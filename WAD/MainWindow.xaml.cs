@@ -17,6 +17,11 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Timers;
+using System.Threading;
+using System.Windows.Media.Animation;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace WAD
 {
@@ -25,6 +30,8 @@ namespace WAD
     /// </summary>
     public partial class MainWindow : Window
     {
+        public static user currentUser = new user();
+
         // Client's socket
         Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
@@ -38,6 +45,8 @@ namespace WAD
             // Starts the client connection to server in the background
             // We can change this to on button click, run client
             runClient();
+            startAnimationHandler();
+
         }
 
         // we can help the user specify ip address + port to connect to.
@@ -208,5 +217,152 @@ namespace WAD
             }
         }
         #endregion
+
+
+        public void startAnimationHandler()
+        {
+            DoubleAnimation ani = new DoubleAnimation(0, TimeSpan.FromSeconds(1));
+            startCanvas.BeginAnimation(Canvas.OpacityProperty, ani);
+        }
+
+        private void imgHome1_MouseEnter(object send, MouseEventArgs e)
+        {
+            DoubleAnimation ani = new DoubleAnimation(0.5, TimeSpan.FromSeconds(0.3));
+            rctHomeOpacity1.BeginAnimation(Rectangle.OpacityProperty, ani);
+            lblHomeMovie1.Foreground = (SolidColorBrush)new BrushConverter().ConvertFromString("#FFFFFFFF");
+        }
+        private void imgHome1_MouseLeave(object sender, MouseEventArgs e)
+        {
+            DoubleAnimation ani = new DoubleAnimation(0, TimeSpan.FromSeconds(0.3));
+            rctHomeOpacity1.BeginAnimation(Rectangle.OpacityProperty, ani);
+            lblHomeMovie1.Foreground = (SolidColorBrush)new BrushConverter().ConvertFromString("#FF000000");
+        }
+        private void imgHome1_ClickEvent(object sender, MouseEventArgs e)
+        {
+            if (currentUser.getEmail() == null)
+            {
+                hideHomeGrid();
+                showLoginGrid();
+            }
+            else
+            {
+                lblHomeMovie1.Content = "Not working";
+            }
+        }
+
+        private void btnHomeRegister_Click(object sender, RoutedEventArgs e)
+        {
+            hideHomeGrid();
+            showLoginGrid();
+        }
+        private void btnHomeSignIn_Click(object sender, RoutedEventArgs e)
+        {
+            hideHomeGrid();
+            showLoginGrid();
+        }
+
+        private void hideHomeGrid()
+        {
+            DoubleAnimation ani = new DoubleAnimation(0, TimeSpan.FromSeconds(0.2));
+            homeGrid.BeginAnimation(Grid.OpacityProperty, ani);
+            homeGrid.IsEnabled = false;
+            homeGrid.Visibility = Visibility.Hidden;
+        }
+        private void showHomeGrid()
+        {
+            homeGrid.Opacity = 0;
+            homeGrid.IsEnabled = true;
+            homeGrid.Visibility = Visibility.Visible;
+            DoubleAnimation ani = new DoubleAnimation(1, TimeSpan.FromSeconds(0.2));
+            homeGrid.BeginAnimation(Grid.OpacityProperty, ani);
+        }
+        private void hideLoginGrid()
+        {
+            DoubleAnimation ani = new DoubleAnimation(0, TimeSpan.FromSeconds(0.2));
+            loginGrid.BeginAnimation(Grid.OpacityProperty, ani);
+            loginGrid.IsEnabled = false;
+            loginGrid.Visibility = Visibility.Hidden;
+        }
+        private void showLoginGrid()
+        {
+            loginGrid.Opacity = 0;
+            loginGrid.IsEnabled = true;
+            loginGrid.Visibility = Visibility.Visible;
+            DoubleAnimation ani = new DoubleAnimation(1, TimeSpan.FromSeconds(0.2));
+            loginGrid.BeginAnimation(Grid.OpacityProperty, ani);
+        }
+
+        private void btnLogin_Click(object sender, RoutedEventArgs e)
+        {
+            NetworkStream stream = new NetworkStream(socket);
+            StreamReader reader = new StreamReader(stream);
+            StreamWriter writer = new StreamWriter(stream);
+            writer.WriteLine("login");
+            writer.WriteLine(txtLoginEmail.Text);
+            string password = sha256_hash(txtLoginPassword.Text);
+            writer.WriteLine(password);
+            if (reader.ReadLine() == "authorized")
+            {
+                currentUser.setFirstName(reader.ReadLine());
+                currentUser.setMiddleName(reader.ReadLine());
+                currentUser.setLastName(reader.ReadLine());
+                currentUser.setDOB(reader.ReadLine());
+                currentUser.setEmail(txtLoginEmail.Text);
+                currentUser.setPassword(password);
+                txtLoginEmail.Text = "";
+                txtLoginPassword.Text = "";
+                lblLoginIncorrect.Visibility = Visibility.Hidden;
+                hideLoginGrid();
+                showHomeGrid();
+                btnHomeSignIn.IsEnabled = false;
+                btnHomeSignIn.Visibility = Visibility.Hidden;
+                btnHomeRegister.IsEnabled = false;
+                btnHomeSignIn.Visibility = Visibility.Hidden;
+                lblHomeHello.Visibility = Visibility.Visible;
+                lblHomeName.Visibility = Visibility.Visible;
+                if ((currentUser.getFirstName() + " " + currentUser.getMiddleName() + " " + currentUser.getLastName()).Length > 20)
+                {
+                    if ((currentUser.getFirstName() + " " + (currentUser.getMiddleName())[0] + ". " + currentUser.getLastName()).Length > 20)
+                    {
+                        if ((currentUser.getFirstName() + " " + (currentUser.getMiddleName())[0] + ". " + currentUser.getLastName()[0] + ".").Length > 20)
+                        {
+                            lblHomeName.Content = currentUser.getFirstName()[0] + ". " + (currentUser.getMiddleName())[0] + ". " + currentUser.getLastName()[0] + ".";
+                        }
+                        else
+                        {
+                            lblHomeName.Content = currentUser.getFirstName() + " " + (currentUser.getMiddleName())[0] + ". " + currentUser.getLastName()[0] + ".";
+                        }
+                    }
+                    else
+                    {
+                        lblHomeName.Content = currentUser.getFirstName() + " " + (currentUser.getMiddleName())[0] + ". " + currentUser.getLastName();
+                    }
+                }
+                else
+                {
+                    lblHomeName.Content = currentUser.getFirstName() + " " + currentUser.getMiddleName() + " " + currentUser.getLastName();
+                }
+            }
+            else
+            {
+                lblLoginIncorrect.Visibility = Visibility.Visible;
+                txtLoginPassword.Text = "";
+            }
+        }
+        public static String sha256_hash(String value)
+        {
+            StringBuilder Sb = new StringBuilder();
+
+            using (SHA256 hash = SHA256Managed.Create())
+            {
+                Encoding enc = Encoding.UTF8;
+                Byte[] result = hash.ComputeHash(enc.GetBytes(value));
+
+                foreach (Byte b in result)
+                    Sb.Append(b.ToString("x2"));
+            }
+
+            return Sb.ToString();
+        }
     }
 }
