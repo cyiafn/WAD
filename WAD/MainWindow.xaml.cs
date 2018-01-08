@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -153,50 +154,58 @@ namespace WAD
         #endregion
 
         // Base load function (example)
-        // Use of openFileDialogue to be user friendly
-        // Not sure about the exact code for WPF https://marlongrech.wordpress.com/2008/05/28/wpf-dialogs-and-dialogresult/
+        // Use of openFileDialog to be user friendly
         #region loadFile() function
         public void loadFile()
         {
-            //DialogResult result = new DialogResult();
-            //result = ofdLoad.ShowDialog();
-            //int count = 0;
-            //if (result == DialogResult.OK)
-            //{
-            //    string[] data = File.ReadAllLines(ofdLoad.FileName);
-            //    foreach (var name in data)
-            //    {
-            //        string[] temp = Convert.ToString(name).Split(';');
-            //        teleList.Add(temp[0], temp[1]);
-            //        count++;
-            //    }
-            //    txtDisplay.Text = "Number of records loaded: " + count;
-            //}
-            //else if (result == DialogResult.Cancel)
-            //{
-            //    MessageBox.Show("Loading is cancelled!");
+            OpenFileDialog dlg = new OpenFileDialog();
+            // default file name, file extension, filter file extension
+            dlg.FileName = "Document";
+            dlg.DefaultExt = ".text";
+            dlg.Filter = "Text documents (.txt)|*.txt";
+
+            if (dlg.ShowDialog() == true)
+            {
+                // read lines from filename
+                string[] data = File.ReadAllLines(dlg.FileName);
+                foreach (var key in data)
+                {
+                    string[] temp = key.Split(';');
+                    //dict.Add(temp[0], temp[1]);
+                }
+                //txtDsiplay.Text = "File loaded!";
+            }
         }
         #endregion
 
         // Base save function (example)
         // Use of SaveFileDialog to be user friendly
-        // Not sure about WPF counterpart
         #region saveFile() function
         public void saveFile()
         {
-            //SaveFileDialog save = new SaveFileDialog();
-            //save.Filter = "Text File | *.txt";
-            //if (save.ShowDialog() == DialogResult.OK)
-            //{
-            //    StreamWriter writer = new StreamWriter(save.OpenFile());
-            //    foreach (var kvp in teleList)
-            //    {
-            //        writer.WriteLine(kvp.Key + ";" + kvp.Value);
-            //    }
-            //    writer.Dispose();
-            //    writer.Close();
-            //    txtDisplay.Text = "Successfully saved!";
-            //}
+            SaveFileDialog dlg = new SaveFileDialog();
+            // default file name, file extension, filter file extension
+            dlg.FileName = "newDocument";
+            dlg.DefaultExt = ".text";
+            dlg.Filter = "Text documents (.txt)|*.txt";
+
+            //string info = "things to be saved";
+            //StreamWriter writer = new StreamWriter(dlg.OpenFile());
+
+            if (dlg.ShowDialog() == true)
+            {
+
+                // Save document
+                //File.WriteAllText(dlg.FileName, info);
+                StreamWriter writer = new StreamWriter(dlg.OpenFile());
+                //foreach (var kvp in dict)
+                //{
+                //    writer.WriteLine(kvp.Key + ";" + kvp.Value);
+                //}
+                writer.Dispose();
+                writer.Close();
+                //txtDsiplay.Text = "Successfully saved!";
+            }
         }
         #endregion
     }
