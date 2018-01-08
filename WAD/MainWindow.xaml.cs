@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -26,13 +27,19 @@ namespace WAD
         // Client's socket
         Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
+        // If running as server, we can contain all client's socket
+        public static ArrayList arrSocket = new ArrayList();
+
         public MainWindow()
         {
             InitializeComponent();
 
             // Starts the client connection to server in the background
+            // We can change this to on button click, run client
             runClient();
         }
+
+        // we can help the user specify ip address + port to connect to.
 
         // Running the socket connection and reading in the background (Async)
         // If there is no need to run the program in the background, async can be replaced with public
@@ -46,6 +53,7 @@ namespace WAD
                 try
                 {
                     // Connect to server at IP address 127.0.0.1 with port 9000
+                    // We can make a popup window to specify what address and port
                     IPEndPoint remoteEP = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 9000);
                     socket.Connect(remoteEP);
                 }
@@ -86,6 +94,36 @@ namespace WAD
                         socket.Close();
                         break;
                     }
+                }
+            });
+        }
+        #endregion
+
+        // If needed, we can run this GUI as a server. code is here.
+        #region runServer() function
+        async void runServer()
+        {
+            // again we can make the user specify the port if needed
+            int port = 7000;
+            IPEndPoint endpoint = new IPEndPoint(IPAddress.Any, port);
+            socket.Bind(endpoint);
+            socket.Listen(10);
+            //SetText("Waiting for clients on port " + port);
+            await Task.Run(() =>
+            {
+                while (true)
+                {
+                    //try
+                    //{
+                    //    // if we want every client to have the possibility of being a server, we have to add connection handler class
+                    //    Socket client = socket.Accept();
+                    //    ConnectionHandler handler = new ConnectionHandler(client, this);
+                    //    ThreadPool.QueueUserWorkItem(new WaitCallback(handler.HandleConnection));
+                    //}
+                    //catch (Exception)
+                    //{
+                    //    SetText("Connection falied on port " + port);
+                    //}
                 }
             });
         }
