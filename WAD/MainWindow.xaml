@@ -54,7 +54,9 @@
             <TextBox x:Name="txtRegisterMiddleName" HorizontalAlignment="Left" Height="23" Margin="381,358,0,0" Text="" VerticalAlignment="Top" Width="263" Background="White" VerticalScrollBarVisibility="Disabled" TextWrapping="NoWrap" MaxLines="1" FontSize="14"/>
             <Label Content="Last Name:" HorizontalAlignment="Left" Margin="290,404,0,0" VerticalAlignment="Top" Foreground="White" FontSize="16"/>
             <TextBox x:Name="txtRegisterLastName" HorizontalAlignment="Left" Height="23" Margin="381,408,0,0" Text="" VerticalAlignment="Top" Width="263" Background="White" VerticalScrollBarVisibility="Disabled" TextWrapping="NoWrap" MaxLines="1" FontSize="14"/>
-            <Button x:Name="btnRegisterRegister" Content="Register" HorizontalAlignment="Left" Margin="381,460,0,0" VerticalAlignment="Top" Width="263" Height="45" Background="Red" Foreground="White" FontWeight="Bold" FontSize="16" Click="btnRegisterRegister_Click"/>
+            <Button x:Name="btnRegisterRegister" Content="Register" HorizontalAlignment="Left" Margin="381,10,0,0" VerticalAlignment="Top" Width="263" Height="45" Background="Red" Foreground="White" FontWeight="Bold" FontSize="16" Click="btnRegisterRegister_Click" Grid.Row="1"/>
+            <Label Content="DOB:" HorizontalAlignment="Left" Margin="332,455,0,0" VerticalAlignment="Top" Foreground="White" FontSize="16"/>
+            <TextBox x:Name="txtRegisterDOB" HorizontalAlignment="Left" Height="23" Margin="381,459,0,0" Text="" VerticalAlignment="Top" Width="263" Background="White" VerticalScrollBarVisibility="Disabled" TextWrapping="NoWrap" MaxLines="1" FontSize="14"/>
         </Grid>
     </Grid>
 

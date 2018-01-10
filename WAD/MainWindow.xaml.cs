@@ -91,7 +91,7 @@ namespace WAD
                     try
                     {
                         // If connected, waits input from server
-                        string input = reader.ReadLine();
+                        //string input = reader.ReadLine();
 
                         // do whatever with input
                     }
@@ -312,58 +312,67 @@ namespace WAD
             NetworkStream stream = new NetworkStream(socket);
             StreamReader reader = new StreamReader(stream);
             StreamWriter writer = new StreamWriter(stream);
-            writer.AutoFlush = true;
-            writer.WriteLine("login");
-            writer.WriteLine(txtLoginEmail.Text);
-            string password = sha256_hash(txtLoginPassword.Text);
-            writer.WriteLine(password);
-            if (reader.ReadLine() == "authorized")
+            try
             {
-                currentUser.setFirstName(reader.ReadLine());
-                currentUser.setMiddleName(reader.ReadLine());
-                currentUser.setLastName(reader.ReadLine());
-                currentUser.setDOB(reader.ReadLine());
-                currentUser.setEmail(txtLoginEmail.Text);
-                currentUser.setPassword(password);
-                txtLoginEmail.Text = "";
-                txtLoginPassword.Text = "";
-                lblLoginIncorrect.Visibility = Visibility.Hidden;
-                hideLoginGrid();
-                showHomeGrid();
-                btnHomeSignIn.IsEnabled = false;
-                btnHomeSignIn.Visibility = Visibility.Hidden;
-                btnHomeRegister.IsEnabled = false;
-                btnHomeSignIn.Visibility = Visibility.Hidden;
-                lblHomeHello.Visibility = Visibility.Visible;
-                lblHomeName.Visibility = Visibility.Visible;
-                if ((currentUser.getFirstName() + " " + currentUser.getMiddleName() + " " + currentUser.getLastName()).Length > 20)
+                writer.AutoFlush = true;
+                writer.WriteLine("login");
+                writer.WriteLine(txtLoginEmail.Text);
+                string password = sha256_hash(txtLoginPassword.Text);
+                writer.WriteLine(password);
+                if (reader.ReadLine() == "authorized")
                 {
-                    if ((currentUser.getFirstName() + " " + (currentUser.getMiddleName())[0] + ". " + currentUser.getLastName()).Length > 20)
+                    currentUser.setFirstName(reader.ReadLine());
+                    currentUser.setMiddleName(reader.ReadLine());
+                    currentUser.setLastName(reader.ReadLine());
+                    currentUser.setDOB(reader.ReadLine());
+                    currentUser.setEmail(txtLoginEmail.Text);
+                    currentUser.setPassword(password);
+                    txtLoginEmail.Text = "";
+                    txtLoginPassword.Text = "";
+                    lblLoginIncorrect.Visibility = Visibility.Hidden;
+                    hideLoginGrid();
+                    showHomeGrid();
+                    btnHomeSignIn.IsEnabled = false;
+                    btnHomeSignIn.Visibility = Visibility.Hidden;
+                    btnHomeRegister.IsEnabled = false;
+                    btnHomeRegister.Visibility = Visibility.Hidden;
+                    btnHomeSignIn.Visibility = Visibility.Hidden;
+                    lblHomeHello.Visibility = Visibility.Visible;
+                    lblHomeName.Visibility = Visibility.Visible;
+                    if ((currentUser.getFirstName() + " " + currentUser.getMiddleName() + " " + currentUser.getLastName()).Length > 20)
                     {
-                        if ((currentUser.getFirstName() + " " + (currentUser.getMiddleName())[0] + ". " + currentUser.getLastName()[0] + ".").Length > 20)
+                        if ((currentUser.getFirstName() + " " + (currentUser.getMiddleName())[0] + ". " + currentUser.getLastName()).Length > 20)
                         {
-                            lblHomeName.Content = currentUser.getFirstName()[0] + ". " + (currentUser.getMiddleName())[0] + ". " + currentUser.getLastName()[0] + ".";
+                            if ((currentUser.getFirstName() + " " + (currentUser.getMiddleName())[0] + ". " + currentUser.getLastName()[0] + ".").Length > 20)
+                            {
+                                lblHomeName.Content = currentUser.getFirstName()[0] + ". " + (currentUser.getMiddleName())[0] + ". " + currentUser.getLastName()[0] + ".";
+                            }
+                            else
+                            {
+                                lblHomeName.Content = currentUser.getFirstName() + " " + (currentUser.getMiddleName())[0] + ". " + currentUser.getLastName()[0] + ".";
+                            }
                         }
                         else
                         {
-                            lblHomeName.Content = currentUser.getFirstName() + " " + (currentUser.getMiddleName())[0] + ". " + currentUser.getLastName()[0] + ".";
+                            lblHomeName.Content = currentUser.getFirstName() + " " + (currentUser.getMiddleName())[0] + ". " + currentUser.getLastName();
                         }
                     }
                     else
                     {
-                        lblHomeName.Content = currentUser.getFirstName() + " " + (currentUser.getMiddleName())[0] + ". " + currentUser.getLastName();
+                        lblHomeName.Content = currentUser.getFirstName() + " " + currentUser.getMiddleName() + " " + currentUser.getLastName();
                     }
                 }
                 else
                 {
-                    lblHomeName.Content = currentUser.getFirstName() + " " + currentUser.getMiddleName() + " " + currentUser.getLastName();
+                    lblLoginIncorrect.Visibility = Visibility.Visible;
+                    txtLoginPassword.Text = "";
                 }
             }
-            else
+            catch (Exception error)
             {
-                lblLoginIncorrect.Visibility = Visibility.Visible;
-                txtLoginPassword.Text = "";
+                throw error;
             }
+            
         }
         public static String sha256_hash(String value)
         {
@@ -389,17 +398,19 @@ namespace WAD
 
         private void btnRegisterRegister_Click(object sender, RoutedEventArgs e)
         {
-            if (txtRegisterPassword == txtRegisterConfirmPassword)
+            if (txtRegisterPassword.Text == txtRegisterConfirmPassword.Text)
             {
                 NetworkStream stream = new NetworkStream(socket);
                 StreamReader reader = new StreamReader(stream);
                 StreamWriter writer = new StreamWriter(stream);
                 writer.AutoFlush = true;
+                writer.WriteLine("register");
                 writer.WriteLine(txtRegisterEmail.Text);
                 writer.WriteLine(sha256_hash(txtRegisterPassword.Text));
                 writer.WriteLine(txtRegisterFirstName.Text);
                 writer.WriteLine(txtRegisterMiddleName.Text);
                 writer.WriteLine(txtRegisterLastName.Text);
+                writer.WriteLine(txtRegisterDOB.Text);
                 writer.Flush();
                 if (reader.ReadLine() == "success")
                 {
@@ -408,17 +419,20 @@ namespace WAD
                     currentUser.setFirstName(txtRegisterFirstName.Text);
                     currentUser.setMiddleName(txtRegisterMiddleName.Text);
                     currentUser.setLastName(txtRegisterLastName.Text);
+                    currentUser.setDOB(txtRegisterDOB.Text);
                     txtRegisterEmail.Text = "";
                     txtRegisterPassword.Text = "";
                     txtRegisterConfirmPassword.Text = "";
                     txtRegisterFirstName.Text = "";
                     txtRegisterMiddleName.Text = "";
                     txtRegisterLastName.Text = "";
+                    txtRegisterDOB.Text = "";
                     hideRegisterGrid();
                     showHomeGrid();
                     btnHomeSignIn.IsEnabled = false;
                     btnHomeSignIn.Visibility = Visibility.Hidden;
                     btnHomeRegister.IsEnabled = false;
+                    btnHomeRegister.Visibility = Visibility.Hidden;
                     btnHomeSignIn.Visibility = Visibility.Hidden;
                     lblHomeHello.Visibility = Visibility.Visible;
                     lblHomeName.Visibility = Visibility.Visible;
