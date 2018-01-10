@@ -11,7 +11,7 @@
 
     <Grid x:Name="baseGrid" Height="640" Margin="0" Width="1024" VerticalAlignment="Center" HorizontalAlignment="Center">
         <Image x:Name="startCanvas" Height="640" Margin="-2,-28,-6,-3" Width="1024" d:IsHidden="true" Source="images/start.png" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-        <Grid x:Name="homeGrid" Height="640" Margin="0" Width="1024" HorizontalAlignment="Right" VerticalAlignment="Bottom" d:IsHidden="false">
+        <Grid x:Name="homeGrid" Height="640" Margin="0" Width="1024" HorizontalAlignment="Right" VerticalAlignment="Bottom" d:IsHidden="true">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="529*"/>
                 <ColumnDefinition Width="495*"/>
@@ -25,7 +25,7 @@
             <Label x:Name="lblHomeHello" Content="Hello," HorizontalAlignment="Left" Margin="265,39,0,0" VerticalAlignment="Top" FontSize="14" Grid.Column="1" Visibility="Hidden"/>
             <Label x:Name="lblHomeName" Content="" Grid.Column="1" HorizontalAlignment="Left" Margin="315,39,0,0" VerticalAlignment="Top" FontSize="14" Visibility="Hidden"/>
         </Grid>
-        <Grid x:Name="loginGrid" HorizontalAlignment="Left" Height="640" VerticalAlignment="Top" Width="1024" Background="#FF4A5459" IsEnabled="True" Visibility="Hidden">
+        <Grid x:Name="loginGrid" HorizontalAlignment="Left" Height="640" VerticalAlignment="Top" Width="1024" Background="#FF4A5459" IsEnabled="true" Visibility="Hidden" d:IsHidden="true">
             <Label Content="Welcome back." HorizontalAlignment="Left" Margin="429,119,0,0" VerticalAlignment="Top" Foreground="White" FontWeight="Bold" FontSize="22"/>
             <Label Content="Email:" HorizontalAlignment="Left" Margin="326,193,0,0" VerticalAlignment="Top" Foreground="White" FontSize="16"/>
             <TextBox x:Name="txtLoginEmail" HorizontalAlignment="Left" Height="23" Margin="381,197,0,0" Text="" VerticalAlignment="Top" Width="263" Background="White" VerticalScrollBarVisibility="Disabled" TextWrapping="NoWrap" MaxLines="1" FontSize="14"/>
@@ -33,8 +33,28 @@
             <TextBox x:Name="txtLoginPassword" HorizontalAlignment="Left" Height="23" Margin="381,239,0,0" Text="" VerticalAlignment="Top" Width="263" Background="White" VerticalScrollBarVisibility="Disabled" TextWrapping="NoWrap" MaxLines="1" FontSize="14"/>
             <Button x:Name="btnLogin" Content="Login" HorizontalAlignment="Left" Margin="381,278,0,0" VerticalAlignment="Top" Width="263" Height="45" Background="Red" Foreground="White" FontWeight="Bold" FontSize="16" Click="btnLogin_Click"/>
             <Label x:Name="lblLoginIncorrect" Content="Your email address and password&#xD;&#xA;combination is incorrect!" HorizontalAlignment="Left" Margin="381,361,0,0" VerticalAlignment="Top" Foreground="#FFB90909" FontSize="18" Visibility="Hidden"/>
-            <Button x:Name="btnLoginRegister" Content="Register" HorizontalAlignment="Left" Margin="468,323,0,0" VerticalAlignment="Top" Width="90" Height="45" Background="{x:Null}" Foreground="White" FontWeight="Bold" FontSize="16" Click="btnLogin_Click" BorderBrush="{x:Null}"/>
+            <Button x:Name="btnLoginRegister" Content="Register" HorizontalAlignment="Left" Margin="468,323,0,0" VerticalAlignment="Top" Width="90" Height="45" Background="{x:Null}" Foreground="White" FontWeight="Bold" FontSize="16" Click="btnLoginRegister_Click" BorderBrush="{x:Null}"/>
 
+        </Grid>
+        <Grid x:Name="registerGrid" Height="640" Margin="0,-12,0,12" Width="1024" HorizontalAlignment="Right" VerticalAlignment="Bottom" d:IsHidden="false" Visibility="Hidden" Background="#FF4A5459">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="517*"/>
+                <RowDefinition Height="123*"/>
+            </Grid.RowDefinitions>
+            <Label Content="Join us." HorizontalAlignment="Left" Margin="468,68,0,0" VerticalAlignment="Top" Foreground="White" FontWeight="Bold" FontSize="22"/>
+            <Label Content="Email:" HorizontalAlignment="Left" Margin="326,145,0,0" VerticalAlignment="Top" Foreground="White" FontSize="16"/>
+            <TextBox x:Name="txtRegisterEmail" HorizontalAlignment="Left" Height="23" Margin="381,149,0,0" Text="" VerticalAlignment="Top" Width="263" Background="White" VerticalScrollBarVisibility="Disabled" TextWrapping="NoWrap" MaxLines="1" FontSize="14"/>
+            <Label Content="Password:" HorizontalAlignment="Left" Margin="298,199,0,0" VerticalAlignment="Top" Foreground="White" FontSize="16"/>
+            <TextBox x:Name="txtRegisterPassword" HorizontalAlignment="Left" Height="23" Margin="381,203,0,0" Text="" VerticalAlignment="Top" Width="263" Background="White" VerticalScrollBarVisibility="Disabled" TextWrapping="NoWrap" MaxLines="1" FontSize="14"/>
+            <Label Content="Confirm Password:" HorizontalAlignment="Left" Margin="237,253,0,0" VerticalAlignment="Top" Foreground="White" FontSize="16"/>
+            <TextBox x:Name="txtRegisterConfirmPassword" HorizontalAlignment="Left" Height="23" Margin="381,256,0,0" Text="" VerticalAlignment="Top" Width="263" Background="White" VerticalScrollBarVisibility="Disabled" TextWrapping="NoWrap" MaxLines="1" FontSize="14"/>
+            <Label Content="First Name:" HorizontalAlignment="Left" Margin="288,303,0,0" VerticalAlignment="Top" Foreground="White" FontSize="16"/>
+            <TextBox x:Name="txtRegisterFirstName" HorizontalAlignment="Left" Height="23" Margin="381,307,0,0" Text="" VerticalAlignment="Top" Width="263" Background="White" VerticalScrollBarVisibility="Disabled" TextWrapping="NoWrap" MaxLines="1" FontSize="14"/>
+            <Label Content="Middle Name:" HorizontalAlignment="Left" Margin="268,354,0,0" VerticalAlignment="Top" Foreground="White" FontSize="16"/>
+            <TextBox x:Name="txtRegisterMiddleName" HorizontalAlignment="Left" Height="23" Margin="381,358,0,0" Text="" VerticalAlignment="Top" Width="263" Background="White" VerticalScrollBarVisibility="Disabled" TextWrapping="NoWrap" MaxLines="1" FontSize="14"/>
+            <Label Content="Last Name:" HorizontalAlignment="Left" Margin="290,404,0,0" VerticalAlignment="Top" Foreground="White" FontSize="16"/>
+            <TextBox x:Name="txtRegisterLastName" HorizontalAlignment="Left" Height="23" Margin="381,408,0,0" Text="" VerticalAlignment="Top" Width="263" Background="White" VerticalScrollBarVisibility="Disabled" TextWrapping="NoWrap" MaxLines="1" FontSize="14"/>
+            <Button x:Name="btnRegisterRegister" Content="Register" HorizontalAlignment="Left" Margin="381,460,0,0" VerticalAlignment="Top" Width="263" Height="45" Background="Red" Foreground="White" FontWeight="Bold" FontSize="16" Click="btnRegisterRegister_Click"/>
         </Grid>
     </Grid>
 

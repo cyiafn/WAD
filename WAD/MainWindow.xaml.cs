@@ -253,7 +253,7 @@ namespace WAD
         private void btnHomeRegister_Click(object sender, RoutedEventArgs e)
         {
             hideHomeGrid();
-            showLoginGrid();
+            showRegisterGrid();
         }
         private void btnHomeSignIn_Click(object sender, RoutedEventArgs e)
         {
@@ -291,12 +291,28 @@ namespace WAD
             DoubleAnimation ani = new DoubleAnimation(1, TimeSpan.FromSeconds(0.2));
             loginGrid.BeginAnimation(Grid.OpacityProperty, ani);
         }
+        private void hideRegisterGrid()
+        {
+            DoubleAnimation ani = new DoubleAnimation(0, TimeSpan.FromSeconds(0.2));
+            registerGrid.BeginAnimation(Grid.OpacityProperty, ani);
+            registerGrid.IsEnabled = false;
+            registerGrid.Visibility = Visibility.Hidden;
+        }
+        private void showRegisterGrid()
+        {
+            registerGrid.Opacity = 0;
+            registerGrid.IsEnabled = true;
+            registerGrid.Visibility = Visibility.Visible;
+            DoubleAnimation ani = new DoubleAnimation(1, TimeSpan.FromSeconds(0.2));
+            registerGrid.BeginAnimation(Grid.OpacityProperty, ani);
+        }
 
         private void btnLogin_Click(object sender, RoutedEventArgs e)
         {
             NetworkStream stream = new NetworkStream(socket);
             StreamReader reader = new StreamReader(stream);
             StreamWriter writer = new StreamWriter(stream);
+            writer.AutoFlush = true;
             writer.WriteLine("login");
             writer.WriteLine(txtLoginEmail.Text);
             string password = sha256_hash(txtLoginPassword.Text);
@@ -363,6 +379,81 @@ namespace WAD
             }
 
             return Sb.ToString();
+        }
+
+        private void btnLoginRegister_Click(object sender, RoutedEventArgs e)
+        {
+            hideLoginGrid();
+            showRegisterGrid();
+        }
+
+        private void btnRegisterRegister_Click(object sender, RoutedEventArgs e)
+        {
+            if (txtRegisterPassword == txtRegisterConfirmPassword)
+            {
+                NetworkStream stream = new NetworkStream(socket);
+                StreamReader reader = new StreamReader(stream);
+                StreamWriter writer = new StreamWriter(stream);
+                writer.AutoFlush = true;
+                writer.WriteLine(txtRegisterEmail.Text);
+                writer.WriteLine(sha256_hash(txtRegisterPassword.Text));
+                writer.WriteLine(txtRegisterFirstName.Text);
+                writer.WriteLine(txtRegisterMiddleName.Text);
+                writer.WriteLine(txtRegisterLastName.Text);
+                writer.Flush();
+                if (reader.ReadLine() == "success")
+                {
+                    currentUser.setEmail(txtRegisterEmail.Text);
+                    currentUser.setPassword(sha256_hash(txtRegisterPassword.Text));
+                    currentUser.setFirstName(txtRegisterFirstName.Text);
+                    currentUser.setMiddleName(txtRegisterMiddleName.Text);
+                    currentUser.setLastName(txtRegisterLastName.Text);
+                    txtRegisterEmail.Text = "";
+                    txtRegisterPassword.Text = "";
+                    txtRegisterConfirmPassword.Text = "";
+                    txtRegisterFirstName.Text = "";
+                    txtRegisterMiddleName.Text = "";
+                    txtRegisterLastName.Text = "";
+                    hideRegisterGrid();
+                    showHomeGrid();
+                    btnHomeSignIn.IsEnabled = false;
+                    btnHomeSignIn.Visibility = Visibility.Hidden;
+                    btnHomeRegister.IsEnabled = false;
+                    btnHomeSignIn.Visibility = Visibility.Hidden;
+                    lblHomeHello.Visibility = Visibility.Visible;
+                    lblHomeName.Visibility = Visibility.Visible;
+                    if ((currentUser.getFirstName() + " " + currentUser.getMiddleName() + " " + currentUser.getLastName()).Length > 20)
+                    {
+                        if ((currentUser.getFirstName() + " " + (currentUser.getMiddleName())[0] + ". " + currentUser.getLastName()).Length > 20)
+                        {
+                            if ((currentUser.getFirstName() + " " + (currentUser.getMiddleName())[0] + ". " + currentUser.getLastName()[0] + ".").Length > 20)
+                            {
+                                lblHomeName.Content = currentUser.getFirstName()[0] + ". " + (currentUser.getMiddleName())[0] + ". " + currentUser.getLastName()[0] + ".";
+                            }
+                            else
+                            {
+                                lblHomeName.Content = currentUser.getFirstName() + " " + (currentUser.getMiddleName())[0] + ". " + currentUser.getLastName()[0] + ".";
+                            }
+                        }
+                        else
+                        {
+                            lblHomeName.Content = currentUser.getFirstName() + " " + (currentUser.getMiddleName())[0] + ". " + currentUser.getLastName();
+                        }
+                    }
+                    else
+                    {
+                        lblHomeName.Content = currentUser.getFirstName() + " " + currentUser.getMiddleName() + " " + currentUser.getLastName();
+                    }
+                }
+                else
+                {
+
+                }
+            }
+            else
+            {
+
+            }
         }
     }
 }
