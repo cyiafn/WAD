@@ -11,10 +11,10 @@
 
     <Grid x:Name="baseGrid" Height="640" Margin="0" Width="1024" VerticalAlignment="Center" HorizontalAlignment="Center">
         <Image x:Name="startCanvas" Height="640" Margin="-2,-28,-6,-3" Width="1024" d:IsHidden="true" Source="images/start.png" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-        <Button x:Name="btnHomeSignIn" Content="Sign In" HorizontalAlignment="Left" Margin="314.667,35,0,0" VerticalAlignment="Top" Width="82" Background="Red" Foreground="White" Height="37" FontWeight="Bold" FontSize="14" Click="btnHomeSignIn_Click" d:IsHidden="true" Grid.Column="1"/>
-        <Button x:Name="btnHomeRegister" Content="Register" HorizontalAlignment="Left" Margin="401.667,42,0,0" VerticalAlignment="Top" Width="75" BorderBrush="{x:Null}" Background="{x:Null}" FontSize="14" Click="btnHomeRegister_Click" FontWeight="Bold" d:IsHidden="true" Grid.Column="1"/>
-        <Label x:Name="lblHomeHello" Content="Hello," HorizontalAlignment="Left" Margin="265,39,0,0" VerticalAlignment="Top" FontSize="14" Grid.Column="1" Visibility="Hidden"/>
-        <Label x:Name="lblHomeName" Content="" Grid.Column="1" HorizontalAlignment="Left" Margin="315,39,0,0" VerticalAlignment="Top" FontSize="14" Visibility="Hidden"/>
+        <Button x:Name="btnHomeSignIn" Content="Sign In" HorizontalAlignment="Left" Margin="843,35,0,0" VerticalAlignment="Top" Width="82" Background="Red" Foreground="White" Height="37" FontWeight="Bold" FontSize="14" Click="btnHomeSignIn_Click" d:IsHidden="true"/>
+        <Button x:Name="btnHomeRegister" Content="Register" HorizontalAlignment="Left" Margin="930,42,0,0" VerticalAlignment="Top" Width="75" BorderBrush="{x:Null}" Background="{x:Null}" FontSize="14" Click="btnHomeRegister_Click" FontWeight="Bold" d:IsHidden="true"/>
+        <Label x:Name="lblHomeHello" Content="Hello," HorizontalAlignment="Left" Margin="787,39,0,0" VerticalAlignment="Top" FontSize="14" Visibility="Hidden"/>
+        <Label x:Name="lblHomeName" Content="" HorizontalAlignment="Left" Margin="837,39,0,0" VerticalAlignment="Top" FontSize="14" Visibility="Hidden"/>
         <Grid x:Name="homeGrid" Height="640" Margin="0" Width="1024" HorizontalAlignment="Right" VerticalAlignment="Bottom" d:IsHidden="true">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="529*"/>
@@ -60,7 +60,7 @@
             <Label Content="DOB:" HorizontalAlignment="Left" Margin="332,455,0,0" VerticalAlignment="Top" Foreground="White" FontSize="16"/>
             <TextBox x:Name="txtRegisterDOB" HorizontalAlignment="Left" Height="23" Margin="381,459,0,0" Text="" VerticalAlignment="Top" Width="263" Background="White" VerticalScrollBarVisibility="Disabled" TextWrapping="NoWrap" MaxLines="1" FontSize="14"/>
         </Grid>
-        <Grid x:Name="listGrid" Height="640" Margin="0,-12,0,12" Width="1024" HorizontalAlignment="Right" VerticalAlignment="Bottom" d:IsHidden="false" Visibility="Visible" Background="#FF4A5459"/>
+        <Grid x:Name="listGrid" Height="640" Margin="0,-12,0,12" Width="1024" HorizontalAlignment="Right" VerticalAlignment="Bottom" d:IsHidden="false" Visibility="Hidden" Background="#FF4A5459"/>
     </Grid>
 
 
