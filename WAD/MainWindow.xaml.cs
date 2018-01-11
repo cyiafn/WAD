@@ -21,7 +21,7 @@ using System.Timers;
 using System.Threading;
 using System.Windows.Media.Animation;
 using System.Security.Cryptography;
-using System.Text;
+using System.Xml.Serialization;
 
 namespace WAD
 {
@@ -36,6 +36,10 @@ namespace WAD
 
         // If running as server, we can contain all client's socket
         public static ArrayList arrSocket = new ArrayList();
+
+        public static HashSet<Movie> movieList = new HashSet<Movie>();
+
+        public static DateTime updatedTime;
 
         public MainWindow()
         {
@@ -314,6 +318,64 @@ namespace WAD
         }
         private void showListGrid()
         {
+            if (movieList.Count() == 0)
+            {
+                NetworkStream stream = new NetworkStream(socket);
+                StreamWriter writer = new StreamWriter(stream);
+                StreamReader read = new StreamReader(stream);
+                writer.AutoFlush = true;
+                writer.WriteLine("request_movie");
+                string xml = read.ReadLine();
+                string line;
+                //string randomVar = read.ReadLine();
+                var xs = new XmlSerializer(typeof(HashSet<Movie>));
+                using (read)
+                {
+                    while ((line = read.ReadLine()) != "endofxml")
+                    {
+                        xml += line;
+                    }
+                }
+                using (var reader = new StringReader(xml))
+                {
+                    var set2 = (HashSet<Movie>)xs.Deserialize(read);
+                    movieList = set2;
+                }
+                foreach (Movie details in movieList)
+                {
+                    lblListLabel1.Content += details.Title;
+                }
+                updatedTime = DateTime.Now;
+            }
+            else
+            {
+                TimeSpan diff = DateTime.Now - updatedTime;
+                if (diff.TotalDays > 0)
+                {
+                    NetworkStream stream = new NetworkStream(socket);
+                    StreamWriter writer = new StreamWriter(stream);
+                    StreamReader read = new StreamReader(stream);
+                    writer.AutoFlush = true;
+                    writer.WriteLine("request_movie");
+                    string xml = read.ReadLine();
+                    string line;
+                    //string randomVar = read.ReadLine();
+                    var xs = new XmlSerializer(typeof(HashSet<Movie>));
+                    using (read)
+                    {
+                        while ((line = read.ReadLine()) != "endofxml")
+                        {
+                            xml += line;
+                        }
+                    }
+                    using (var reader = new StringReader(xml))
+                    {
+                        var set2 = (HashSet<Movie>)xs.Deserialize(read);
+                        movieList = set2;
+                    }
+                    updatedTime = DateTime.Now;
+                }
+            }
             listGrid.Opacity = 0;
             listGrid.IsEnabled = true;
             listGrid.Visibility = Visibility.Visible;
@@ -496,7 +558,8 @@ namespace WAD
 
         private void rctHomeOpacity2_MouseDown(object sender, MouseButtonEventArgs e)
         {
-
+            hideHomeGrid();
+            showListGrid();
         }
     }
 }

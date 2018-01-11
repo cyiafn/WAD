@@ -60,7 +60,30 @@
             <Label Content="DOB:" HorizontalAlignment="Left" Margin="332,455,0,0" VerticalAlignment="Top" Foreground="White" FontSize="16"/>
             <TextBox x:Name="txtRegisterDOB" HorizontalAlignment="Left" Height="23" Margin="381,459,0,0" Text="" VerticalAlignment="Top" Width="263" Background="White" VerticalScrollBarVisibility="Disabled" TextWrapping="NoWrap" MaxLines="1" FontSize="14"/>
         </Grid>
-        <Grid x:Name="listGrid" Height="640" Margin="0,-12,0,12" Width="1024" HorizontalAlignment="Right" VerticalAlignment="Bottom" d:IsHidden="false" Visibility="Hidden" Background="#FF4A5459"/>
+        <Grid x:Name="listGrid" Height="640" Margin="0,-12,0,12" Width="1024" HorizontalAlignment="Right" VerticalAlignment="Bottom" d:IsHidden="false" Visibility="Hidden" Background="White">
+            <Label Content="Showing Movies." HorizontalAlignment="Left" Margin="16,37,0,0" VerticalAlignment="Top" FontSize="18" FontWeight="Bold"/>
+            <Image x:Name="imgListImage1" HorizontalAlignment="Left" Height="174" Margin="67,89,0,0" VerticalAlignment="Top" Width="121"/>
+            <Label x:Name="lblListLabel1" Content="" HorizontalAlignment="Left" Margin="67,268,0,0" VerticalAlignment="Top" FontSize="14" Width="121" Height="59" HorizontalContentAlignment="Center"/>
+            <Image x:Name="imgListImage2" HorizontalAlignment="Left" Height="174" Margin="255,89,0,0" VerticalAlignment="Top" Width="122"/>
+            <Label x:Name="lblListLabel2" Content="" HorizontalAlignment="Left" Margin="255,268,0,0" VerticalAlignment="Top" FontSize="14" Width="122" Height="59" HorizontalContentAlignment="Center"/>
+            <Image x:Name="imgListImage3" HorizontalAlignment="Left" Height="174" Margin="449,89,0,0" VerticalAlignment="Top" Width="122"/>
+            <Label x:Name="lblListLabel3" Content="" HorizontalAlignment="Left" Margin="449,268,0,0" VerticalAlignment="Top" FontSize="14" Width="122" Height="59" HorizontalContentAlignment="Center"/>
+            <Image x:Name="imgListImage4" HorizontalAlignment="Left" Height="174" Margin="639,89,0,0" VerticalAlignment="Top" Width="122"/>
+            <Label x:Name="lblListLabel4" Content="" HorizontalAlignment="Left" Margin="639,268,0,0" VerticalAlignment="Top" FontSize="14" Width="122" Height="59" HorizontalContentAlignment="Center"/>
+            <Image x:Name="imgListImage5" HorizontalAlignment="Left" Height="174" Margin="829,89,0,0" VerticalAlignment="Top" Width="122"/>
+            <Label x:Name="lblListLabel5" Content="" HorizontalAlignment="Left" Margin="831,280,0,0" VerticalAlignment="Top" FontSize="14" Width="122" Height="59" HorizontalContentAlignment="Center"/>
+            <Image x:Name="imgListImage6" HorizontalAlignment="Left" Height="174" Margin="67,342,0,0" VerticalAlignment="Top" Width="121"/>
+            <Label x:Name="lblListLabel6" Content="" HorizontalAlignment="Left" Margin="67,520,0,0" VerticalAlignment="Top" FontSize="14" Width="121" Height="60" HorizontalContentAlignment="Center"/>
+            <Image x:Name="imgListImage7" HorizontalAlignment="Left" Height="174" Margin="255,342,0,0" VerticalAlignment="Top" Width="121"/>
+            <Label x:Name="lblListLabel7" Content="" HorizontalAlignment="Left" Margin="255,520,0,0" VerticalAlignment="Top" FontSize="14" Width="121" Height="60" HorizontalContentAlignment="Center"/>
+            <Image x:Name="imgListImage8" HorizontalAlignment="Left" Height="174" Margin="449,342,0,0" VerticalAlignment="Top" Width="121"/>
+            <Label x:Name="lblListLabel8" Content="" HorizontalAlignment="Left" Margin="449,520,0,0" VerticalAlignment="Top" FontSize="14" Width="121" Height="60" HorizontalContentAlignment="Center"/>
+            <Image x:Name="imgListImage9" HorizontalAlignment="Left" Height="174" Margin="639,342,0,0" VerticalAlignment="Top" Width="121"/>
+            <Label x:Name="lblListLabel9" Content="" HorizontalAlignment="Left" Margin="639,520,0,0" VerticalAlignment="Top" FontSize="14" Width="121" Height="60" HorizontalContentAlignment="Center"/>
+            <Image x:Name="imgListImage10" HorizontalAlignment="Left" Height="174" Margin="829,342,0,0" VerticalAlignment="Top" Width="121"/>
+            <Label x:Name="lblListLabel10" Content="" HorizontalAlignment="Left" Margin="829,520,0,0" VerticalAlignment="Top" FontSize="14" Width="121" Height="60" HorizontalContentAlignment="Center"/>
+            <Button x:Name="btnListNext" Content="Next" HorizontalAlignment="Left" Margin="916,585,0,0" VerticalAlignment="Top" Width="82" Background="Red" Foreground="White" Height="37" FontWeight="Bold" FontSize="14" d:IsHidden="false"/>
+        </Grid>
     </Grid>
 
 
