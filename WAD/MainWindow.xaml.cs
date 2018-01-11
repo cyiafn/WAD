@@ -31,7 +31,6 @@ namespace WAD
     public partial class MainWindow : Window
     {
         public static user currentUser = new user();
-
         // Client's socket
         Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
@@ -306,7 +305,21 @@ namespace WAD
             DoubleAnimation ani = new DoubleAnimation(1, TimeSpan.FromSeconds(0.2));
             registerGrid.BeginAnimation(Grid.OpacityProperty, ani);
         }
-
+        private void hideListGrid()
+        {
+            DoubleAnimation ani = new DoubleAnimation(0, TimeSpan.FromSeconds(0.2));
+            listGrid.BeginAnimation(Grid.OpacityProperty, ani);
+            listGrid.IsEnabled = false;
+            listGrid.Visibility = Visibility.Hidden;
+        }
+        private void showListGrid()
+        {
+            listGrid.Opacity = 0;
+            listGrid.IsEnabled = true;
+            listGrid.Visibility = Visibility.Visible;
+            DoubleAnimation ani = new DoubleAnimation(1, TimeSpan.FromSeconds(0.2));
+            listGrid.BeginAnimation(Grid.OpacityProperty, ani);
+        }
         private void btnLogin_Click(object sender, RoutedEventArgs e)
         {
             NetworkStream stream = new NetworkStream(socket);
@@ -468,6 +481,22 @@ namespace WAD
             {
 
             }
+        }
+
+        private void rctHomeOpacity2_MouseEnter(object sender, MouseEventArgs e)
+        {
+            DoubleAnimation ani = new DoubleAnimation(0.5, TimeSpan.FromSeconds(0.3));
+            rctHomeOpacity2.BeginAnimation(Rectangle.OpacityProperty, ani);
+        }
+        private void rctHomeOpacity2_MouseLeave(object sender, MouseEventArgs e)
+        {
+            DoubleAnimation ani = new DoubleAnimation(0, TimeSpan.FromSeconds(0.3));
+            rctHomeOpacity2.BeginAnimation(Rectangle.OpacityProperty, ani);
+        }
+
+        private void rctHomeOpacity2_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+
         }
     }
 }

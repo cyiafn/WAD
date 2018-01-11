@@ -11,6 +11,10 @@
 
     <Grid x:Name="baseGrid" Height="640" Margin="0" Width="1024" VerticalAlignment="Center" HorizontalAlignment="Center">
         <Image x:Name="startCanvas" Height="640" Margin="-2,-28,-6,-3" Width="1024" d:IsHidden="true" Source="images/start.png" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        <Button x:Name="btnHomeSignIn" Content="Sign In" HorizontalAlignment="Left" Margin="314.667,35,0,0" VerticalAlignment="Top" Width="82" Background="Red" Foreground="White" Height="37" FontWeight="Bold" FontSize="14" Click="btnHomeSignIn_Click" d:IsHidden="true" Grid.Column="1"/>
+        <Button x:Name="btnHomeRegister" Content="Register" HorizontalAlignment="Left" Margin="401.667,42,0,0" VerticalAlignment="Top" Width="75" BorderBrush="{x:Null}" Background="{x:Null}" FontSize="14" Click="btnHomeRegister_Click" FontWeight="Bold" d:IsHidden="true" Grid.Column="1"/>
+        <Label x:Name="lblHomeHello" Content="Hello," HorizontalAlignment="Left" Margin="265,39,0,0" VerticalAlignment="Top" FontSize="14" Grid.Column="1" Visibility="Hidden"/>
+        <Label x:Name="lblHomeName" Content="" Grid.Column="1" HorizontalAlignment="Left" Margin="315,39,0,0" VerticalAlignment="Top" FontSize="14" Visibility="Hidden"/>
         <Grid x:Name="homeGrid" Height="640" Margin="0" Width="1024" HorizontalAlignment="Right" VerticalAlignment="Bottom" d:IsHidden="true">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="529*"/>
@@ -20,10 +24,8 @@
             <Image x:Name="imgHome1" HorizontalAlignment="Left" Height="284" Margin="3,87,0,0" VerticalAlignment="Top" Width="1021" Source="images/temp1.jpg" Stretch="UniformToFill" Grid.ColumnSpan="2"/>
             <Rectangle x:Name="rctHomeOpacity1" Fill="Black" HorizontalAlignment="Left" Height="284" Margin="3,87,0,0" VerticalAlignment="Top" Width="1021" Opacity="0" MouseEnter="imgHome1_MouseEnter" MouseLeave="imgHome1_MouseLeave" MouseDown="imgHome1_ClickEvent" Grid.ColumnSpan="2"/>
             <Label x:Name="lblHomeMovie1" Content="Spiderman Homecoming" HorizontalAlignment="Left" Margin="385,318,0,0" VerticalAlignment="Top" FontSize="24" FontWeight="Bold" Background="{x:Null}" Foreground="Black" Grid.ColumnSpan="2"/>
-            <Button x:Name="btnHomeSignIn" Content="Sign In" HorizontalAlignment="Left" Margin="314.667,35,0,0" VerticalAlignment="Top" Width="82" Background="Red" Foreground="White" Height="37" FontWeight="Bold" FontSize="14" Click="btnHomeSignIn_Click" d:IsHidden="true" Grid.Column="1"/>
-            <Button x:Name="btnHomeRegister" Content="Register" HorizontalAlignment="Left" Margin="401.667,42,0,0" VerticalAlignment="Top" Width="75" BorderBrush="{x:Null}" Background="{x:Null}" FontSize="14" Click="btnHomeRegister_Click" FontWeight="Bold" d:IsHidden="true" Grid.Column="1"/>
-            <Label x:Name="lblHomeHello" Content="Hello," HorizontalAlignment="Left" Margin="265,39,0,0" VerticalAlignment="Top" FontSize="14" Grid.Column="1" Visibility="Hidden"/>
-            <Label x:Name="lblHomeName" Content="" Grid.Column="1" HorizontalAlignment="Left" Margin="315,39,0,0" VerticalAlignment="Top" FontSize="14" Visibility="Hidden"/>
+            <Image x:Name="imgHomeList" HorizontalAlignment="Left" Height="230" Margin="18,381,0,0" VerticalAlignment="Top" Width="230" Source="images/list.png"/>
+            <Rectangle x:Name="rctHomeOpacity2" Fill="Black" HorizontalAlignment="Left" Height="230" Margin="18,381,0,0" VerticalAlignment="Top" Width="230" Opacity="0" MouseEnter="rctHomeOpacity2_MouseEnter" MouseLeave="rctHomeOpacity2_MouseLeave" MouseDown="rctHomeOpacity2_MouseDown"/>
         </Grid>
         <Grid x:Name="loginGrid" HorizontalAlignment="Left" Height="640" VerticalAlignment="Top" Width="1024" Background="#FF4A5459" IsEnabled="true" Visibility="Hidden" d:IsHidden="true">
             <Label Content="Welcome back." HorizontalAlignment="Left" Margin="429,119,0,0" VerticalAlignment="Top" Foreground="White" FontWeight="Bold" FontSize="22"/>
@@ -58,6 +60,7 @@
             <Label Content="DOB:" HorizontalAlignment="Left" Margin="332,455,0,0" VerticalAlignment="Top" Foreground="White" FontSize="16"/>
             <TextBox x:Name="txtRegisterDOB" HorizontalAlignment="Left" Height="23" Margin="381,459,0,0" Text="" VerticalAlignment="Top" Width="263" Background="White" VerticalScrollBarVisibility="Disabled" TextWrapping="NoWrap" MaxLines="1" FontSize="14"/>
         </Grid>
+        <Grid x:Name="listGrid" Height="640" Margin="0,-12,0,12" Width="1024" HorizontalAlignment="Right" VerticalAlignment="Bottom" d:IsHidden="false" Visibility="Visible" Background="#FF4A5459"/>
     </Grid>
 
 

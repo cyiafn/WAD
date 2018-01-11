@@ -13,3 +13,18 @@ D:\Visual Studio Projects\WAD\WAD\obj\Debug\WAD.csproj.GenerateResource.Cache
 D:\Visual Studio Projects\WAD\WAD\obj\Debug\WAD.csproj.CoreCompileInputs.cache
 D:\Visual Studio Projects\WAD\WAD\obj\Debug\WAD.exe
 D:\Visual Studio Projects\WAD\WAD\obj\Debug\WAD.pdb
+C:\Users\chenyifan\Desktop\WAD\WAD\bin\Debug\WAD.exe.config
+C:\Users\chenyifan\Desktop\WAD\WAD\bin\Debug\WAD.exe
+C:\Users\chenyifan\Desktop\WAD\WAD\bin\Debug\WAD.pdb
+C:\Users\chenyifan\Desktop\WAD\WAD\obj\Debug\WAD.csprojResolveAssemblyReference.cache
+C:\Users\chenyifan\Desktop\WAD\WAD\obj\Debug\MainWindow.g.cs
+C:\Users\chenyifan\Desktop\WAD\WAD\obj\Debug\App.g.cs
+C:\Users\chenyifan\Desktop\WAD\WAD\obj\Debug\WAD_MarkupCompile.cache
+C:\Users\chenyifan\Desktop\WAD\WAD\obj\Debug\WAD_MarkupCompile.lref
+C:\Users\chenyifan\Desktop\WAD\WAD\obj\Debug\MainWindow.baml
+C:\Users\chenyifan\Desktop\WAD\WAD\obj\Debug\WAD.g.resources
+C:\Users\chenyifan\Desktop\WAD\WAD\obj\Debug\WAD.Properties.Resources.resources
+C:\Users\chenyifan\Desktop\WAD\WAD\obj\Debug\WAD.csproj.GenerateResource.Cache
+C:\Users\chenyifan\Desktop\WAD\WAD\obj\Debug\WAD.csproj.CoreCompileInputs.cache
+C:\Users\chenyifan\Desktop\WAD\WAD\obj\Debug\WAD.exe
+C:\Users\chenyifan\Desktop\WAD\WAD\obj\Debug\WAD.pdb
