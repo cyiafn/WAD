@@ -325,21 +325,19 @@ namespace WAD
                 StreamReader read = new StreamReader(stream);
                 writer.AutoFlush = true;
                 writer.WriteLine("request_movie");
-                string xml = read.ReadLine();
+                string xml = "";
                 string line;
                 //string randomVar = read.ReadLine();
                 var xs = new XmlSerializer(typeof(HashSet<Movie>));
-                using (read)
+                while ((line = read.ReadLine()) != "endofxml")
                 {
-                    while ((line = read.ReadLine()) != "endofxml")
-                    {
-                        xml += line;
-                    }
+                    xml += line;
                 }
+                HashSet<Movie> newSet = new HashSet<Movie>();
                 using (var reader = new StringReader(xml))
                 {
-                    var set2 = (HashSet<Movie>)xs.Deserialize(read);
-                    movieList = set2;
+                    newSet = (HashSet<Movie>)xs.Deserialize(reader);
+                    movieList = newSet;
                 }
                 foreach (Movie details in movieList)
                 {
@@ -357,21 +355,19 @@ namespace WAD
                     StreamReader read = new StreamReader(stream);
                     writer.AutoFlush = true;
                     writer.WriteLine("request_movie");
-                    string xml = read.ReadLine();
+                    string xml = "";
                     string line;
                     //string randomVar = read.ReadLine();
                     var xs = new XmlSerializer(typeof(HashSet<Movie>));
-                    using (read)
+                    while ((line = read.ReadLine()) != "endofxml")
                     {
-                        while ((line = read.ReadLine()) != "endofxml")
-                        {
-                            xml += line;
-                        }
+                        xml += line;
                     }
+                    HashSet<Movie> newSet = new HashSet<Movie>();
                     using (var reader = new StringReader(xml))
                     {
-                        var set2 = (HashSet<Movie>)xs.Deserialize(read);
-                        movieList = set2;
+                        newSet = (HashSet<Movie>)xs.Deserialize(reader);
+                        movieList = newSet;
                     }
                     updatedTime = DateTime.Now;
                 }
