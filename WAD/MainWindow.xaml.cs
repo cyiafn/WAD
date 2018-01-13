@@ -37,9 +37,34 @@ namespace WAD
         // If running as server, we can contain all client's socket
         public static ArrayList arrSocket = new ArrayList();
 
-        public static HashSet<Movie> movieList = new HashSet<Movie>();
+        public static List<Movie> movieList = new List<Movie>();
 
         public static DateTime updatedTime;
+
+        public static int listStart = 0;
+
+        public static int currentSelectedMovie = 0;
+
+        private static BitmapImage LoadImage(byte[] imageData)
+        {
+            if (imageData == null || imageData.Length == 0)
+            {
+                return null;
+            }
+            var image = new BitmapImage();
+            using (var mem = new MemoryStream(imageData))
+            {
+                mem.Position = 0;
+                image.BeginInit();
+                image.CreateOptions = BitmapCreateOptions.PreservePixelFormat;
+                image.CacheOption = BitmapCacheOption.OnLoad;
+                image.UriSource = null;
+                image.StreamSource = mem;
+                image.EndInit();
+                image.Freeze();
+                return image;
+            }
+        }
 
         public MainWindow()
         {
@@ -311,6 +336,7 @@ namespace WAD
         }
         private void hideListGrid()
         {
+            listStart = 0;
             DoubleAnimation ani = new DoubleAnimation(0, TimeSpan.FromSeconds(0.2));
             listGrid.BeginAnimation(Grid.OpacityProperty, ani);
             listGrid.IsEnabled = false;
@@ -318,6 +344,26 @@ namespace WAD
         }
         private void showListGrid()
         {
+            lblListLabel1.Content = "";
+            lblListLabel2.Content = "";
+            lblListLabel3.Content = "";
+            lblListLabel4.Content = "";
+            lblListLabel5.Content = "";
+            lblListLabel6.Content = "";
+            lblListLabel7.Content = "";
+            lblListLabel8.Content = "";
+            lblListLabel9.Content = "";
+            lblListLabel10.Content = "";
+            imgListImage1.Source = null;
+            imgListImage2.Source = null;
+            imgListImage3.Source = null;
+            imgListImage4.Source = null;
+            imgListImage5.Source = null;
+            imgListImage6.Source = null;
+            imgListImage7.Source = null;
+            imgListImage8.Source = null;
+            imgListImage9.Source = null;
+            imgListImage10.Source = null;
             if (movieList.Count() == 0)
             {
                 NetworkStream stream = new NetworkStream(socket);
@@ -337,11 +383,13 @@ namespace WAD
                 using (var reader = new StringReader(xml))
                 {
                     newSet = (HashSet<Movie>)xs.Deserialize(reader);
-                    movieList = newSet;
                 }
-                foreach (Movie details in movieList)
+                foreach (Movie details in newSet)
                 {
-                    lblListLabel1.Content += details.Title;
+                    if (details.Status == true)
+                    {
+                        movieList.Add(details);
+                    }
                 }
                 updatedTime = DateTime.Now;
             }
@@ -367,10 +415,120 @@ namespace WAD
                     using (var reader = new StringReader(xml))
                     {
                         newSet = (HashSet<Movie>)xs.Deserialize(reader);
-                        movieList = newSet;
+                    }
+                    foreach (Movie details in newSet)
+                    {
+                        if (details.Status == true)
+                        {
+                            movieList.Add(details);
+                        }
                     }
                     updatedTime = DateTime.Now;
                 }
+            }
+            int counter = 1;
+            int x = 0;
+            if (movieList.Count < listStart + 10)
+            {
+                x = movieList.Count;
+            }
+            else
+            {
+                x = listStart + 10;
+            }
+            for (int i = listStart; i < x; i ++)
+            {
+                if (counter == 1)
+                {
+                    lblListLabel1.Content = movieList[i].Title;
+                    var image = LoadImage(movieList[i].FileData);
+                    imgListImage1.Source = image;
+                    counter += 1;
+                }
+                else if (counter == 2)
+                {
+                    lblListLabel2.Content = movieList[i].Title;
+                    var image = LoadImage(movieList[i].FileData);
+                    imgListImage2.Source = image;
+                    counter += 1;
+                }
+                else if (counter == 3)
+                {
+                    lblListLabel3.Content = movieList[i].Title;
+                    var image = LoadImage(movieList[i].FileData);
+                    imgListImage3.Source = image;
+                    counter += 1;
+                }
+                else if (counter == 4)
+                {
+                    lblListLabel4.Content = movieList[i].Title;
+                    var image = LoadImage(movieList[i].FileData);
+                    imgListImage4.Source = image;
+                    counter += 1;
+                }
+                else if (counter == 5)
+                {
+                    lblListLabel5.Content = movieList[i].Title;
+                    var image = LoadImage(movieList[i].FileData);
+                    imgListImage5.Source = image;
+                    counter += 1;
+                }
+                else if (counter == 6)
+                {
+                    lblListLabel6.Content = movieList[i].Title;
+                    var image = LoadImage(movieList[i].FileData);
+                    imgListImage6.Source = image;
+                    counter += 1;
+                }
+                else if (counter == 7)
+                {
+                    lblListLabel7.Content = movieList[i].Title;
+                    var image = LoadImage(movieList[i].FileData);
+                    imgListImage7.Source = image;
+                    counter += 1;
+                }
+                else if (counter == 8)
+                {
+                    lblListLabel8.Content = movieList[i].Title;
+                    var image = LoadImage(movieList[i].FileData);
+                    imgListImage8.Source = image;
+                    counter += 1;
+                }
+                else if (counter == 9)
+                {
+                    lblListLabel9.Content = movieList[i].Title;
+                    var image = LoadImage(movieList[i].FileData);
+                    imgListImage9.Source = image;
+                    counter += 1;
+                }
+                else if (counter == 10)
+                {
+                    lblListLabel10.Content = movieList[i].Title;
+                    var image = LoadImage(movieList[i].FileData);
+                    imgListImage10.Source = image;
+                    counter += 1;
+                }
+            }
+            if (listStart > 10)
+            {
+                btnListPrev.Visibility = Visibility.Visible;
+                btnListPrev.IsEnabled = true;
+            }
+            else
+            {
+                btnListPrev.Visibility = Visibility.Hidden;
+                btnListPrev.IsEnabled = false;
+            }
+            listStart += 10;
+            if (movieList.ElementAtOrDefault(listStart) != null)
+            {
+                btnListNext.Visibility = Visibility.Visible;
+                btnListNext.IsEnabled = true;
+            }
+            else
+            {
+                btnListNext.Visibility = Visibility.Hidden;
+                btnListNext.IsEnabled = false;
             }
             listGrid.Opacity = 0;
             listGrid.IsEnabled = true;
@@ -378,6 +536,29 @@ namespace WAD
             DoubleAnimation ani = new DoubleAnimation(1, TimeSpan.FromSeconds(0.2));
             listGrid.BeginAnimation(Grid.OpacityProperty, ani);
         }
+
+        private void hideMovieGrid()
+        {
+            currentSelectedMovie = 0;
+            DoubleAnimation ani = new DoubleAnimation(0, TimeSpan.FromSeconds(0.2));
+            movieGrid.BeginAnimation(Grid.OpacityProperty, ani);
+            movieGrid.IsEnabled = false;
+            movieGrid.Visibility = Visibility.Hidden;
+        }
+
+        private void showMovieGrid()
+        {
+            var image = LoadImage(movieList[currentSelectedMovie].FileData);
+            imgMovie.Source = image;
+            lblMovieTitle.Content = movieList[currentSelectedMovie].Title;
+            lblMovieType.Content = movieList[currentSelectedMovie].MovieType;
+            lblMoviePrice.Content = "$ " + String.Format("{0:.00}", movieList[currentSelectedMovie].Price);
+            movieGrid.IsEnabled = true;
+            movieGrid.Visibility = Visibility.Visible;
+            DoubleAnimation ani = new DoubleAnimation(1, TimeSpan.FromSeconds(0.2));
+            movieGrid.BeginAnimation(Grid.OpacityProperty, ani);
+        }
+
         private void btnLogin_Click(object sender, RoutedEventArgs e)
         {
             NetworkStream stream = new NetworkStream(socket);
@@ -556,6 +737,523 @@ namespace WAD
         {
             hideHomeGrid();
             showListGrid();
+        }
+
+        private void btnListNext_Click(object sender, RoutedEventArgs e)
+        {
+            lblListLabel1.Content = "";
+            lblListLabel2.Content = "";
+            lblListLabel3.Content = "";
+            lblListLabel4.Content = "";
+            lblListLabel5.Content = "";
+            lblListLabel6.Content = "";
+            lblListLabel7.Content = "";
+            lblListLabel8.Content = "";
+            lblListLabel9.Content = "";
+            lblListLabel10.Content = "";
+            imgListImage1.Source = null;
+            imgListImage2.Source = null;
+            imgListImage3.Source = null;
+            imgListImage4.Source = null;
+            imgListImage5.Source = null;
+            imgListImage6.Source = null;
+            imgListImage7.Source = null;
+            imgListImage8.Source = null;
+            imgListImage9.Source = null;
+            imgListImage10.Source = null;
+            int counter = 1;
+            int x = 0;
+            if (movieList.Count < listStart + 10)
+            {
+                x = movieList.Count;
+            }
+            else
+            {
+                x = listStart + 10;
+            }
+            for (int i = listStart; i < x; i++)
+            {
+                if (counter == 1)
+                {
+                    lblListLabel1.Content = movieList[i].Title;
+                    var image = LoadImage(movieList[i].FileData);
+                    imgListImage1.Source = image;
+                    counter += 1;
+                }
+                else if (counter == 2)
+                {
+                    lblListLabel2.Content = movieList[i].Title;
+                    var image = LoadImage(movieList[i].FileData);
+                    imgListImage2.Source = image;
+                    counter += 1;
+                }
+                else if (counter == 3)
+                {
+                    lblListLabel3.Content = movieList[i].Title;
+                    var image = LoadImage(movieList[i].FileData);
+                    imgListImage3.Source = image;
+                    counter += 1;
+                }
+                else if (counter == 4)
+                {
+                    lblListLabel4.Content = movieList[i].Title;
+                    var image = LoadImage(movieList[i].FileData);
+                    imgListImage4.Source = image;
+                    counter += 1;
+                }
+                else if (counter == 5)
+                {
+                    lblListLabel5.Content = movieList[i].Title;
+                    var image = LoadImage(movieList[i].FileData);
+                    imgListImage5.Source = image;
+                    counter += 1;
+                }
+                else if (counter == 6)
+                {
+                    lblListLabel6.Content = movieList[i].Title;
+                    var image = LoadImage(movieList[i].FileData);
+                    imgListImage6.Source = image;
+                    counter += 1;
+                }
+                else if (counter == 7)
+                {
+                    lblListLabel7.Content = movieList[i].Title;
+                    var image = LoadImage(movieList[i].FileData);
+                    imgListImage7.Source = image;
+                    counter += 1;
+                }
+                else if (counter == 8)
+                {
+                    lblListLabel8.Content = movieList[i].Title;
+                    var image = LoadImage(movieList[i].FileData);
+                    imgListImage8.Source = image;
+                    counter += 1;
+                }
+                else if (counter == 9)
+                {
+                    lblListLabel9.Content = movieList[i].Title;
+                    var image = LoadImage(movieList[i].FileData);
+                    imgListImage9.Source = image;
+                    counter += 1;
+                }
+                else if (counter == 10)
+                {
+                    lblListLabel10.Content = movieList[i].Title;
+                    var image = LoadImage(movieList[i].FileData);
+                    imgListImage10.Source = image;
+                    counter += 1;
+                }
+            }
+            if (listStart > 0)
+            {
+                btnListPrev.Visibility = Visibility.Visible;
+                btnListPrev.IsEnabled = true;
+            }
+            else
+            {
+                btnListPrev.Visibility = Visibility.Visible;
+                btnListPrev.IsEnabled = true;
+            }
+            listStart += 10;
+            if (movieList.ElementAtOrDefault(listStart) != null)
+            {
+                btnListNext.Visibility = Visibility.Visible;
+                btnListNext.IsEnabled = true;
+            }
+            else
+            {
+                btnListNext.Visibility = Visibility.Hidden;
+                btnListNext.IsEnabled = false;
+            }
+        }
+
+        private void btnListPrev_Click(object sender, RoutedEventArgs e)
+        {
+            listStart -= 20;
+            lblListLabel1.Content = "";
+            lblListLabel2.Content = "";
+            lblListLabel3.Content = "";
+            lblListLabel4.Content = "";
+            lblListLabel5.Content = "";
+            lblListLabel6.Content = "";
+            lblListLabel7.Content = "";
+            lblListLabel8.Content = "";
+            lblListLabel9.Content = "";
+            lblListLabel10.Content = "";
+            imgListImage1.Source = null;
+            imgListImage2.Source = null;
+            imgListImage3.Source = null;
+            imgListImage4.Source = null;
+            imgListImage5.Source = null;
+            imgListImage6.Source = null;
+            imgListImage7.Source = null;
+            imgListImage8.Source = null;
+            imgListImage9.Source = null;
+            imgListImage10.Source = null;
+            int counter = 1;
+            int x = 0;
+            if (movieList.Count < listStart + 10)
+            {
+                x = movieList.Count;
+            }
+            else
+            {
+                x = listStart + 10;
+            }
+            for (int i = listStart; i < x; i++)
+            {
+                if (counter == 1)
+                {
+                    lblListLabel1.Content = movieList[i].Title;
+                    var image = LoadImage(movieList[i].FileData);
+                    imgListImage1.Source = image;
+                    counter += 1;
+                }
+                else if (counter == 2)
+                {
+                    lblListLabel2.Content = movieList[i].Title;
+                    var image = LoadImage(movieList[i].FileData);
+                    imgListImage2.Source = image;
+                    counter += 1;
+                }
+                else if (counter == 3)
+                {
+                    lblListLabel3.Content = movieList[i].Title;
+                    var image = LoadImage(movieList[i].FileData);
+                    imgListImage3.Source = image;
+                    counter += 1;
+                }
+                else if (counter == 4)
+                {
+                    lblListLabel4.Content = movieList[i].Title;
+                    var image = LoadImage(movieList[i].FileData);
+                    imgListImage4.Source = image;
+                    counter += 1;
+                }
+                else if (counter == 5)
+                {
+                    lblListLabel5.Content = movieList[i].Title;
+                    var image = LoadImage(movieList[i].FileData);
+                    imgListImage5.Source = image;
+                    counter += 1;
+                }
+                else if (counter == 6)
+                {
+                    lblListLabel6.Content = movieList[i].Title;
+                    var image = LoadImage(movieList[i].FileData);
+                    imgListImage6.Source = image;
+                    counter += 1;
+                }
+                else if (counter == 7)
+                {
+                    lblListLabel7.Content = movieList[i].Title;
+                    var image = LoadImage(movieList[i].FileData);
+                    imgListImage7.Source = image;
+                    counter += 1;
+                }
+                else if (counter == 8)
+                {
+                    lblListLabel8.Content = movieList[i].Title;
+                    var image = LoadImage(movieList[i].FileData);
+                    imgListImage8.Source = image;
+                    counter += 1;
+                }
+                else if (counter == 9)
+                {
+                    lblListLabel9.Content = movieList[i].Title;
+                    var image = LoadImage(movieList[i].FileData);
+                    imgListImage9.Source = image;
+                    counter += 1;
+                }
+                else if (counter == 10)
+                {
+                    lblListLabel10.Content = movieList[i].Title;
+                    var image = LoadImage(movieList[i].FileData);
+                    imgListImage10.Source = image;
+                    counter += 1;
+                }
+            }
+            if (listStart > 10)
+            {
+                btnListPrev.Visibility = Visibility.Visible;
+                btnListPrev.IsEnabled = true;
+            }
+            else
+            {
+                btnListPrev.Visibility = Visibility.Hidden;
+                btnListPrev.IsEnabled = false;
+            }
+            listStart += 10;
+            if (movieList.ElementAtOrDefault(listStart) != null)
+            {
+                btnListNext.Visibility = Visibility.Visible;
+                btnListNext.IsEnabled = true;
+            }
+            else
+            {
+                btnListNext.Visibility = Visibility.Hidden;
+                btnListNext.IsEnabled = false;
+            }
+        }
+
+        private void rctList1_MouseEnter(object sender, MouseEventArgs e)
+        {
+            if (movieList.ElementAtOrDefault(listStart - 10) != null)
+            {
+                DoubleAnimation ani = new DoubleAnimation(0.2, TimeSpan.FromSeconds(0.1));
+                rctList1.BeginAnimation(Rectangle.OpacityProperty, ani);
+            }
+        }
+
+        private void rctList2_MouseEnter(object sender, MouseEventArgs e)
+        {
+            if (movieList.ElementAtOrDefault(listStart - 9) != null)
+            {
+                DoubleAnimation ani = new DoubleAnimation(0.2, TimeSpan.FromSeconds(0.1));
+                rctList2.BeginAnimation(Rectangle.OpacityProperty, ani);
+            }
+        }
+
+        private void rctList3_MouseEnter(object sender, MouseEventArgs e)
+        {
+            if (movieList.ElementAtOrDefault(listStart - 8) != null)
+            {
+                DoubleAnimation ani = new DoubleAnimation(0.2, TimeSpan.FromSeconds(0.1));
+                rctList3.BeginAnimation(Rectangle.OpacityProperty, ani);
+            } 
+        }
+
+        private void rctList4_MouseEnter(object sender, MouseEventArgs e)
+        {
+            if (movieList.ElementAtOrDefault(listStart -7) != null)
+            {
+                DoubleAnimation ani = new DoubleAnimation(0.2, TimeSpan.FromSeconds(0.1));
+                rctList4.BeginAnimation(Rectangle.OpacityProperty, ani);
+            }
+        }
+
+        private void rctList5_MouseEnter(object sender, MouseEventArgs e)
+        {
+            if (movieList.ElementAtOrDefault(listStart -6) != null)
+            {
+                DoubleAnimation ani = new DoubleAnimation(0.2, TimeSpan.FromSeconds(0.1));
+                rctList5.BeginAnimation(Rectangle.OpacityProperty, ani);
+            }
+        }
+
+        private void rctList6_MouseEnter(object sender, MouseEventArgs e)
+        {
+            if (movieList.ElementAtOrDefault(listStart - 5) != null)
+            {
+                DoubleAnimation ani = new DoubleAnimation(0.2, TimeSpan.FromSeconds(0.1));
+                rctList6.BeginAnimation(Rectangle.OpacityProperty, ani);
+            }
+        }
+
+        private void rctList7_MouseEnter(object sender, MouseEventArgs e)
+        {
+            if (movieList.ElementAtOrDefault(listStart - 4) != null)
+            {
+                DoubleAnimation ani = new DoubleAnimation(0.2, TimeSpan.FromSeconds(0.1));
+                rctList7.BeginAnimation(Rectangle.OpacityProperty, ani);
+            }
+        }
+
+        private void rctList8_MouseEnter(object sender, MouseEventArgs e)
+        {
+            if (movieList.ElementAtOrDefault(listStart - 3) != null)
+            {
+                DoubleAnimation ani = new DoubleAnimation(0.2, TimeSpan.FromSeconds(0.1));
+                rctList8.BeginAnimation(Rectangle.OpacityProperty, ani);
+            }
+        }
+
+        private void rctList9_MouseEnter(object sender, MouseEventArgs e)
+        {
+            if (movieList.ElementAtOrDefault(listStart - 2) != null)
+            {
+                DoubleAnimation ani = new DoubleAnimation(0.2, TimeSpan.FromSeconds(0.1));
+                rctList9.BeginAnimation(Rectangle.OpacityProperty, ani);
+            }
+        }
+
+        private void rctList10_MouseEnter(object sender, MouseEventArgs e)
+        {
+            if (movieList.ElementAtOrDefault(listStart - 1) != null) {
+                DoubleAnimation ani = new DoubleAnimation(0.2, TimeSpan.FromSeconds(0.1));
+                rctList10.BeginAnimation(Rectangle.OpacityProperty, ani);
+            }
+        }
+
+        private void rctList1_MouseLeave(object sender, MouseEventArgs e)
+        {
+            if (movieList.ElementAtOrDefault(listStart - 10) != null)
+            {
+                DoubleAnimation ani = new DoubleAnimation(0, TimeSpan.FromSeconds(0.1));
+                rctList1.BeginAnimation(Rectangle.OpacityProperty, ani);
+            }
+        }
+
+        private void rctList2_MouseLeave(object sender, MouseEventArgs e)
+        {
+            if (movieList.ElementAtOrDefault(listStart - 9) != null)
+            {
+                DoubleAnimation ani = new DoubleAnimation(0, TimeSpan.FromSeconds(0.1));
+                rctList2.BeginAnimation(Rectangle.OpacityProperty, ani);
+            }
+        }
+
+        private void rctList3_MouseLeave(object sender, MouseEventArgs e)
+        {
+            if (movieList.ElementAtOrDefault(listStart - 8) != null)
+            {
+                DoubleAnimation ani = new DoubleAnimation(0, TimeSpan.FromSeconds(0.1));
+                rctList3.BeginAnimation(Rectangle.OpacityProperty, ani);
+            }
+        }
+
+        private void rctList4_MouseLeave(object sender, MouseEventArgs e)
+        {
+            if (movieList.ElementAtOrDefault(listStart - 7) != null)
+            {
+                DoubleAnimation ani = new DoubleAnimation(0, TimeSpan.FromSeconds(0.1));
+                rctList4.BeginAnimation(Rectangle.OpacityProperty, ani);
+            }
+        }
+
+        private void rctList5_MouseLeave(object sender, MouseEventArgs e)
+        {
+            if (movieList.ElementAtOrDefault(listStart - 6) != null)
+            {
+                DoubleAnimation ani = new DoubleAnimation(0, TimeSpan.FromSeconds(0.1));
+                rctList5.BeginAnimation(Rectangle.OpacityProperty, ani);
+            }
+        }
+
+        private void rctList6_MouseLeave(object sender, MouseEventArgs e)
+        {
+            if (movieList.ElementAtOrDefault(listStart - 5) != null)
+            {
+                DoubleAnimation ani = new DoubleAnimation(0, TimeSpan.FromSeconds(0.1));
+                rctList6.BeginAnimation(Rectangle.OpacityProperty, ani);
+            }
+        }
+
+        private void rctList7_MouseLeave(object sender, MouseEventArgs e)
+        {
+            if (movieList.ElementAtOrDefault(listStart - 4) != null)
+            {
+                DoubleAnimation ani = new DoubleAnimation(0, TimeSpan.FromSeconds(0.1));
+                rctList7.BeginAnimation(Rectangle.OpacityProperty, ani);
+            }
+        }
+
+        private void rctList8_MouseLeave(object sender, MouseEventArgs e)
+        {
+            if (movieList.ElementAtOrDefault(listStart - 3) != null)
+            {
+                DoubleAnimation ani = new DoubleAnimation(0, TimeSpan.FromSeconds(0.1));
+                rctList8.BeginAnimation(Rectangle.OpacityProperty, ani);
+            }
+        }
+
+        private void rctList9_MouseLeave(object sender, MouseEventArgs e)
+        {
+            if (movieList.ElementAtOrDefault(listStart - 2) != null)
+            {
+                DoubleAnimation ani = new DoubleAnimation(0, TimeSpan.FromSeconds(0.1));
+                rctList9.BeginAnimation(Rectangle.OpacityProperty, ani);
+            }
+        }
+
+        private void rctList10_MouseLeave(object sender, MouseEventArgs e)
+        {
+            if (movieList.ElementAtOrDefault(listStart - 1) != null)
+            {
+                DoubleAnimation ani = new DoubleAnimation(0, TimeSpan.FromSeconds(0.1));
+                rctList10.BeginAnimation(Rectangle.OpacityProperty, ani);
+            }
+        }
+
+        private void rctList1_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            currentSelectedMovie = listStart - 10;
+            hideListGrid();
+            showMovieGrid();
+        }
+
+        private void rctList2_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            currentSelectedMovie = listStart - 9;
+            hideListGrid();
+            showMovieGrid();
+        }
+
+        private void rctList3_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            currentSelectedMovie = listStart - 8;
+            hideListGrid();
+            showMovieGrid();
+        }
+
+        private void rctList4_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            currentSelectedMovie = listStart - 7;
+            hideListGrid();
+            showMovieGrid();
+        }
+
+        private void rctList5_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            currentSelectedMovie = listStart - 6;
+            hideListGrid();
+            showMovieGrid();
+        }
+
+        private void rctList6_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            currentSelectedMovie = listStart - 5;
+            hideListGrid();
+            showMovieGrid();
+        }
+
+        private void rctList7_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            currentSelectedMovie = listStart - 4;
+            hideListGrid();
+            showMovieGrid();
+        }
+
+        private void rctList8_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            currentSelectedMovie = listStart - 3;
+            hideListGrid();
+            showMovieGrid();
+        }
+
+        private void rctList9_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            currentSelectedMovie = listStart - 2;
+            hideListGrid();
+            showMovieGrid();
+        }
+
+        private void rctList10_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            currentSelectedMovie = listStart - 1;
+            hideListGrid();
+            showMovieGrid();
+        }
+
+        private void btnMovieBack_Click(object sender, RoutedEventArgs e)
+        {
+            hideMovieGrid();
+            showListGrid();
+        }
+
+        private void btnMovieBook_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
