@@ -557,6 +557,7 @@ namespace WAD
             movieGrid.Visibility = Visibility.Visible;
             DoubleAnimation ani = new DoubleAnimation(1, TimeSpan.FromSeconds(0.2));
             movieGrid.BeginAnimation(Grid.OpacityProperty, ani);
+            wbMovie.Address = string.Format("https://www.youtube.com/embed/{0}?version=3&playlist=1&hd=1&autoplay=1&fs=0&autohide=1&loop=1&controls=0", movieList[currentSelectedMovie].VideoId);
         }
 
         private void btnLogin_Click(object sender, RoutedEventArgs e)
