@@ -29,7 +29,7 @@
             <Image x:Name="imgHomeList" HorizontalAlignment="Left" Height="230" Margin="18,381,0,0" VerticalAlignment="Top" Width="230" Source="images/list.png"/>
             <Rectangle x:Name="rctHomeOpacity2" Fill="Black" HorizontalAlignment="Left" Height="230" Margin="18,381,0,0" VerticalAlignment="Top" Width="230" Opacity="0" MouseEnter="rctHomeOpacity2_MouseEnter" MouseLeave="rctHomeOpacity2_MouseLeave" MouseDown="rctHomeOpacity2_MouseDown"/>
         </Grid>
-        <Grid x:Name="loginGrid" HorizontalAlignment="Left" Height="640" VerticalAlignment="Top" Width="1024" Background="#FF4A5459" IsEnabled="true" Visibility="Hidden" d:IsHidden="true">
+        <Grid x:Name="loginGrid" HorizontalAlignment="Left" Height="640" VerticalAlignment="Top" Width="1024" Background="#FF4A5459" IsEnabled="false" Visibility="Hidden" d:IsHidden="true">
             <Label Content="Welcome back." HorizontalAlignment="Left" Margin="429,119,0,0" VerticalAlignment="Top" Foreground="White" FontWeight="Bold" FontSize="22"/>
             <Label Content="Email:" HorizontalAlignment="Left" Margin="326,193,0,0" VerticalAlignment="Top" Foreground="White" FontSize="16"/>
             <TextBox x:Name="txtLoginEmail" HorizontalAlignment="Left" Height="23" Margin="381,197,0,0" Text="" VerticalAlignment="Top" Width="263" Background="White" VerticalScrollBarVisibility="Disabled" TextWrapping="NoWrap" MaxLines="1" FontSize="14"/>
@@ -40,7 +40,7 @@
             <Button x:Name="btnLoginRegister" Content="Register" HorizontalAlignment="Left" Margin="468,323,0,0" VerticalAlignment="Top" Width="90" Height="45" Background="{x:Null}" Foreground="White" FontWeight="Bold" FontSize="16" Click="btnLoginRegister_Click" BorderBrush="{x:Null}"/>
 
         </Grid>
-        <Grid x:Name="registerGrid" Height="640" Margin="0,-12,0,12" Width="1024" HorizontalAlignment="Right" VerticalAlignment="Bottom" d:IsHidden="false" Visibility="Hidden" Background="#FF4A5459">
+        <Grid x:Name="registerGrid" Height="640" Margin="0,-12,0,12" Width="1024" IsEnabled="false" HorizontalAlignment="Right" VerticalAlignment="Bottom" d:IsHidden="false" Visibility="Hidden" Background="#FF4A5459">
             <Grid.RowDefinitions>
                 <RowDefinition Height="517*"/>
                 <RowDefinition Height="123*"/>
@@ -62,7 +62,7 @@
             <Label Content="DOB:" HorizontalAlignment="Left" Margin="332,455,0,0" VerticalAlignment="Top" Foreground="White" FontSize="16"/>
             <TextBox x:Name="txtRegisterDOB" HorizontalAlignment="Left" Height="23" Margin="381,459,0,0" Text="" VerticalAlignment="Top" Width="263" Background="White" VerticalScrollBarVisibility="Disabled" TextWrapping="NoWrap" MaxLines="1" FontSize="14"/>
         </Grid>
-        <Grid x:Name="listGrid" Height="640" Margin="0,-12,0,12" Width="1024" HorizontalAlignment="Right" VerticalAlignment="Bottom" d:IsHidden="false" Visibility="Hidden" Background="White">
+        <Grid x:Name="listGrid" Height="640" Margin="0,-12,0,12" Width="1024" HorizontalAlignment="Right" VerticalAlignment="Bottom" d:IsHidden="false" Visibility="hidden" Background="White" IsEnabled="false">
             <Rectangle x:Name="rctList1" HorizontalAlignment="Left" Height="238" Margin="67,89,0,0" VerticalAlignment="Top" Width="121" Fill="Black" Opacity="0" MouseEnter="rctList1_MouseEnter" MouseLeave="rctList1_MouseLeave" MouseDown="rctList1_MouseDown"/>
             <Rectangle x:Name="rctList2" HorizontalAlignment="Left" Height="238" Margin="255,89,0,0" VerticalAlignment="Top" Width="121" Fill="Black" Opacity="0" MouseEnter="rctList2_MouseEnter" MouseLeave="rctList2_MouseLeave" MouseDown="rctList2_MouseDown"/>
             <Rectangle x:Name="rctList3" HorizontalAlignment="Left" Height="238" Margin="449,89,0,0" VerticalAlignment="Top" Width="121" Fill="Black" Opacity="0" MouseEnter="rctList3_MouseEnter" MouseLeave="rctList3_MouseLeave" MouseDown="rctList3_MouseDown"/>
@@ -74,30 +74,30 @@
             <Rectangle x:Name="rctList9" HorizontalAlignment="Left" Height="238" Margin="639,342,0,0" VerticalAlignment="Top" Width="121" Fill="Black" Opacity="0" MouseEnter="rctList9_MouseEnter" MouseLeave="rctList9_MouseLeave" MouseDown="rctList9_MouseDown"/>
             <Rectangle x:Name="rctList10" HorizontalAlignment="Left" Height="238" Margin="829,344,0,0" VerticalAlignment="Top" Width="121" Fill="Black" Opacity="0" MouseEnter="rctList10_MouseEnter" MouseLeave="rctList10_MouseLeave" MouseDown="rctList10_MouseDown"/>
             <Label Content="Showing Movies." HorizontalAlignment="Left" Margin="26,37,0,0" VerticalAlignment="Top" FontSize="18" FontWeight="Bold"/>
-            <Image x:Name="imgListImage1" HorizontalAlignment="Left" Height="174" Margin="67,89,0,0" VerticalAlignment="Top" Width="121" MouseEnter="rctList1_MouseEnter" MouseLeave="rctList1_MouseLeave" MouseDown="rctList1_MouseDown"/>
+            <Image x:Name="imgListImage1" HorizontalAlignment="Left" Height="174" Margin="67,89,0,0" VerticalAlignment="Top" Width="121" MouseEnter="rctList1_MouseEnter" MouseLeave="rctList1_MouseLeave" MouseDown="rctList1_MouseDown" Stretch="Fill"/>
             <Label x:Name="lblListLabel1" Content="" HorizontalAlignment="Left" Margin="67,268,0,0" VerticalAlignment="Top" FontSize="14" Width="121" Height="59" HorizontalContentAlignment="Center" MouseEnter="rctList1_MouseEnter" MouseLeave="rctList1_MouseLeave" MouseDown="rctList1_MouseDown"/>
-            <Image x:Name="imgListImage2" HorizontalAlignment="Left" Height="174" Margin="255,89,0,0" VerticalAlignment="Top" Width="122" MouseEnter="rctList2_MouseEnter" MouseLeave="rctList2_MouseLeave" MouseDown="rctList2_MouseDown"/>
+            <Image x:Name="imgListImage2" HorizontalAlignment="Left" Height="174" Margin="255,89,0,0" VerticalAlignment="Top" Width="122" MouseEnter="rctList2_MouseEnter" MouseLeave="rctList2_MouseLeave" MouseDown="rctList2_MouseDown" Stretch="Fill"/>
             <Label x:Name="lblListLabel2" Content="" HorizontalAlignment="Left" Margin="255,268,0,0" VerticalAlignment="Top" FontSize="14" Width="122" Height="59" HorizontalContentAlignment="Center" MouseEnter="rctList2_MouseEnter" MouseLeave="rctList2_MouseLeave" MouseDown="rctList2_MouseDown"/>
-            <Image x:Name="imgListImage3" HorizontalAlignment="Left" Height="174" Margin="449,89,0,0" VerticalAlignment="Top" Width="122" MouseEnter="rctList3_MouseEnter" MouseLeave="rctList3_MouseLeave" MouseDown="rctList3_MouseDown"/>
+            <Image x:Name="imgListImage3" HorizontalAlignment="Left" Height="174" Margin="449,89,0,0" VerticalAlignment="Top" Width="122" MouseEnter="rctList3_MouseEnter" MouseLeave="rctList3_MouseLeave" MouseDown="rctList3_MouseDown" Stretch="Fill"/>
             <Label x:Name="lblListLabel3" Content="" HorizontalAlignment="Left" Margin="449,268,0,0" VerticalAlignment="Top" FontSize="14" Width="122" Height="59" HorizontalContentAlignment="Center" MouseEnter="rctList3_MouseEnter" MouseLeave="rctList3_MouseLeave" MouseDown="rctList3_MouseDown"/>
-            <Image x:Name="imgListImage4" HorizontalAlignment="Left" Height="174" Margin="639,89,0,0" VerticalAlignment="Top" Width="122" MouseEnter="rctList4_MouseEnter" MouseLeave="rctList4_MouseLeave" MouseDown="rctList4_MouseDown"/>
+            <Image x:Name="imgListImage4" HorizontalAlignment="Left" Height="174" Margin="639,89,0,0" VerticalAlignment="Top" Width="122" MouseEnter="rctList4_MouseEnter" MouseLeave="rctList4_MouseLeave" MouseDown="rctList4_MouseDown" Stretch="Fill"/>
             <Label x:Name="lblListLabel4" Content="" HorizontalAlignment="Left" Margin="639,268,0,0" VerticalAlignment="Top" FontSize="14" Width="122" Height="59" HorizontalContentAlignment="Center" MouseEnter="rctList4_MouseEnter" MouseLeave="rctList4_MouseLeave" MouseDown="rctList4_MouseDown"/>
-            <Image x:Name="imgListImage5" HorizontalAlignment="Left" Height="174" Margin="829,89,0,0" VerticalAlignment="Top" Width="122" MouseEnter="rctList5_MouseEnter" MouseLeave="rctList5_MouseLeave" MouseDown="rctList5_MouseDown"/>
+            <Image x:Name="imgListImage5" HorizontalAlignment="Left" Height="174" Margin="829,89,0,0" VerticalAlignment="Top" Width="122" MouseEnter="rctList5_MouseEnter" MouseLeave="rctList5_MouseLeave" MouseDown="rctList5_MouseDown" Stretch="Fill"/>
             <Label x:Name="lblListLabel5" Content="" HorizontalAlignment="Left" Margin="831,280,0,0" VerticalAlignment="Top" FontSize="14" Width="122" Height="59" HorizontalContentAlignment="Center" MouseEnter="rctList5_MouseEnter" MouseLeave="rctList5_MouseLeave" MouseDown="rctList5_MouseDown"/>
-            <Image x:Name="imgListImage6" HorizontalAlignment="Left" Height="174" Margin="67,342,0,0" VerticalAlignment="Top" Width="121" MouseEnter="rctList6_MouseEnter" MouseLeave="rctList6_MouseLeave" MouseDown="rctList6_MouseDown"/>
+            <Image x:Name="imgListImage6" HorizontalAlignment="Left" Height="174" Margin="67,342,0,0" VerticalAlignment="Top" Width="121" MouseEnter="rctList6_MouseEnter" MouseLeave="rctList6_MouseLeave" MouseDown="rctList6_MouseDown" Stretch="Fill"/>
             <Label x:Name="lblListLabel6" Content="" HorizontalAlignment="Left" Margin="67,520,0,0" VerticalAlignment="Top" FontSize="14" Width="121" Height="60" HorizontalContentAlignment="Center" MouseEnter="rctList6_MouseEnter" MouseLeave="rctList6_MouseLeave" MouseDown="rctList6_MouseDown"/>
-            <Image x:Name="imgListImage7" HorizontalAlignment="Left" Height="174" Margin="255,342,0,0" VerticalAlignment="Top" Width="121" MouseEnter="rctList7_MouseEnter" MouseLeave="rctList7_MouseLeave" MouseDown="rctList7_MouseDown"/>
+            <Image x:Name="imgListImage7" HorizontalAlignment="Left" Height="174" Margin="255,342,0,0" VerticalAlignment="Top" Width="121" MouseEnter="rctList7_MouseEnter" MouseLeave="rctList7_MouseLeave" MouseDown="rctList7_MouseDown" Stretch="Fill"/>
             <Label x:Name="lblListLabel7" Content="" HorizontalAlignment="Left" Margin="255,520,0,0" VerticalAlignment="Top" FontSize="14" Width="121" Height="60" HorizontalContentAlignment="Center" MouseEnter="rctList7_MouseEnter" MouseLeave="rctList7_MouseLeave" MouseDown="rctList7_MouseDown"/>
-            <Image x:Name="imgListImage8" HorizontalAlignment="Left" Height="174" Margin="449,342,0,0" VerticalAlignment="Top" Width="121" MouseEnter="rctList8_MouseEnter" MouseLeave="rctList8_MouseLeave" MouseDown="rctList8_MouseDown"/>
+            <Image x:Name="imgListImage8" HorizontalAlignment="Left" Height="174" Margin="449,342,0,0" VerticalAlignment="Top" Width="121" MouseEnter="rctList8_MouseEnter" MouseLeave="rctList8_MouseLeave" MouseDown="rctList8_MouseDown" Stretch="Fill"/>
             <Label x:Name="lblListLabel8" Content="" HorizontalAlignment="Left" Margin="449,520,0,0" VerticalAlignment="Top" FontSize="14" Width="121" Height="60" HorizontalContentAlignment="Center" MouseEnter="rctList8_MouseEnter" MouseLeave="rctList8_MouseLeave" MouseDown="rctList8_MouseDown"/>
-            <Image x:Name="imgListImage9" HorizontalAlignment="Left" Height="174" Margin="639,342,0,0" VerticalAlignment="Top" Width="121" MouseEnter="rctList9_MouseEnter" MouseLeave="rctList9_MouseLeave" MouseDown="rctList9_MouseDown"/>
+            <Image x:Name="imgListImage9" HorizontalAlignment="Left" Height="174" Margin="639,342,0,0" VerticalAlignment="Top" Width="121" MouseEnter="rctList9_MouseEnter" MouseLeave="rctList9_MouseLeave" MouseDown="rctList9_MouseDown" Stretch="Fill"/>
             <Label x:Name="lblListLabel9" Content="" HorizontalAlignment="Left" Margin="639,520,0,0" VerticalAlignment="Top" FontSize="14" Width="121" Height="60" HorizontalContentAlignment="Center" MouseEnter="rctList9_MouseEnter" MouseLeave="rctList9_MouseLeave" MouseDown="rctList9_MouseDown"/>
-            <Image x:Name="imgListImage10" HorizontalAlignment="Left" Height="174" Margin="829,342,0,0" VerticalAlignment="Top" Width="121" MouseEnter="rctList10_MouseEnter" MouseLeave="rctList10_MouseLeave" MouseDown="rctList10_MouseDown"/>
+            <Image x:Name="imgListImage10" HorizontalAlignment="Left" Height="174" Margin="829,342,0,0" VerticalAlignment="Top" Width="121" MouseEnter="rctList10_MouseEnter" MouseLeave="rctList10_MouseLeave" MouseDown="rctList10_MouseDown" Stretch="Fill"/>
             <Label x:Name="lblListLabel10" Content="" HorizontalAlignment="Left" Margin="829,520,0,0" VerticalAlignment="Top" FontSize="14" Width="121" Height="60" HorizontalContentAlignment="Center" MouseEnter="rctList10_MouseEnter" MouseLeave="rctList10_MouseLeave" MouseDown="rctList10_MouseDown"/>
             <Button x:Name="btnListNext" Content="Next" HorizontalAlignment="Left" Margin="916,585,0,0" VerticalAlignment="Top" Width="82" Background="Red" Foreground="White" Height="37" FontWeight="Bold" FontSize="14" d:IsHidden="false" Click="btnListNext_Click"/>
             <Button x:Name="btnListPrev" Content="Previous" HorizontalAlignment="Left" Margin="26,585,0,0" VerticalAlignment="Top" Width="82" Background="Red" Foreground="White" Height="37" FontWeight="Bold" FontSize="14" d:IsHidden="false" Click="btnListPrev_Click"/>
         </Grid>
-        <Grid x:Name="movieGrid" Height="640" Margin="0,-12,0,12" Width="1024" HorizontalAlignment="Right" VerticalAlignment="Bottom" d:IsHidden="false" Visibility="Hidden" Background="White">
+        <Grid x:Name="movieGrid" Height="640" Margin="0,-12,0,12" Width="1024" HorizontalAlignment="Right" VerticalAlignment="Bottom" d:IsHidden="false" Visibility="Hidden" Background="White" IsEnabled="false">
             <Image x:Name="imgMovie" HorizontalAlignment="Left" Height="510" Margin="44,68,0,0" VerticalAlignment="Top" Width="328"/>
             <Label x:Name="lblMovieTitle" Content="" HorizontalAlignment="Left" Margin="480,68,0,0" VerticalAlignment="Top" FontSize="36" FontWeight="Bold" Height="114" Width="444" HorizontalContentAlignment="Center"/>
             <Label x:Name="lblMovieType" Content="" HorizontalAlignment="Left" Margin="480,182,0,0" VerticalAlignment="Top" Foreground="#FF575757" FontSize="16"/>
@@ -107,7 +107,11 @@
             <Image x:Name="imgLoading" gif:AnimationBehavior.SourceUri="images/loading.gif" Margin="669,321,293,256" />
             <cefSharp:ChromiumWebBrowser x:Name="wbMovie" HorizontalAlignment="Left" Height="235" Margin="474,230,0,0" VerticalAlignment="Top" Width="460" LoadingStateChanged="wbMovie_LoadingStateChanged"/>
         </Grid>
+        <Grid x:Name="bookingGrid" Height="640" Margin="0,-12,0,12" Width="1024" HorizontalAlignment="Right" VerticalAlignment="Bottom" d:IsHidden="false" Visibility="Hidden" Background="White" IsEnabled="false">
+            <Rectangle HorizontalAlignment="Left" Height="462" Margin="51,133,0,0" VerticalAlignment="Top" Width="719" Stroke="Black"/>
+            <Label x:Name="lblBookingTitle" Content="Showing Movies." HorizontalAlignment="Left" Margin="51,60,0,0" VerticalAlignment="Top" FontSize="18" FontWeight="Bold"/>
 
+        </Grid>
     </Grid>
 
 

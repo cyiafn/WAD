@@ -132,6 +132,7 @@ namespace WAD
                         socket.Close();
                         break;
                     }
+                    Thread.Sleep(5000);
                 }
             });
         }
@@ -396,8 +397,9 @@ namespace WAD
             else
             {
                 TimeSpan diff = DateTime.Now - updatedTime;
-                if (diff.TotalDays > 0)
+                if (diff.Days > 0)
                 {
+                    movieList.Clear();
                     NetworkStream stream = new NetworkStream(socket);
                     StreamWriter writer = new StreamWriter(stream);
                     StreamReader read = new StreamReader(stream);
@@ -558,6 +560,7 @@ namespace WAD
             movieGrid.Visibility = Visibility.Visible;
             DoubleAnimation ani = new DoubleAnimation(1, TimeSpan.FromSeconds(0.2));
             movieGrid.BeginAnimation(Grid.OpacityProperty, ani);
+            wbMovie.IsEnabled = true;
             wbMovie.Address = string.Format("https://www.youtube.com/embed/{0}?version=3&playlist=1&hd=1&autoplay=1&fs=0&autohide=1&loop=1&controls=0", movieList[currentSelectedMovie].VideoId);
         }
 
