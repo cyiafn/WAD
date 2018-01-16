@@ -51,7 +51,7 @@
             <Label Content="Password:" HorizontalAlignment="Left" Margin="298,199,0,0" VerticalAlignment="Top" Foreground="White" FontSize="16"/>
             <PasswordBox x:Name="txtRegisterPassword" HorizontalAlignment="Left" Height="23" Margin="381,203,0,0" VerticalAlignment="Top" Width="263" Background="White" FontSize="14"/>
             <Label Content="Confirm Password:" HorizontalAlignment="Left" Margin="237,253,0,0" VerticalAlignment="Top" Foreground="White" FontSize="16"/>
-            <TextBox x:Name="txtRegisterConfirmPassword" HorizontalAlignment="Left" Height="23" Margin="381,256,0,0" Text="" VerticalAlignment="Top" Width="263" Background="White" VerticalScrollBarVisibility="Disabled" TextWrapping="NoWrap" MaxLines="1" FontSize="14"/>
+            <PasswordBox x:Name="txtRegisterConfirmPassword" HorizontalAlignment="Left" Height="23" Margin="381,256,0,0" VerticalAlignment="Top" Width="263" Background="White" FontSize="14"/>
             <Label Content="First Name:" HorizontalAlignment="Left" Margin="288,303,0,0" VerticalAlignment="Top" Foreground="White" FontSize="16"/>
             <TextBox x:Name="txtRegisterFirstName" HorizontalAlignment="Left" Height="23" Margin="381,307,0,0" Text="" VerticalAlignment="Top" Width="263" Background="White" VerticalScrollBarVisibility="Disabled" TextWrapping="NoWrap" MaxLines="1" FontSize="14"/>
             <Label Content="Middle Name:" HorizontalAlignment="Left" Margin="268,354,0,0" VerticalAlignment="Top" Foreground="White" FontSize="16"/>
@@ -62,7 +62,8 @@
             <Label Content="DOB:" HorizontalAlignment="Left" Margin="332,455,0,0" VerticalAlignment="Top" Foreground="White" FontSize="16"/>
             <TextBox x:Name="txtRegisterDOB" HorizontalAlignment="Left" Height="23" Margin="381,459,0,0" Text="" VerticalAlignment="Top" Width="263" Background="White" VerticalScrollBarVisibility="Disabled" TextWrapping="NoWrap" MaxLines="1" FontSize="14"/>
         </Grid>
-        <Grid x:Name="listGrid" Height="640" Margin="0,-12,0,12" Width="1024" HorizontalAlignment="Right" VerticalAlignment="Bottom" d:IsHidden="false" Visibility="hidden" Background="White" IsEnabled="false">
+        <Grid x:Name="listGrid" Height="640" Margin="0,-12,0,12" Width="1024" HorizontalAlignment="Right" VerticalAlignment="Bottom" d:IsHidden="false" Visibility="Hidden" Background="White" IsEnabled="false">
+
             <Rectangle x:Name="rctList1" HorizontalAlignment="Left" Height="238" Margin="67,89,0,0" VerticalAlignment="Top" Width="121" Fill="Black" Opacity="0" MouseEnter="rctList1_MouseEnter" MouseLeave="rctList1_MouseLeave" MouseDown="rctList1_MouseDown"/>
             <Rectangle x:Name="rctList2" HorizontalAlignment="Left" Height="238" Margin="255,89,0,0" VerticalAlignment="Top" Width="121" Fill="Black" Opacity="0" MouseEnter="rctList2_MouseEnter" MouseLeave="rctList2_MouseLeave" MouseDown="rctList2_MouseDown"/>
             <Rectangle x:Name="rctList3" HorizontalAlignment="Left" Height="238" Margin="449,89,0,0" VerticalAlignment="Top" Width="121" Fill="Black" Opacity="0" MouseEnter="rctList3_MouseEnter" MouseLeave="rctList3_MouseLeave" MouseDown="rctList3_MouseDown"/>
@@ -96,6 +97,7 @@
             <Label x:Name="lblListLabel10" Content="" HorizontalAlignment="Left" Margin="829,520,0,0" VerticalAlignment="Top" FontSize="14" Width="121" Height="60" HorizontalContentAlignment="Center" MouseEnter="rctList10_MouseEnter" MouseLeave="rctList10_MouseLeave" MouseDown="rctList10_MouseDown"/>
             <Button x:Name="btnListNext" Content="Next" HorizontalAlignment="Left" Margin="916,585,0,0" VerticalAlignment="Top" Width="82" Background="Red" Foreground="White" Height="37" FontWeight="Bold" FontSize="14" d:IsHidden="false" Click="btnListNext_Click"/>
             <Button x:Name="btnListPrev" Content="Previous" HorizontalAlignment="Left" Margin="26,585,0,0" VerticalAlignment="Top" Width="82" Background="Red" Foreground="White" Height="37" FontWeight="Bold" FontSize="14" d:IsHidden="false" Click="btnListPrev_Click"/>
+            <Button x:Name="btnListBookings" Content="My bookings" HorizontalAlignment="Left" Margin="878,37,0,0" VerticalAlignment="Top" Width="120" Background="{x:Null}" BorderBrush="{x:Null}" FontSize="18" Click="btnListBookings_Click"/>
         </Grid>
         <Grid x:Name="movieGrid" Height="640" Margin="0,-12,0,12" Width="1024" HorizontalAlignment="Right" VerticalAlignment="Bottom" d:IsHidden="false" Visibility="Hidden" Background="White" IsEnabled="false">
             <Image x:Name="imgMovie" HorizontalAlignment="Left" Height="510" Margin="44,68,0,0" VerticalAlignment="Top" Width="328"/>
@@ -140,13 +142,35 @@
             <Label x:Name="lblBookingTicketPrice" Content="$ 0.00" HorizontalAlignment="Left" Margin="921,433,0,0" VerticalAlignment="Top" FontSize="14" Foreground="Black"/>
             <Label x:Name="lblBookingTotal" Content="$ 0.00" HorizontalAlignment="Left" Margin="921,455,0,0" VerticalAlignment="Top" FontSize="14" Foreground="Black"/>
         </Grid>
-        <Grid x:Name="confirmationGrid" Height="640" Width="1024" HorizontalAlignment="Right" VerticalAlignment="Bottom" d:IsHidden="false" Visibility="Hidden" Background="White" IsEnabled="True">
+        <Grid x:Name="confirmationGrid" Height="640" Width="1024" HorizontalAlignment="Right" VerticalAlignment="Bottom" d:IsHidden="false" Visibility="Hidden" Background="White" IsEnabled="false">
             <Label Content="You are all set!" HorizontalAlignment="Left" Margin="330,54,0,0" VerticalAlignment="Top" FontSize="48" FontWeight="Bold"/>
             <TextBlock TextAlignment="Center" TextWrapping="WrapWithOverflow" Text="Thank you for using Ticketter, your tickets have been booked for the registered timings, here are your details:" HorizontalAlignment="Center" Margin="260,258,292,0" VerticalAlignment="Top" FontSize="20" Height="166" Width="472"/>
             <Image Source="images/icondark.png" HorizontalAlignment="Left" Height="100" Margin="444,137,0,0" VerticalAlignment="Top" Width="100"/>
             <TextBlock x:Name="txtConfirmSeats" TextAlignment="Center" TextWrapping="WrapWithOverflow" Text="" HorizontalAlignment="Left" Margin="246,354,0,0" VerticalAlignment="Top" Width="502" Height="86" FontSize="16"/>
-            <TextBlock x:Name="lblConfirmTime" TextAlignment="Center" TextWrapping="WrapWithOverflow" Text="" HorizontalAlignment="Left" Margin="260,445,0,0" VerticalAlignment="Top" Width="472" FontSize="18" Height="39"/>
+            <TextBlock x:Name="lblConfirmTime" TextAlignment="Center" TextWrapping="WrapWithOverflow" Text="" HorizontalAlignment="Left" Margin="246,445,0,0" VerticalAlignment="Top" Width="502" FontSize="18" Height="39"/>
             <Button x:Name="btnConfirmRecept" Content="Save Details" HorizontalAlignment="Left" Margin="380,507,0,0" VerticalAlignment="Top" Width="236" Background="Red" Foreground="White" Height="71" FontWeight="Bold" FontSize="24" d:IsHidden="false" BorderBrush="#FF707070" Click="btnConfirmRecept_Click"/>
+            <Button x:Name="btnConfirmBack" Content="Back" HorizontalAlignment="Left" Margin="26,572,0,0" VerticalAlignment="Top" Width="60" Background="{x:Null}" BorderBrush="{x:Null}" FontSize="18" Height="34" Click="btnConfirmBack_Click"/>
+        </Grid>
+        <Grid x:Name="checkGrid" Height="640" Width="1024" HorizontalAlignment="Right" VerticalAlignment="Bottom" d:IsHidden="false" Visibility="Hidden" Background="White" IsEnabled="true">
+            <DataGrid x:Name="dgCheckBookings" IsReadOnly="true" HorizontalAlignment="Stretch" Height="368" Margin="34,182,0,0" VerticalAlignment="Top" Width="948" FontSize="18" AutoGenerateColumns="False" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserSortColumns="False" MinColumnWidth="150">
+                <DataGrid.Resources>
+                    <Style TargetType="DataGridRow">
+                        <EventSetter Event="MouseDoubleClick" Handler="DataGridRow_MouseDoubleClick"/>
+                    </Style>
+                </DataGrid.Resources>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Binding="{Binding Path=ID}" CanUserResize="False" ClipboardContentBinding="{x:Null}" FontSize="18" Header="ID"/>
+                    <DataGridTextColumn Binding="{Binding Path=Title}" CanUserResize="False" ClipboardContentBinding="{x:Null}" FontSize="18" Header="Movie Title"/>
+                    <DataGridTextColumn Binding="{Binding Path=Seats}" ClipboardContentBinding="{x:Null}" CanUserResize="False" FontSize="18" Header="Seats Booked"/>
+                    <DataGridTextColumn Binding="{Binding Path=Date}" ClipboardContentBinding="{x:Null}" CanUserResize="False" FontSize="18" Header="Date"/>
+                    <DataGridTextColumn Binding="{Binding Path=Time}" ClipboardContentBinding="{x:Null}" CanUserResize="False" FontSize="18" Header="Timeslot booked"/>
+                </DataGrid.Columns>
+            </DataGrid>
+            <Button x:Name="btnCheckBack" Content="Back" HorizontalAlignment="Left" Margin="22,580,0,0" VerticalAlignment="Top" Width="56" Background="{x:Null}" BorderBrush="{x:Null}" FontSize="18" Click="btnCheckBack_Click"/>
+            <TextBox x:Name="txtCheckDelete" HorizontalAlignment="Left" Height="36" Margin="187,134,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="690" FontSize="18"/>
+            <Label Content="Enter Booking ID:" HorizontalAlignment="Left" Margin="34,134,0,0" VerticalAlignment="Top" FontSize="18"/>
+            <Button x:Name="btnCheckDelete" Content="Delete" HorizontalAlignment="Left" Margin="897,136,0,0" VerticalAlignment="Top" Width="85" Height="34" FontSize="16" Click="btnCheckDelete_Click"/>
+            <Label Content="Manage your bookings." HorizontalAlignment="Left" Margin="34,38,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="36"/>
         </Grid>
     </Grid>
 

@@ -361,6 +361,7 @@ namespace WAD
         }
         private void showListGrid()
         {
+            listGrid.Opacity = 0;
             lblListLabel1.Content = "";
             lblListLabel2.Content = "";
             lblListLabel3.Content = "";
@@ -557,12 +558,14 @@ namespace WAD
 
         private void hideMovieGrid()
         {
+            wbMovie.Address = string.Format("http://blank.org/");
             currentSelectedMovie = 0;
             DoubleAnimation ani = new DoubleAnimation(0, TimeSpan.FromSeconds(0.2));
             movieGrid.BeginAnimation(Grid.OpacityProperty, ani);
             movieGrid.IsEnabled = false;
             movieGrid.Visibility = Visibility.Hidden;
             imgLoading.IsEnabled = true;
+  
         }
 
         private void showMovieGrid()
@@ -572,6 +575,7 @@ namespace WAD
             lblMovieTitle.Content = movieList[currentSelectedMovie].Title;
             lblMovieType.Content = movieList[currentSelectedMovie].MovieType;
             lblMoviePrice.Content = "$ " + String.Format("{0:.00}", movieList[currentSelectedMovie].Price);
+            movieGrid.Opacity = 0;
             movieGrid.IsEnabled = true;
             movieGrid.Visibility = Visibility.Visible;
             DoubleAnimation ani = new DoubleAnimation(1, TimeSpan.FromSeconds(0.2));
@@ -671,7 +675,7 @@ namespace WAD
 
         private void btnRegisterRegister_Click(object sender, RoutedEventArgs e)
         {
-            if (txtRegisterPassword.Password == txtRegisterConfirmPassword.Text)
+            if (txtRegisterPassword.Password == txtRegisterConfirmPassword.Password)
             {
                 NetworkStream stream = new NetworkStream(socket);
                 StreamReader reader = new StreamReader(stream);
@@ -695,7 +699,7 @@ namespace WAD
                     currentUser.setDOB(txtRegisterDOB.Text);
                     txtRegisterEmail.Text = "";
                     txtRegisterPassword.Password = "";
-                    txtRegisterConfirmPassword.Text = "";
+                    txtRegisterConfirmPassword.Password = "";
                     txtRegisterFirstName.Text = "";
                     txtRegisterMiddleName.Text = "";
                     txtRegisterLastName.Text = "";
@@ -1274,6 +1278,7 @@ namespace WAD
 
         private void btnMovieBook_Click(object sender, RoutedEventArgs e)
         {
+            hideMovieGrid();
             showBookingGrid();
         }
 
@@ -1290,6 +1295,7 @@ namespace WAD
         }
         private void showBookingGrid()
         {
+            bookingGrid.Opacity = 0;
             bookingGrid.IsEnabled = true;
             bookingGrid.Visibility = Visibility.Visible;
             DoubleAnimation ani = new DoubleAnimation(1, TimeSpan.FromSeconds(0.2));
@@ -1367,7 +1373,7 @@ namespace WAD
         private void btnBookingBack_Click(object sender, RoutedEventArgs e)
         {
             hideBookingGrid();
-            showMovieGrid();
+            showListGrid();
         }
 
         private void ddlBookingDate_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -2210,7 +2216,7 @@ namespace WAD
             String[] datetime = dt.Split(';');
             writer.WriteLine(datetime[1]);
             writer.WriteLine(datetime[0]);
-            writer.WriteLine(lblBookingSeats.Text.ToString().Replace(". ", "|"));
+            writer.WriteLine(lblBookingSeats.Text.ToString().Replace(", ", "|"));
             string status = read.ReadLine();
             if (status == "success")
             {
@@ -2259,6 +2265,132 @@ namespace WAD
 
                     writer.Close();
                 }
+            }
+        }
+
+        private void btnConfirmBack_Click(object sender, RoutedEventArgs e)
+        {
+            hideConfirmGrid();
+            showListGrid();
+        }
+
+        private void showCheckGrid()
+        {
+            dgCheckBookings.Items.Clear();
+            NetworkStream stream = new NetworkStream(socket);
+            StreamWriter writer = new StreamWriter(stream);
+            StreamReader read = new StreamReader(stream);
+            writer.AutoFlush = true;
+            writer.WriteLine("view_booking");
+            writer.WriteLine(currentUser.getEmail());
+            string xml = "";
+            string line;
+            //string randomVar = read.ReadLine();
+            var xs = new XmlSerializer(typeof(HashSet<Booking>));
+            while ((line = read.ReadLine()) != "endofxml")
+            {
+                if (line == "fail")
+                {
+                    break;
+                }
+                else
+                {
+                    xml += line;
+                }
+            }
+
+            if (line == "fail")
+            {
+                System.Windows.MessageBox.Show("You have no bookings.");
+                showListGrid();
+            }
+            else
+            {
+                HashSet<Booking> newSet = new HashSet<Booking>();
+                using (var reader = new StringReader(xml))
+                {
+                    newSet = (HashSet<Booking>)xs.Deserialize(reader);
+                }
+                List<Booking> bookList = newSet.ToList();
+                for (int i = 0; i < bookList.Count; i++)
+                {
+                    string seats = "";
+                    bool first = true;
+                    for (int x = 0; x < (bookList[i].Seats).Length; x++)
+                    {
+                        if (first)
+                        {
+                            seats += bookList[i].Seats[x];
+                            first = false;
+                        }
+                        else
+                        {
+                            seats += ", " + bookList[i].Seats[x];
+                        }
+                    }
+
+                    var data = new tempDGClass { ID = bookList[i].TransactionId, Title = bookList[i].Movie, Seats = seats, Time = bookList[i].Timeslot, Date = bookList[i].Date };
+                    dgCheckBookings.Items.Add(data);
+                }
+                checkGrid.Opacity = 0;
+                checkGrid.IsEnabled = true;
+                checkGrid.Visibility = Visibility.Visible;
+                DoubleAnimation ani = new DoubleAnimation(1, TimeSpan.FromSeconds(0.2));
+                checkGrid.BeginAnimation(Grid.OpacityProperty, ani);
+            }
+        }
+        private void hideCheckGrid()
+        {
+            DoubleAnimation ani = new DoubleAnimation(0, TimeSpan.FromSeconds(0.2));
+            checkGrid.BeginAnimation(Grid.OpacityProperty, ani);
+            checkGrid.IsEnabled = false;
+            checkGrid.Visibility = Visibility.Hidden;
+        }
+        private void btnListBookings_Click(object sender, RoutedEventArgs e)
+        {
+            hideListGrid();
+            showCheckGrid();
+        }
+
+        private void btnCheckBack_Click(object sender, RoutedEventArgs e)
+        {
+            hideCheckGrid();
+            showListGrid();
+        }
+
+        public class tempDGClass
+        {
+            public string ID { get; set; }
+            public string Title { get; set; }
+            public string Seats { get; set; }
+            public string Time { get; set; }
+            public string Date { get; set; }
+        }
+
+        private void DataGridRow_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            tempDGClass booking = dgCheckBookings.SelectedItem as tempDGClass;
+            Clipboard.SetText(booking.ID.ToString());
+            txtCheckDelete.Text = booking.ID.ToString();
+        }
+
+        private void btnCheckDelete_Click(object sender, RoutedEventArgs e)
+        {
+            NetworkStream stream = new NetworkStream(socket);
+            StreamWriter writer = new StreamWriter(stream);
+            StreamReader read = new StreamReader(stream);
+            writer.AutoFlush = true;
+            writer.WriteLine("remove_booking");
+            writer.WriteLine(txtCheckDelete.Text);
+            if (read.ReadLine() == "success")
+            {
+                hideCheckGrid();
+                showCheckGrid();
+                
+            }
+            else
+            {
+                MessageBox.Show("No such ID!");
             }
         }
     }
