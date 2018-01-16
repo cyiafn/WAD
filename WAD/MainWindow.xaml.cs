@@ -544,6 +544,7 @@ namespace WAD
             movieGrid.BeginAnimation(Grid.OpacityProperty, ani);
             movieGrid.IsEnabled = false;
             movieGrid.Visibility = Visibility.Hidden;
+            imgLoading.IsEnabled = true;
         }
 
         private void showMovieGrid()
@@ -1255,6 +1256,18 @@ namespace WAD
         private void btnMovieBook_Click(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void wbMovie_LoadingStateChanged(object sender, CefSharp.LoadingStateChangedEventArgs e)
+        {
+            if(e.IsLoading == false)
+            {
+                this.Dispatcher.Invoke(() =>
+                {
+                    imgLoading.IsEnabled = false;
+                });
+                
+            }
         }
     }
 }

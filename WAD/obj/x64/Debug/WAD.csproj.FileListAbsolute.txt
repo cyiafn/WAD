@@ -22,3 +22,4 @@ C:\Users\chenyifan\Desktop\WAD\WAD\obj\x64\Debug\WAD.csproj.GenerateResource.Cac
 C:\Users\chenyifan\Desktop\WAD\WAD\obj\x64\Debug\WAD.csproj.CoreCompileInputs.cache
 C:\Users\chenyifan\Desktop\WAD\WAD\obj\x64\Debug\WAD.exe
 C:\Users\chenyifan\Desktop\WAD\WAD\obj\x64\Debug\WAD.pdb
+C:\Users\chenyifan\Desktop\WAD\WAD\bin\x64\Debug\XamlAnimatedGif.dll

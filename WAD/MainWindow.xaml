@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WAD"
         xmlns:cefSharp="clr-namespace:CefSharp.Wpf;assembly=CefSharp.Wpf"
+        xmlns:gif="https://github.com/XamlAnimatedGif/XamlAnimatedGif"
         mc:Ignorable="d"
         Title="Ticketter" Height="640" Width="1024" Background="White" Icon="images/icon.png">
 
@@ -103,7 +104,8 @@
             <Button x:Name="btnMovieBook" Content="Book" HorizontalAlignment="Left" Margin="480,494,0,0" VerticalAlignment="Top" Width="444" Background="Red" Foreground="White" Height="84" FontWeight="Bold" FontSize="24" d:IsHidden="false" Click="btnMovieBook_Click"/>
             <Label x:Name="lblMoviePrice" Content="" HorizontalAlignment="Left" Margin="824,547,0,0" VerticalAlignment="Top" Width="100" FontSize="16" HorizontalContentAlignment="Right" Foreground="White"/>
             <Button x:Name="btnMovieBack" Content="Back" HorizontalAlignment="Left" Margin="22,594,0,0" VerticalAlignment="Top" Width="45" FontSize="16" Background="{x:Null}" BorderBrush="{x:Null}" Click="btnMovieBack_Click"/>
-            <cefSharp:ChromiumWebBrowser x:Name="wbMovie" HorizontalAlignment="Left" Height="235" Margin="474,230,0,0" VerticalAlignment="Top" Width="460"/>
+            <Image x:Name="imgLoading" gif:AnimationBehavior.SourceUri="images/loading.gif" Margin="669,321,293,256" />
+            <cefSharp:ChromiumWebBrowser x:Name="wbMovie" HorizontalAlignment="Left" Height="235" Margin="474,230,0,0" VerticalAlignment="Top" Width="460" LoadingStateChanged="wbMovie_LoadingStateChanged"/>
         </Grid>
 
     </Grid>
