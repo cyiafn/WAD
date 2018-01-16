@@ -34,7 +34,7 @@
             <Label Content="Email:" HorizontalAlignment="Left" Margin="326,193,0,0" VerticalAlignment="Top" Foreground="White" FontSize="16"/>
             <TextBox x:Name="txtLoginEmail" HorizontalAlignment="Left" Height="23" Margin="381,197,0,0" Text="" VerticalAlignment="Top" Width="263" Background="White" VerticalScrollBarVisibility="Disabled" TextWrapping="NoWrap" MaxLines="1" FontSize="14"/>
             <Label Content="Password:" HorizontalAlignment="Left" Margin="298,233,0,0" VerticalAlignment="Top" Foreground="White" FontSize="16"/>
-            <TextBox x:Name="txtLoginPassword" HorizontalAlignment="Left" Height="23" Margin="381,239,0,0" Text="" VerticalAlignment="Top" Width="263" Background="White" VerticalScrollBarVisibility="Disabled" TextWrapping="NoWrap" MaxLines="1" FontSize="14"/>
+            <PasswordBox x:Name="txtLoginPassword" HorizontalAlignment="Left" Height="23" Margin="381,239,0,0" VerticalAlignment="Top" Width="263" Background="White" FontSize="14"/>
             <Button x:Name="btnLogin" Content="Login" HorizontalAlignment="Left" Margin="381,278,0,0" VerticalAlignment="Top" Width="263" Height="45" Background="Red" Foreground="White" FontWeight="Bold" FontSize="16" Click="btnLogin_Click"/>
             <Label x:Name="lblLoginIncorrect" Content="Your email address and password&#xD;&#xA;combination is incorrect!" HorizontalAlignment="Left" Margin="381,361,0,0" VerticalAlignment="Top" Foreground="#FFB90909" FontSize="18" Visibility="Hidden"/>
             <Button x:Name="btnLoginRegister" Content="Register" HorizontalAlignment="Left" Margin="468,323,0,0" VerticalAlignment="Top" Width="90" Height="45" Background="{x:Null}" Foreground="White" FontWeight="Bold" FontSize="16" Click="btnLoginRegister_Click" BorderBrush="{x:Null}"/>
@@ -49,7 +49,7 @@
             <Label Content="Email:" HorizontalAlignment="Left" Margin="326,145,0,0" VerticalAlignment="Top" Foreground="White" FontSize="16"/>
             <TextBox x:Name="txtRegisterEmail" HorizontalAlignment="Left" Height="23" Margin="381,149,0,0" Text="" VerticalAlignment="Top" Width="263" Background="White" VerticalScrollBarVisibility="Disabled" TextWrapping="NoWrap" MaxLines="1" FontSize="14"/>
             <Label Content="Password:" HorizontalAlignment="Left" Margin="298,199,0,0" VerticalAlignment="Top" Foreground="White" FontSize="16"/>
-            <TextBox x:Name="txtRegisterPassword" HorizontalAlignment="Left" Height="23" Margin="381,203,0,0" Text="" VerticalAlignment="Top" Width="263" Background="White" VerticalScrollBarVisibility="Disabled" TextWrapping="NoWrap" MaxLines="1" FontSize="14"/>
+            <PasswordBox x:Name="txtRegisterPassword" HorizontalAlignment="Left" Height="23" Margin="381,203,0,0" VerticalAlignment="Top" Width="263" Background="White" FontSize="14"/>
             <Label Content="Confirm Password:" HorizontalAlignment="Left" Margin="237,253,0,0" VerticalAlignment="Top" Foreground="White" FontSize="16"/>
             <TextBox x:Name="txtRegisterConfirmPassword" HorizontalAlignment="Left" Height="23" Margin="381,256,0,0" Text="" VerticalAlignment="Top" Width="263" Background="White" VerticalScrollBarVisibility="Disabled" TextWrapping="NoWrap" MaxLines="1" FontSize="14"/>
             <Label Content="First Name:" HorizontalAlignment="Left" Margin="288,303,0,0" VerticalAlignment="Top" Foreground="White" FontSize="16"/>
@@ -107,10 +107,46 @@
             <Image x:Name="imgLoading" gif:AnimationBehavior.SourceUri="images/loading.gif" Margin="669,321,293,256" />
             <cefSharp:ChromiumWebBrowser x:Name="wbMovie" HorizontalAlignment="Left" Height="235" Margin="474,230,0,0" VerticalAlignment="Top" Width="460" LoadingStateChanged="wbMovie_LoadingStateChanged"/>
         </Grid>
-        <Grid x:Name="bookingGrid" Height="640" Margin="0,-12,0,12" Width="1024" HorizontalAlignment="Right" VerticalAlignment="Bottom" d:IsHidden="false" Visibility="Hidden" Background="White" IsEnabled="false">
-            <Rectangle HorizontalAlignment="Left" Height="462" Margin="51,133,0,0" VerticalAlignment="Top" Width="719" Stroke="Black"/>
-            <Label x:Name="lblBookingTitle" Content="Showing Movies." HorizontalAlignment="Left" Margin="51,60,0,0" VerticalAlignment="Top" FontSize="18" FontWeight="Bold"/>
-
+        <Grid x:Name="bookingGrid" Height="640" Width="1024" HorizontalAlignment="Right" VerticalAlignment="Bottom" d:IsHidden="false" Visibility="Hidden" Background="White" IsEnabled="false">
+            <Rectangle HorizontalAlignment="Left" Height="404" Margin="51,184,0,0" VerticalAlignment="Top" Width="667" Stroke="Black"/>
+            <Label x:Name="lblBookingTitle" Content="" HorizontalAlignment="Left" Margin="51,60,0,0" VerticalAlignment="Top" FontSize="18" FontWeight="Bold" Foreground="Black"/>
+            <ComboBox x:Name="ddlBookingDate" HorizontalAlignment="Left" Margin="142,126,0,0" VerticalAlignment="Top" Width="576" Height="34" SelectionChanged="ddlBookingDate_SelectionChanged"/>
+            <Rectangle HorizontalAlignment="Left" Height="376" Margin="754,126,0,0" VerticalAlignment="Top" Width="236" Fill="#FFE2E2E2"/>
+            <Button x:Name="btnBookingConfirm" Content="Confirm" HorizontalAlignment="Left" Margin="754,520,0,0" VerticalAlignment="Top" Width="236" Background="Red" Foreground="White" Height="71" FontWeight="Bold" FontSize="24" d:IsHidden="false" BorderBrush="#FF707070" Click="btnBookingConfirm_Click"/>
+            <Label Content="Seats booked." HorizontalAlignment="Left" Margin="799,142,0,0" VerticalAlignment="Top" Background="{x:Null}" Foreground="Black" FontSize="20" FontWeight="Bold"/>
+            <TextBlock x:Name="lblBookingSeats" Text="" TextWrapping="WrapWithOverflow" HorizontalAlignment="Left" Margin="776,218,0,0" VerticalAlignment="Top" FontSize="18" Foreground="Black" Height="164" Width="192"/>
+            <Button Content="SCREEN" HorizontalAlignment="Left" Margin="70,535,0,0" VerticalAlignment="Top" Width="634" Height="34" FontSize="18" IsEnabled="False"/>
+            <Button x:Name="btnBookingC1" Content="C1" HorizontalAlignment="Left" Margin="116,218,0,0" VerticalAlignment="Top" Width="61" Height="61" FontSize="18" Background="{x:Null}" BorderBrush="#FFA2A2A2" Foreground="White" Click="btnBookingC1_Click"/>
+            <Button x:Name="btnBookingC2" Content="C2" HorizontalAlignment="Left" Margin="234,218,0,0" VerticalAlignment="Top" Width="62" Height="61" FontSize="18" Background="{x:Null}" BorderBrush="#FFA2A2A2" Foreground="White" Click="btnBookingC2_Click"/>
+            <Button x:Name="btnBookingC3" Content="C3" HorizontalAlignment="Left" Margin="357,218,0,0" VerticalAlignment="Top" Width="62" Height="61" FontSize="18" Background="{x:Null}" BorderBrush="#FFA2A2A2" Foreground="White" Click="btnBookingC3_Click"/>
+            <Button x:Name="btnBookingC4" Content="C4" HorizontalAlignment="Left" Margin="474,218,0,0" VerticalAlignment="Top" Width="62" Height="61" FontSize="18" Background="{x:Null}" BorderBrush="#FFA2A2A2" Foreground="White" Click="btnBookingC4_Click"/>
+            <Button x:Name="btnBookingC5" Content="C5" HorizontalAlignment="Left" Margin="585,218,0,0" VerticalAlignment="Top" Width="62" Height="61" FontSize="18" Background="{x:Null}" BorderBrush="#FFA2A2A2" Foreground="White" Click="btnBookingC5_Click"/>
+            <Button x:Name="btnBookingB1" Content="B1" HorizontalAlignment="Left" Margin="116,322,0,0" VerticalAlignment="Top" Width="61" Height="60" FontSize="18" Background="{x:Null}" BorderBrush="#FFA2A2A2" Foreground="White" Click="btnBookingB1_Click"/>
+            <Button x:Name="btnBookingB2" Content="B2" HorizontalAlignment="Left" Margin="234,322,0,0" VerticalAlignment="Top" Width="62" Height="60" FontSize="18" Background="{x:Null}" BorderBrush="#FFA2A2A2" Foreground="White" Click="btnBookingB2_Click"/>
+            <Button x:Name="btnBookingB3" Content="B3" HorizontalAlignment="Left" Margin="357,322,0,0" VerticalAlignment="Top" Width="62" Height="60" FontSize="18" Background="{x:Null}" BorderBrush="#FFA2A2A2" Foreground="White" Click="btnBookingB3_Click"/>
+            <Button x:Name="btnBookingB4" Content="B4" HorizontalAlignment="Left" Margin="474,322,0,0" VerticalAlignment="Top" Width="62" Height="60" FontSize="18" Background="{x:Null}" BorderBrush="#FFA2A2A2" Foreground="White" Click="btnBookingB4_Click"/>
+            <Button x:Name="btnBookingB5" Content="B5" HorizontalAlignment="Left" Margin="585,322,0,0" VerticalAlignment="Top" Width="62" Height="60" FontSize="18" Background="{x:Null}" BorderBrush="#FFA2A2A2" Foreground="White" Click="btnBookingB5_Click"/>
+            <Button x:Name="btnBookingA1" Content="A1" HorizontalAlignment="Left" Margin="116,424,0,0" VerticalAlignment="Top" Width="61" Height="60" FontSize="18" Background="{x:Null}" BorderBrush="#FFA2A2A2" Foreground="White" Click="btnBookingA1_Click"/>
+            <Button x:Name="btnBookingA2" Content="A2" HorizontalAlignment="Left" Margin="234,424,0,0" VerticalAlignment="Top" Width="62" Height="60" FontSize="18" Background="{x:Null}" BorderBrush="#FFA2A2A2" Foreground="White" Click="btnBookingA2_Click"/>
+            <Button x:Name="btnBookingA3" Content="A3" HorizontalAlignment="Left" Margin="357,424,0,0" VerticalAlignment="Top" Width="62" Height="60" FontSize="18" Background="{x:Null}" BorderBrush="#FFA2A2A2" Foreground="White" Click="btnBookingA3_Click"/>
+            <Button x:Name="btnBookingA4" Content="A4" HorizontalAlignment="Left" Margin="474,424,0,0" VerticalAlignment="Top" Width="62" Height="60" FontSize="18" Background="{x:Null}" BorderBrush="#FFA2A2A2" Foreground="White" Click="btnBookingA4_Click"/>
+            <Button x:Name="btnBookingA5" Content="A5" HorizontalAlignment="Left" Margin="585,424,0,0" VerticalAlignment="Top" Width="62" Height="60" FontSize="18" Background="{x:Null}" BorderBrush="#FFA2A2A2" Foreground="White" Click="btnBookingA5_Click"/>
+            <Label Content="Timeslot: " HorizontalAlignment="Left" Margin="51,126,0,0" VerticalAlignment="Top" Foreground="Black" FontSize="18"/>
+            <Button x:Name="btnBookingBack" Content="Back" HorizontalAlignment="Left" Margin="10,589,0,0" VerticalAlignment="Top" Width="51" Background="{x:Null}" BorderBrush="{x:Null}" FontSize="18" Click="btnBookingBack_Click"/>
+            <Label Content="Total Seats:" HorizontalAlignment="Left" Margin="791,412,0,0" VerticalAlignment="Top" Foreground="Black" FontSize="14"/>
+            <Label Content="Price Per Ticket:" HorizontalAlignment="Left" Margin="764,432,0,0" VerticalAlignment="Top" Foreground="Black" FontSize="14"/>
+            <Label Content="Total:" HorizontalAlignment="Left" Margin="828,455,0,0" VerticalAlignment="Top" FontSize="14" Foreground="Black"/>
+            <Label x:Name="lblBookingTotalSeats" Content="0" HorizontalAlignment="Left" Margin="950,412,0,0" VerticalAlignment="Top" FontSize="14" Foreground="Black"/>
+            <Label x:Name="lblBookingTicketPrice" Content="$ 0.00" HorizontalAlignment="Left" Margin="921,433,0,0" VerticalAlignment="Top" FontSize="14" Foreground="Black"/>
+            <Label x:Name="lblBookingTotal" Content="$ 0.00" HorizontalAlignment="Left" Margin="921,455,0,0" VerticalAlignment="Top" FontSize="14" Foreground="Black"/>
+        </Grid>
+        <Grid x:Name="confirmationGrid" Height="640" Width="1024" HorizontalAlignment="Right" VerticalAlignment="Bottom" d:IsHidden="false" Visibility="Hidden" Background="White" IsEnabled="True">
+            <Label Content="You are all set!" HorizontalAlignment="Left" Margin="330,54,0,0" VerticalAlignment="Top" FontSize="48" FontWeight="Bold"/>
+            <TextBlock TextAlignment="Center" TextWrapping="WrapWithOverflow" Text="Thank you for using Ticketter, your tickets have been booked for the registered timings, here are your details:" HorizontalAlignment="Center" Margin="260,258,292,0" VerticalAlignment="Top" FontSize="20" Height="166" Width="472"/>
+            <Image Source="images/icondark.png" HorizontalAlignment="Left" Height="100" Margin="444,137,0,0" VerticalAlignment="Top" Width="100"/>
+            <TextBlock x:Name="txtConfirmSeats" TextAlignment="Center" TextWrapping="WrapWithOverflow" Text="" HorizontalAlignment="Left" Margin="246,354,0,0" VerticalAlignment="Top" Width="502" Height="86" FontSize="16"/>
+            <TextBlock x:Name="lblConfirmTime" TextAlignment="Center" TextWrapping="WrapWithOverflow" Text="" HorizontalAlignment="Left" Margin="260,445,0,0" VerticalAlignment="Top" Width="472" FontSize="18" Height="39"/>
+            <Button x:Name="btnConfirmRecept" Content="Save Details" HorizontalAlignment="Left" Margin="380,507,0,0" VerticalAlignment="Top" Width="236" Background="Red" Foreground="White" Height="71" FontWeight="Bold" FontSize="24" d:IsHidden="false" BorderBrush="#FF707070" Click="btnConfirmRecept_Click"/>
         </Grid>
     </Grid>
 

@@ -22,7 +22,6 @@ using System.Threading;
 using System.Windows.Media.Animation;
 using System.Security.Cryptography;
 using System.Xml.Serialization;
-
 namespace WAD
 {
     /// <summary>
@@ -44,6 +43,8 @@ namespace WAD
         public static int listStart = 0;
 
         public static int currentSelectedMovie = 0;
+
+        public static List<String> showtimeList = new List<string>();
 
         private static BitmapImage LoadImage(byte[] imageData)
         {
@@ -177,8 +178,8 @@ namespace WAD
             //var dispatcher = myTextBlock.Dispatcher;
             //if (dispatcher.CheckAccess())
             //    action();
-                //myTextBlock.Text = msg;
-                //myLabel.Content = msg;
+            //myTextBlock.Text = msg;
+            //myLabel.Content = msg;
             //else
             //    dispatcher.Invoke(action);
             //if (this.InvokeRequired)
@@ -335,6 +336,21 @@ namespace WAD
             DoubleAnimation ani = new DoubleAnimation(1, TimeSpan.FromSeconds(0.2));
             registerGrid.BeginAnimation(Grid.OpacityProperty, ani);
         }
+        private void hideConfirmGrid()
+        {
+            DoubleAnimation ani = new DoubleAnimation(0, TimeSpan.FromSeconds(0.2));
+            confirmationGrid.BeginAnimation(Grid.OpacityProperty, ani);
+            confirmationGrid.IsEnabled = false;
+            confirmationGrid.Visibility = Visibility.Hidden;
+        }
+        private void showConfirmGrid()
+        {
+            confirmationGrid.Opacity = 0;
+            confirmationGrid.IsEnabled = true;
+            confirmationGrid.Visibility = Visibility.Visible;
+            DoubleAnimation ani = new DoubleAnimation(1, TimeSpan.FromSeconds(0.2));
+            confirmationGrid.BeginAnimation(Grid.OpacityProperty, ani);
+        }
         private void hideListGrid()
         {
             listStart = 0;
@@ -438,7 +454,7 @@ namespace WAD
             {
                 x = listStart + 10;
             }
-            for (int i = listStart; i < x; i ++)
+            for (int i = listStart; i < x; i++)
             {
                 if (counter == 1)
                 {
@@ -574,7 +590,7 @@ namespace WAD
                 writer.AutoFlush = true;
                 writer.WriteLine("login");
                 writer.WriteLine(txtLoginEmail.Text);
-                string password = sha256_hash(txtLoginPassword.Text);
+                string password = sha256_hash(txtLoginPassword.Password);
                 writer.WriteLine(password);
                 if (reader.ReadLine() == "authorized")
                 {
@@ -585,7 +601,7 @@ namespace WAD
                     currentUser.setEmail(txtLoginEmail.Text);
                     currentUser.setPassword(password);
                     txtLoginEmail.Text = "";
-                    txtLoginPassword.Text = "";
+                    txtLoginPassword.Password = "";
                     lblLoginIncorrect.Visibility = Visibility.Hidden;
                     hideLoginGrid();
                     showHomeGrid();
@@ -622,14 +638,14 @@ namespace WAD
                 else
                 {
                     lblLoginIncorrect.Visibility = Visibility.Visible;
-                    txtLoginPassword.Text = "";
+                    txtLoginPassword.Password = "";
                 }
             }
             catch (Exception error)
             {
                 throw error;
             }
-            
+
         }
         public static String sha256_hash(String value)
         {
@@ -655,7 +671,7 @@ namespace WAD
 
         private void btnRegisterRegister_Click(object sender, RoutedEventArgs e)
         {
-            if (txtRegisterPassword.Text == txtRegisterConfirmPassword.Text)
+            if (txtRegisterPassword.Password == txtRegisterConfirmPassword.Text)
             {
                 NetworkStream stream = new NetworkStream(socket);
                 StreamReader reader = new StreamReader(stream);
@@ -663,7 +679,7 @@ namespace WAD
                 writer.AutoFlush = true;
                 writer.WriteLine("register");
                 writer.WriteLine(txtRegisterEmail.Text);
-                writer.WriteLine(sha256_hash(txtRegisterPassword.Text));
+                writer.WriteLine(sha256_hash(txtRegisterPassword.Password));
                 writer.WriteLine(txtRegisterFirstName.Text);
                 writer.WriteLine(txtRegisterMiddleName.Text);
                 writer.WriteLine(txtRegisterLastName.Text);
@@ -672,13 +688,13 @@ namespace WAD
                 if (reader.ReadLine() == "success")
                 {
                     currentUser.setEmail(txtRegisterEmail.Text);
-                    currentUser.setPassword(sha256_hash(txtRegisterPassword.Text));
+                    currentUser.setPassword(sha256_hash(txtRegisterPassword.Password));
                     currentUser.setFirstName(txtRegisterFirstName.Text);
                     currentUser.setMiddleName(txtRegisterMiddleName.Text);
                     currentUser.setLastName(txtRegisterLastName.Text);
                     currentUser.setDOB(txtRegisterDOB.Text);
                     txtRegisterEmail.Text = "";
-                    txtRegisterPassword.Text = "";
+                    txtRegisterPassword.Password = "";
                     txtRegisterConfirmPassword.Text = "";
                     txtRegisterFirstName.Text = "";
                     txtRegisterMiddleName.Text = "";
@@ -1025,12 +1041,12 @@ namespace WAD
             {
                 DoubleAnimation ani = new DoubleAnimation(0.2, TimeSpan.FromSeconds(0.1));
                 rctList3.BeginAnimation(Rectangle.OpacityProperty, ani);
-            } 
+            }
         }
 
         private void rctList4_MouseEnter(object sender, MouseEventArgs e)
         {
-            if (movieList.ElementAtOrDefault(listStart -7) != null)
+            if (movieList.ElementAtOrDefault(listStart - 7) != null)
             {
                 DoubleAnimation ani = new DoubleAnimation(0.2, TimeSpan.FromSeconds(0.1));
                 rctList4.BeginAnimation(Rectangle.OpacityProperty, ani);
@@ -1039,7 +1055,7 @@ namespace WAD
 
         private void rctList5_MouseEnter(object sender, MouseEventArgs e)
         {
-            if (movieList.ElementAtOrDefault(listStart -6) != null)
+            if (movieList.ElementAtOrDefault(listStart - 6) != null)
             {
                 DoubleAnimation ani = new DoubleAnimation(0.2, TimeSpan.FromSeconds(0.1));
                 rctList5.BeginAnimation(Rectangle.OpacityProperty, ani);
@@ -1258,18 +1274,991 @@ namespace WAD
 
         private void btnMovieBook_Click(object sender, RoutedEventArgs e)
         {
-
+            showBookingGrid();
         }
 
         private void wbMovie_LoadingStateChanged(object sender, CefSharp.LoadingStateChangedEventArgs e)
         {
-            if(e.IsLoading == false)
+            if (e.IsLoading == false)
             {
                 this.Dispatcher.Invoke(() =>
                 {
                     imgLoading.IsEnabled = false;
                 });
-                
+
+            }
+        }
+        private void showBookingGrid()
+        {
+            bookingGrid.IsEnabled = true;
+            bookingGrid.Visibility = Visibility.Visible;
+            DoubleAnimation ani = new DoubleAnimation(1, TimeSpan.FromSeconds(0.2));
+            bookingGrid.BeginAnimation(Grid.OpacityProperty, ani);
+            BrushConverter bc = new BrushConverter();
+            btnBookingA1.Background = (Brush)bc.ConvertFrom("#FFFF0000");
+            btnBookingA2.Background = (Brush)bc.ConvertFrom("#FFFF0000");
+            btnBookingA3.Background = (Brush)bc.ConvertFrom("#FFFF0000");
+            btnBookingA4.Background = (Brush)bc.ConvertFrom("#FFFF0000");
+            btnBookingA5.Background = (Brush)bc.ConvertFrom("#FFFF0000");
+            btnBookingB1.Background = (Brush)bc.ConvertFrom("#FFFF0000");
+            btnBookingB2.Background = (Brush)bc.ConvertFrom("#FFFF0000");
+            btnBookingB3.Background = (Brush)bc.ConvertFrom("#FFFF0000");
+            btnBookingB4.Background = (Brush)bc.ConvertFrom("#FFFF0000");
+            btnBookingB5.Background = (Brush)bc.ConvertFrom("#FFFF0000");
+            btnBookingC1.Background = (Brush)bc.ConvertFrom("#FFFF0000");
+            btnBookingC2.Background = (Brush)bc.ConvertFrom("#FFFF0000");
+            btnBookingC3.Background = (Brush)bc.ConvertFrom("#FFFF0000");
+            btnBookingC4.Background = (Brush)bc.ConvertFrom("#FFFF0000");
+            btnBookingC5.Background = (Brush)bc.ConvertFrom("#FFFF0000");
+            btnBookingA1.IsEnabled = false;
+            btnBookingA2.IsEnabled = false;
+            btnBookingA3.IsEnabled = false;
+            btnBookingA4.IsEnabled = false;
+            btnBookingA5.IsEnabled = false;
+            btnBookingB1.IsEnabled = false;
+            btnBookingB2.IsEnabled = false;
+            btnBookingB3.IsEnabled = false;
+            btnBookingB4.IsEnabled = false;
+            btnBookingB5.IsEnabled = false;
+            btnBookingC1.IsEnabled = false;
+            btnBookingC2.IsEnabled = false;
+            btnBookingC3.IsEnabled = false;
+            btnBookingC4.IsEnabled = false;
+            btnBookingC5.IsEnabled = false;
+            btnBookingConfirm.IsEnabled = false;
+            NetworkStream stream = new NetworkStream(socket);
+            StreamWriter writer = new StreamWriter(stream);
+            StreamReader read = new StreamReader(stream);
+            writer.AutoFlush = true;
+            writer.WriteLine("request_showtime");
+            writer.WriteLine(movieList[currentSelectedMovie].Title);
+            lblBookingTicketPrice.Content = "$ " + String.Format("{0:.00}", movieList[currentSelectedMovie].Price);
+            lblBookingTotal.Content = "$ 0.00";
+            string xml = "";
+            string line;
+            //string randomVar = read.ReadLine();
+            var xs = new XmlSerializer(typeof(List<String>));
+            while ((line = read.ReadLine()) != "endofxml")
+            {
+                xml += line;
+            }
+            using (var reader = new StringReader(xml))
+            {
+                showtimeList = (List<String>)xs.Deserialize(reader);
+            }
+            lblBookingTitle.Content = movieList[currentSelectedMovie].Title;
+            for (int i = 0; i < showtimeList.Count; i++)
+            {
+                string[] tempList = showtimeList[i].Split(';');
+                ddlBookingDate.Items.Add(tempList[1] + " on " + tempList[0]);
+            }
+        }
+        private void hideBookingGrid()
+        {
+            DoubleAnimation ani = new DoubleAnimation(0, TimeSpan.FromSeconds(0.2));
+            bookingGrid.BeginAnimation(Grid.OpacityProperty, ani);
+            bookingGrid.IsEnabled = false;
+            bookingGrid.Visibility = Visibility.Hidden;
+            lblBookingSeats.Text = "";
+            lblBookingTotalSeats.Content = "0";
+            showtimeList.Clear();
+        }
+
+        private void btnBookingBack_Click(object sender, RoutedEventArgs e)
+        {
+            hideBookingGrid();
+            showMovieGrid();
+        }
+
+        private void ddlBookingDate_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            btnBookingA1.IsEnabled = true;
+            btnBookingA2.IsEnabled = true;
+            btnBookingA3.IsEnabled = true;
+            btnBookingA4.IsEnabled = true;
+            btnBookingA5.IsEnabled = true;
+            btnBookingB1.IsEnabled = true;
+            btnBookingB2.IsEnabled = true;
+            btnBookingB3.IsEnabled = true;
+            btnBookingB4.IsEnabled = true;
+            btnBookingB5.IsEnabled = true;
+            btnBookingC1.IsEnabled = true;
+            btnBookingC2.IsEnabled = true;
+            btnBookingC3.IsEnabled = true;
+            btnBookingC4.IsEnabled = true;
+            btnBookingC5.IsEnabled = true;
+            btnBookingConfirm.IsEnabled = true;
+            BrushConverter bc = new BrushConverter();
+            string tempVal = ddlBookingDate.SelectedValue.ToString().Replace(" on ", ";");
+            String[] tempArray = tempVal.Split(';');
+
+            for (int i = 0; i < showtimeList.Count; i++)
+            {
+                if (showtimeList[i].StartsWith(tempArray[1] + ";" + tempArray[0]))
+                {
+                    if (showtimeList[i].Contains("C1"))
+                    {
+                        btnBookingC1.Background = (Brush)bc.ConvertFrom("#FF033A00");
+                    }
+                    if (showtimeList[i].Contains("C2"))
+                    {
+                        btnBookingC2.Background = (Brush)bc.ConvertFrom("#FF033A00");
+                    }
+                    if (showtimeList[i].Contains("C3"))
+                    {
+                        btnBookingC3.Background = (Brush)bc.ConvertFrom("#FF033A00");
+                    }
+                    if (showtimeList[i].Contains("C4"))
+                    {
+                        btnBookingC4.Background = (Brush)bc.ConvertFrom("#FF033A00");
+                    }
+                    if (showtimeList[i].Contains("C5"))
+                    {
+                        btnBookingC5.Background = (Brush)bc.ConvertFrom("#FF033A00");
+                    }
+                    if (showtimeList[i].Contains("B1"))
+                    {
+                        btnBookingB1.Background = (Brush)bc.ConvertFrom("#FF033A00");
+                    }
+                    if (showtimeList[i].Contains("B2"))
+                    {
+                        btnBookingB2.Background = (Brush)bc.ConvertFrom("#FF033A00");
+                    }
+                    if (showtimeList[i].Contains("B3"))
+                    {
+                        btnBookingB3.Background = (Brush)bc.ConvertFrom("#FF033A00");
+                    }
+                    if (showtimeList[i].Contains("B4"))
+                    {
+                        btnBookingB4.Background = (Brush)bc.ConvertFrom("#FF033A00");
+                    }
+                    if (showtimeList[i].Contains("B5"))
+                    {
+                        btnBookingB5.Background = (Brush)bc.ConvertFrom("#FF033A00");
+                    }
+                    if (showtimeList[i].Contains("A1"))
+                    {
+                        btnBookingA1.Background = (Brush)bc.ConvertFrom("#FF033A00");
+                    }
+                    if (showtimeList[i].Contains("A2"))
+                    {
+                        btnBookingA2.Background = (Brush)bc.ConvertFrom("#FF033A00");
+                    }
+                    if (showtimeList[i].Contains("A3"))
+                    {
+                        btnBookingA3.Background = (Brush)bc.ConvertFrom("#FF033A00");
+                    }
+                    if (showtimeList[i].Contains("A4"))
+                    {
+                        btnBookingA4.Background = (Brush)bc.ConvertFrom("#FF033A00");
+                    }
+                    if (showtimeList[i].Contains("A5"))
+                    {
+                        btnBookingA5.Background = (Brush)bc.ConvertFrom("#FF033A00");
+                    }
+                }
+            }
+        }
+
+        private void btnBookingC1_Click(object sender, RoutedEventArgs e)
+        {
+            BrushConverter bc = new BrushConverter();
+            if (btnBookingC1.Background.ToString() == "#FFFF0000")
+            {
+                System.Windows.MessageBox.Show("This seat is already taken!");
+            }
+            else if (btnBookingC1.Background.ToString() == "#FF033A00")
+            {
+                btnBookingC1.Background = (Brush)bc.ConvertFrom("#FF004385");
+                int seats = Convert.ToInt32(lblBookingTotalSeats.Content);
+                seats += 1;
+                lblBookingTotalSeats.Content = seats.ToString();
+                double total = Convert.ToDouble(lblBookingTotal.Content.ToString().Replace("$ ", ""));
+                double price = Convert.ToDouble(lblBookingTicketPrice.Content.ToString().Replace("$ ", ""));
+                total = seats * price;
+                lblBookingTotal.Content = "$ " + String.Format("{0:.00}", total);
+
+                if (lblBookingSeats.Text.ToString() == "")
+                {
+                    lblBookingSeats.Text += "C1";
+                }
+                else
+                {
+                    lblBookingSeats.Text += ", C1";
+                }
+            }
+            else
+            {
+                btnBookingC1.Background = (Brush)bc.ConvertFrom("#FF033A00");
+                int seats = Convert.ToInt32(lblBookingTotalSeats.Content);
+                seats -= 1;
+                lblBookingTotalSeats.Content = seats.ToString();
+                double total = Convert.ToDouble(lblBookingTotal.Content.ToString().Replace("$ ", ""));
+                double price = Convert.ToDouble(lblBookingTicketPrice.Content.ToString().Replace("$ ", ""));
+                total = seats * price;
+                lblBookingTotal.Content = "$ " + String.Format("{0:.00}", total);
+
+                if (lblBookingSeats.Text.ToString() == "C1")
+                {
+                    lblBookingSeats.Text = "";
+                }
+                else
+                {
+                    lblBookingSeats.Text = lblBookingSeats.Text.ToString().Replace(", C1", "");
+                }
+            }
+        }
+
+        private void btnBookingC2_Click(object sender, RoutedEventArgs e)
+        {
+            BrushConverter bc = new BrushConverter();
+            if (btnBookingC2.Background.ToString() == "#FFFF0000")
+            {
+                System.Windows.MessageBox.Show("This seat is already taken!");
+            }
+            else if (btnBookingC2.Background.ToString() == "#FF033A00")
+            {
+                btnBookingC2.Background = (Brush)bc.ConvertFrom("#FF004385");
+                int seats = Convert.ToInt32(lblBookingTotalSeats.Content);
+                seats += 1;
+                lblBookingTotalSeats.Content = seats.ToString();
+                double total = Convert.ToDouble(lblBookingTotal.Content.ToString().Replace("$ ", ""));
+                double price = Convert.ToDouble(lblBookingTicketPrice.Content.ToString().Replace("$ ", ""));
+                total = seats * price;
+                lblBookingTotal.Content = "$ " + String.Format("{0:.00}", total);
+
+                if (lblBookingSeats.Text.ToString() == "")
+                {
+                    lblBookingSeats.Text += "C2";
+                }
+                else
+                {
+                    lblBookingSeats.Text += ", C2";
+                }
+            }
+            else
+            {
+                btnBookingC2.Background = (Brush)bc.ConvertFrom("#FF033A00");
+                int seats = Convert.ToInt32(lblBookingTotalSeats.Content);
+                seats -= 1;
+                lblBookingTotalSeats.Content = seats.ToString();
+                double total = Convert.ToDouble(lblBookingTotal.Content.ToString().Replace("$ ", ""));
+                double price = Convert.ToDouble(lblBookingTicketPrice.Content.ToString().Replace("$ ", ""));
+                total = seats * price;
+                lblBookingTotal.Content = "$ " + String.Format("{0:.00}", total);
+
+                if (lblBookingSeats.Text.ToString() == "C2")
+                {
+                    lblBookingSeats.Text = "";
+                }
+                else
+                {
+                    lblBookingSeats.Text = lblBookingSeats.Text.ToString().Replace(", C2", "");
+                }
+            }
+        }
+
+        private void btnBookingC3_Click(object sender, RoutedEventArgs e)
+        {
+            BrushConverter bc = new BrushConverter();
+            if (btnBookingC3.Background.ToString() == "#FFFF0000")
+            {
+                System.Windows.MessageBox.Show("This seat is already taken!");
+            }
+            else if (btnBookingC3.Background.ToString() == "#FF033A00")
+            {
+                btnBookingC3.Background = (Brush)bc.ConvertFrom("#FF004385");
+                int seats = Convert.ToInt32(lblBookingTotalSeats.Content);
+                seats += 1;
+                lblBookingTotalSeats.Content = seats.ToString();
+                double total = Convert.ToDouble(lblBookingTotal.Content.ToString().Replace("$ ", ""));
+                double price = Convert.ToDouble(lblBookingTicketPrice.Content.ToString().Replace("$ ", ""));
+                total = seats * price;
+                lblBookingTotal.Content = "$ " + String.Format("{0:.00}", total);
+
+                if (lblBookingSeats.Text.ToString() == "")
+                {
+                    lblBookingSeats.Text += "C3";
+                }
+                else
+                {
+                    lblBookingSeats.Text += ", C3";
+                }
+            }
+            else
+            {
+                btnBookingC3.Background = (Brush)bc.ConvertFrom("#FF033A00");
+                int seats = Convert.ToInt32(lblBookingTotalSeats.Content);
+                seats -= 1;
+                lblBookingTotalSeats.Content = seats.ToString();
+                double total = Convert.ToDouble(lblBookingTotal.Content.ToString().Replace("$ ", ""));
+                double price = Convert.ToDouble(lblBookingTicketPrice.Content.ToString().Replace("$ ", ""));
+                total = seats * price;
+                lblBookingTotal.Content = "$ " + String.Format("{0:.00}", total);
+
+                if (lblBookingSeats.Text.ToString() == "C3")
+                {
+                    lblBookingSeats.Text = "";
+                }
+                else
+                {
+                    lblBookingSeats.Text = lblBookingSeats.Text.ToString().Replace(", C3", "");
+                }
+            }
+        }
+
+        private void btnBookingC4_Click(object sender, RoutedEventArgs e)
+        {
+            BrushConverter bc = new BrushConverter();
+            if (btnBookingC4.Background.ToString() == "#FFFF0000")
+            {
+                System.Windows.MessageBox.Show("This seat is already taken!");
+            }
+            else if (btnBookingC4.Background.ToString() == "#FF033A00")
+            {
+                btnBookingC4.Background = (Brush)bc.ConvertFrom("#FF004385");
+                int seats = Convert.ToInt32(lblBookingTotalSeats.Content);
+                seats += 1;
+                lblBookingTotalSeats.Content = seats.ToString();
+                double total = Convert.ToDouble(lblBookingTotal.Content.ToString().Replace("$ ", ""));
+                double price = Convert.ToDouble(lblBookingTicketPrice.Content.ToString().Replace("$ ", ""));
+                total = seats * price;
+                lblBookingTotal.Content = "$ " + String.Format("{0:.00}", total);
+
+                if (lblBookingSeats.Text.ToString() == "")
+                {
+                    lblBookingSeats.Text += "C4";
+                }
+                else
+                {
+                    lblBookingSeats.Text += ", C4";
+                }
+            }
+            else
+            {
+                btnBookingC4.Background = (Brush)bc.ConvertFrom("#FF033A00");
+                int seats = Convert.ToInt32(lblBookingTotalSeats.Content);
+                seats -= 1;
+                lblBookingTotalSeats.Content = seats.ToString();
+                double total = Convert.ToDouble(lblBookingTotal.Content.ToString().Replace("$ ", ""));
+                double price = Convert.ToDouble(lblBookingTicketPrice.Content.ToString().Replace("$ ", ""));
+                total = seats * price;
+                lblBookingTotal.Content = "$ " + String.Format("{0:.00}", total);
+
+                if (lblBookingSeats.Text.ToString() == "C4")
+                {
+                    lblBookingSeats.Text = "";
+                }
+                else
+                {
+                    lblBookingSeats.Text = lblBookingSeats.Text.ToString().Replace(", C4", "");
+                }
+            }
+        }
+
+        private void btnBookingC5_Click(object sender, RoutedEventArgs e)
+        {
+            BrushConverter bc = new BrushConverter();
+            if (btnBookingC5.Background.ToString() == "#FFFF0000")
+            {
+                System.Windows.MessageBox.Show("This seat is already taken!");
+            }
+            else if (btnBookingC5.Background.ToString() == "#FF033A00")
+            {
+                btnBookingC5.Background = (Brush)bc.ConvertFrom("#FF004385");
+                int seats = Convert.ToInt32(lblBookingTotalSeats.Content);
+                seats += 1;
+                lblBookingTotalSeats.Content = seats.ToString();
+                double total = Convert.ToDouble(lblBookingTotal.Content.ToString().Replace("$ ", ""));
+                double price = Convert.ToDouble(lblBookingTicketPrice.Content.ToString().Replace("$ ", ""));
+                total = seats * price;
+                lblBookingTotal.Content = "$ " + String.Format("{0:.00}", total);
+
+                if (lblBookingSeats.Text.ToString() == "")
+                {
+                    lblBookingSeats.Text += "C5";
+                }
+                else
+                {
+                    lblBookingSeats.Text += ", C5";
+                }
+            }
+            else
+            {
+                btnBookingC5.Background = (Brush)bc.ConvertFrom("#FF033A00");
+                int seats = Convert.ToInt32(lblBookingTotalSeats.Content);
+                seats -= 1;
+                lblBookingTotalSeats.Content = seats.ToString();
+                double total = Convert.ToDouble(lblBookingTotal.Content.ToString().Replace("$ ", ""));
+                double price = Convert.ToDouble(lblBookingTicketPrice.Content.ToString().Replace("$ ", ""));
+                total = seats * price;
+                lblBookingTotal.Content = "$ " + String.Format("{0:.00}", total);
+
+                if (lblBookingSeats.Text.ToString() == "C5")
+                {
+                    lblBookingSeats.Text = "";
+                }
+                else
+                {
+                    lblBookingSeats.Text = lblBookingSeats.Text.ToString().Replace(", C5", "");
+                }
+            }
+        }
+
+        private void btnBookingB1_Click(object sender, RoutedEventArgs e)
+        {
+            BrushConverter bc = new BrushConverter();
+            if (btnBookingB1.Background.ToString() == "#FFFF0000")
+            {
+                System.Windows.MessageBox.Show("This seat is already taken!");
+            }
+            else if (btnBookingB1.Background.ToString() == "#FF033A00")
+            {
+                btnBookingB1.Background = (Brush)bc.ConvertFrom("#FF004385");
+                int seats = Convert.ToInt32(lblBookingTotalSeats.Content);
+                seats += 1;
+                lblBookingTotalSeats.Content = seats.ToString();
+                double total = Convert.ToDouble(lblBookingTotal.Content.ToString().Replace("$ ", ""));
+                double price = Convert.ToDouble(lblBookingTicketPrice.Content.ToString().Replace("$ ", ""));
+                total = seats * price;
+                lblBookingTotal.Content = "$ " + String.Format("{0:.00}", total);
+
+                if (lblBookingSeats.Text.ToString() == "")
+                {
+                    lblBookingSeats.Text += "B1";
+                }
+                else
+                {
+                    lblBookingSeats.Text += ", B1";
+                }
+            }
+            else
+            {
+                btnBookingB1.Background = (Brush)bc.ConvertFrom("#FF033A00");
+                int seats = Convert.ToInt32(lblBookingTotalSeats.Content);
+                seats -= 1;
+                lblBookingTotalSeats.Content = seats.ToString();
+                double total = Convert.ToDouble(lblBookingTotal.Content.ToString().Replace("$ ", ""));
+                double price = Convert.ToDouble(lblBookingTicketPrice.Content.ToString().Replace("$ ", ""));
+                total = seats * price;
+                lblBookingTotal.Content = "$ " + String.Format("{0:.00}", total);
+
+                if (lblBookingSeats.Text.ToString() == "B1")
+                {
+                    lblBookingSeats.Text = "";
+                }
+                else
+                {
+                    lblBookingSeats.Text = lblBookingSeats.Text.ToString().Replace(", B1", "");
+                }
+            }
+        }
+
+        private void btnBookingB2_Click(object sender, RoutedEventArgs e)
+        {
+            BrushConverter bc = new BrushConverter();
+            if (btnBookingB2.Background.ToString() == "#FFFF0000")
+            {
+                System.Windows.MessageBox.Show("This seat is already taken!");
+            }
+            else if (btnBookingB2.Background.ToString() == "#FF033A00")
+            {
+                btnBookingB2.Background = (Brush)bc.ConvertFrom("#FF004385");
+                int seats = Convert.ToInt32(lblBookingTotalSeats.Content);
+                seats += 1;
+                lblBookingTotalSeats.Content = seats.ToString();
+                double total = Convert.ToDouble(lblBookingTotal.Content.ToString().Replace("$ ", ""));
+                double price = Convert.ToDouble(lblBookingTicketPrice.Content.ToString().Replace("$ ", ""));
+                total = seats * price;
+                lblBookingTotal.Content = "$ " + String.Format("{0:.00}", total);
+
+                if (lblBookingSeats.Text.ToString() == "")
+                {
+                    lblBookingSeats.Text += "B2";
+                }
+                else
+                {
+                    lblBookingSeats.Text += ", B2";
+                }
+            }
+            else
+            {
+                btnBookingB2.Background = (Brush)bc.ConvertFrom("#FF033A00");
+                int seats = Convert.ToInt32(lblBookingTotalSeats.Content);
+                seats -= 1;
+                lblBookingTotalSeats.Content = seats.ToString();
+                double total = Convert.ToDouble(lblBookingTotal.Content.ToString().Replace("$ ", ""));
+                double price = Convert.ToDouble(lblBookingTicketPrice.Content.ToString().Replace("$ ", ""));
+                total = seats * price;
+                lblBookingTotal.Content = "$ " + String.Format("{0:.00}", total);
+
+                if (lblBookingSeats.Text.ToString() == "B2")
+                {
+                    lblBookingSeats.Text = "";
+                }
+                else
+                {
+                    lblBookingSeats.Text = lblBookingSeats.Text.ToString().Replace(", B2", "");
+                }
+            }
+        }
+
+        private void btnBookingB3_Click(object sender, RoutedEventArgs e)
+        {
+            BrushConverter bc = new BrushConverter();
+            if (btnBookingB3.Background.ToString() == "#FFFF0000")
+            {
+                System.Windows.MessageBox.Show("This seat is already taken!");
+            }
+            else if (btnBookingB3.Background.ToString() == "#FF033A00")
+            {
+                btnBookingB3.Background = (Brush)bc.ConvertFrom("#FF004385");
+                int seats = Convert.ToInt32(lblBookingTotalSeats.Content);
+                seats += 1;
+                lblBookingTotalSeats.Content = seats.ToString();
+                double total = Convert.ToDouble(lblBookingTotal.Content.ToString().Replace("$ ", ""));
+                double price = Convert.ToDouble(lblBookingTicketPrice.Content.ToString().Replace("$ ", ""));
+                total = seats * price;
+                lblBookingTotal.Content = "$ " + String.Format("{0:.00}", total);
+
+                if (lblBookingSeats.Text.ToString() == "")
+                {
+                    lblBookingSeats.Text += "B3";
+                }
+                else
+                {
+                    lblBookingSeats.Text += ", B3";
+                }
+            }
+            else
+            {
+                btnBookingB3.Background = (Brush)bc.ConvertFrom("#FF033A00");
+                int seats = Convert.ToInt32(lblBookingTotalSeats.Content);
+                seats -= 1;
+                lblBookingTotalSeats.Content = seats.ToString();
+                double total = Convert.ToDouble(lblBookingTotal.Content.ToString().Replace("$ ", ""));
+                double price = Convert.ToDouble(lblBookingTicketPrice.Content.ToString().Replace("$ ", ""));
+                total = seats * price;
+                lblBookingTotal.Content = "$ " + String.Format("{0:.00}", total);
+
+                if (lblBookingSeats.Text.ToString() == "B3")
+                {
+                    lblBookingSeats.Text = "";
+                }
+                else
+                {
+                    lblBookingSeats.Text = lblBookingSeats.Text.ToString().Replace(", B3", "");
+                }
+            }
+        }
+
+        private void btnBookingB4_Click(object sender, RoutedEventArgs e)
+        {
+            BrushConverter bc = new BrushConverter();
+            if (btnBookingB4.Background.ToString() == "#FFFF0000")
+            {
+                System.Windows.MessageBox.Show("This seat is already taken!");
+            }
+            else if (btnBookingB4.Background.ToString() == "#FF033A00")
+            {
+                btnBookingB4.Background = (Brush)bc.ConvertFrom("#FF004385");
+                int seats = Convert.ToInt32(lblBookingTotalSeats.Content);
+                seats += 1;
+                lblBookingTotalSeats.Content = seats.ToString();
+                double total = Convert.ToDouble(lblBookingTotal.Content.ToString().Replace("$ ", ""));
+                double price = Convert.ToDouble(lblBookingTicketPrice.Content.ToString().Replace("$ ", ""));
+                total = seats * price;
+                lblBookingTotal.Content = "$ " + String.Format("{0:.00}", total);
+
+                if (lblBookingSeats.Text.ToString() == "")
+                {
+                    lblBookingSeats.Text += "B4";
+                }
+                else
+                {
+                    lblBookingSeats.Text += ", B4";
+                }
+            }
+            else
+            {
+                btnBookingB4.Background = (Brush)bc.ConvertFrom("#FF033A00");
+                int seats = Convert.ToInt32(lblBookingTotalSeats.Content);
+                seats -= 1;
+                lblBookingTotalSeats.Content = seats.ToString();
+                double total = Convert.ToDouble(lblBookingTotal.Content.ToString().Replace("$ ", ""));
+                double price = Convert.ToDouble(lblBookingTicketPrice.Content.ToString().Replace("$ ", ""));
+                total = seats * price;
+                lblBookingTotal.Content = "$ " + String.Format("{0:.00}", total);
+
+                if (lblBookingSeats.Text.ToString() == "B4")
+                {
+                    lblBookingSeats.Text = "";
+                }
+                else
+                {
+                    lblBookingSeats.Text = lblBookingSeats.Text.ToString().Replace(", B4", "");
+                }
+            }
+        }
+
+        private void btnBookingB5_Click(object sender, RoutedEventArgs e)
+        {
+            BrushConverter bc = new BrushConverter();
+            if (btnBookingB5.Background.ToString() == "#FFFF0000")
+            {
+                System.Windows.MessageBox.Show("This seat is already taken!");
+            }
+            else if (btnBookingB5.Background.ToString() == "#FF033A00")
+            {
+                btnBookingB5.Background = (Brush)bc.ConvertFrom("#FF004385");
+                int seats = Convert.ToInt32(lblBookingTotalSeats.Content);
+                seats += 1;
+                lblBookingTotalSeats.Content = seats.ToString();
+                double total = Convert.ToDouble(lblBookingTotal.Content.ToString().Replace("$ ", ""));
+                double price = Convert.ToDouble(lblBookingTicketPrice.Content.ToString().Replace("$ ", ""));
+                total = seats * price;
+                lblBookingTotal.Content = "$ " + String.Format("{0:.00}", total);
+
+                if (lblBookingSeats.Text.ToString() == "")
+                {
+                    lblBookingSeats.Text += "B5";
+                }
+                else
+                {
+                    lblBookingSeats.Text += ", B5";
+                }
+            }
+            else
+            {
+                btnBookingB5.Background = (Brush)bc.ConvertFrom("#FF033A00");
+                int seats = Convert.ToInt32(lblBookingTotalSeats.Content);
+                seats -= 1;
+                lblBookingTotalSeats.Content = seats.ToString();
+                double total = Convert.ToDouble(lblBookingTotal.Content.ToString().Replace("$ ", ""));
+                double price = Convert.ToDouble(lblBookingTicketPrice.Content.ToString().Replace("$ ", ""));
+                total = seats * price;
+                lblBookingTotal.Content = "$ " + String.Format("{0:.00}", total);
+
+                if (lblBookingSeats.Text.ToString() == "B5")
+                {
+                    lblBookingSeats.Text = "";
+                }
+                else
+                {
+                    lblBookingSeats.Text = lblBookingSeats.Text.ToString().Replace(", B5", "");
+                }
+            }
+        }
+
+        private void btnBookingA1_Click(object sender, RoutedEventArgs e)
+        {
+            BrushConverter bc = new BrushConverter();
+            if (btnBookingA1.Background.ToString() == "#FFFF0000")
+            {
+                System.Windows.MessageBox.Show("This seat is already taken!");
+            }
+            else if (btnBookingA1.Background.ToString() == "#FF033A00")
+            {
+                btnBookingA1.Background = (Brush)bc.ConvertFrom("#FF004385");
+                int seats = Convert.ToInt32(lblBookingTotalSeats.Content);
+                seats += 1;
+                lblBookingTotalSeats.Content = seats.ToString();
+                double total = Convert.ToDouble(lblBookingTotal.Content.ToString().Replace("$ ", ""));
+                double price = Convert.ToDouble(lblBookingTicketPrice.Content.ToString().Replace("$ ", ""));
+                total = seats * price;
+                lblBookingTotal.Content = "$ " + String.Format("{0:.00}", total);
+
+                if (lblBookingSeats.Text.ToString() == "")
+                {
+                    lblBookingSeats.Text += "A1";
+                }
+                else
+                {
+                    lblBookingSeats.Text += ", A1";
+                }
+            }
+            else
+            {
+                btnBookingA1.Background = (Brush)bc.ConvertFrom("#FF033A00");
+                int seats = Convert.ToInt32(lblBookingTotalSeats.Content);
+                seats -= 1;
+                lblBookingTotalSeats.Content = seats.ToString();
+                double total = Convert.ToDouble(lblBookingTotal.Content.ToString().Replace("$ ", ""));
+                double price = Convert.ToDouble(lblBookingTicketPrice.Content.ToString().Replace("$ ", ""));
+                total = seats * price;
+                lblBookingTotal.Content = "$ " + String.Format("{0:.00}", total);
+
+                if (lblBookingSeats.Text.ToString() == "A1")
+                {
+                    lblBookingSeats.Text = "";
+                }
+                else
+                {
+                    lblBookingSeats.Text = lblBookingSeats.Text.ToString().Replace(", A1", "");
+                }
+            }
+        }
+
+        private void btnBookingA2_Click(object sender, RoutedEventArgs e)
+        {
+            BrushConverter bc = new BrushConverter();
+            if (btnBookingA2.Background.ToString() == "#FFFF0000")
+            {
+                System.Windows.MessageBox.Show("This seat is already taken!");
+            }
+            else if (btnBookingA2.Background.ToString() == "#FF033A00")
+            {
+                btnBookingA2.Background = (Brush)bc.ConvertFrom("#FF004385");
+                int seats = Convert.ToInt32(lblBookingTotalSeats.Content);
+                seats += 1;
+                lblBookingTotalSeats.Content = seats.ToString();
+                double total = Convert.ToDouble(lblBookingTotal.Content.ToString().Replace("$ ", ""));
+                double price = Convert.ToDouble(lblBookingTicketPrice.Content.ToString().Replace("$ ", ""));
+                total = seats * price;
+                lblBookingTotal.Content = "$ " + String.Format("{0:.00}", total);
+
+                if (lblBookingSeats.Text.ToString() == "")
+                {
+                    lblBookingSeats.Text += "A2";
+                }
+                else
+                {
+                    lblBookingSeats.Text += ", A2";
+                }
+            }
+            else
+            {
+                btnBookingA2.Background = (Brush)bc.ConvertFrom("#FF033A00");
+                int seats = Convert.ToInt32(lblBookingTotalSeats.Content);
+                seats -= 1;
+                lblBookingTotalSeats.Content = seats.ToString();
+                double total = Convert.ToDouble(lblBookingTotal.Content.ToString().Replace("$ ", ""));
+                double price = Convert.ToDouble(lblBookingTicketPrice.Content.ToString().Replace("$ ", ""));
+                total = seats * price;
+                lblBookingTotal.Content = "$ " + String.Format("{0:.00}", total);
+
+                if (lblBookingSeats.Text.ToString() == "A2")
+                {
+                    lblBookingSeats.Text = "";
+                }
+                else
+                {
+                    lblBookingSeats.Text = lblBookingSeats.Text.ToString().Replace(", A2", "");
+                }
+            }
+        }
+
+        private void btnBookingA3_Click(object sender, RoutedEventArgs e)
+        {
+            BrushConverter bc = new BrushConverter();
+            if (btnBookingA3.Background.ToString() == "#FFFF0000")
+            {
+                System.Windows.MessageBox.Show("This seat is already taken!");
+            }
+            else if (btnBookingA3.Background.ToString() == "#FF033A00")
+            {
+                btnBookingA3.Background = (Brush)bc.ConvertFrom("#FF004385");
+                int seats = Convert.ToInt32(lblBookingTotalSeats.Content);
+                seats += 1;
+                lblBookingTotalSeats.Content = seats.ToString();
+                double total = Convert.ToDouble(lblBookingTotal.Content.ToString().Replace("$ ", ""));
+                double price = Convert.ToDouble(lblBookingTicketPrice.Content.ToString().Replace("$ ", ""));
+                total = seats * price;
+                lblBookingTotal.Content = "$ " + String.Format("{0:.00}", total);
+
+                if (lblBookingSeats.Text.ToString() == "")
+                {
+                    lblBookingSeats.Text += "A3";
+                }
+                else
+                {
+                    lblBookingSeats.Text += ", A3";
+                }
+            }
+            else
+            {
+                btnBookingA3.Background = (Brush)bc.ConvertFrom("#FF033A00");
+                int seats = Convert.ToInt32(lblBookingTotalSeats.Content);
+                seats -= 1;
+                lblBookingTotalSeats.Content = seats.ToString();
+                double total = Convert.ToDouble(lblBookingTotal.Content.ToString().Replace("$ ", ""));
+                double price = Convert.ToDouble(lblBookingTicketPrice.Content.ToString().Replace("$ ", ""));
+                total = seats * price;
+                lblBookingTotal.Content = "$ " + String.Format("{0:.00}", total);
+
+                if (lblBookingSeats.Text.ToString() == "A3")
+                {
+                    lblBookingSeats.Text = "";
+                }
+                else
+                {
+                    lblBookingSeats.Text = lblBookingSeats.Text.ToString().Replace(", A3", "");
+                }
+            }
+        }
+
+        private void btnBookingA4_Click(object sender, RoutedEventArgs e)
+        {
+            BrushConverter bc = new BrushConverter();
+            if (btnBookingA4.Background.ToString() == "#FFFF0000")
+            {
+                System.Windows.MessageBox.Show("This seat is already taken!");
+            }
+            else if (btnBookingA4.Background.ToString() == "#FF033A00")
+            {
+                btnBookingA4.Background = (Brush)bc.ConvertFrom("#FF004385");
+                int seats = Convert.ToInt32(lblBookingTotalSeats.Content);
+                seats += 1;
+                lblBookingTotalSeats.Content = seats.ToString();
+                double total = Convert.ToDouble(lblBookingTotal.Content.ToString().Replace("$ ", ""));
+                double price = Convert.ToDouble(lblBookingTicketPrice.Content.ToString().Replace("$ ", ""));
+                total = seats * price;
+                lblBookingTotal.Content = "$ " + String.Format("{0:.00}", total);
+
+                if (lblBookingSeats.Text.ToString() == "")
+                {
+                    lblBookingSeats.Text += "A4";
+                }
+                else
+                {
+                    lblBookingSeats.Text += ", A4";
+                }
+            }
+            else
+            {
+                btnBookingA4.Background = (Brush)bc.ConvertFrom("#FF033A00");
+                int seats = Convert.ToInt32(lblBookingTotalSeats.Content);
+                seats -= 1;
+                lblBookingTotalSeats.Content = seats.ToString();
+                double total = Convert.ToDouble(lblBookingTotal.Content.ToString().Replace("$ ", ""));
+                double price = Convert.ToDouble(lblBookingTicketPrice.Content.ToString().Replace("$ ", ""));
+                total = seats * price;
+                lblBookingTotal.Content = "$ " + String.Format("{0:.00}", total);
+
+                if (lblBookingSeats.Text.ToString() == "A4")
+                {
+                    lblBookingSeats.Text = "";
+                }
+                else
+                {
+                    lblBookingSeats.Text = lblBookingSeats.Text.ToString().Replace(", A4", "");
+                }
+            }
+        }
+
+        private void btnBookingA5_Click(object sender, RoutedEventArgs e)
+        {
+            BrushConverter bc = new BrushConverter();
+            if (btnBookingA5.Background.ToString() == "#FFFF0000")
+            {
+                System.Windows.MessageBox.Show("This seat is already taken!");
+            }
+            else if (btnBookingA5.Background.ToString() == "#FF033A00")
+            {
+                btnBookingA5.Background = (Brush)bc.ConvertFrom("#FF004385");
+                int seats = Convert.ToInt32(lblBookingTotalSeats.Content);
+                seats += 1;
+                lblBookingTotalSeats.Content = seats.ToString();
+                double total = Convert.ToDouble(lblBookingTotal.Content.ToString().Replace("$ ", ""));
+                double price = Convert.ToDouble(lblBookingTicketPrice.Content.ToString().Replace("$ ", ""));
+                total = seats * price;
+                lblBookingTotal.Content = "$ " + String.Format("{0:.00}", total);
+
+                if (lblBookingSeats.Text.ToString() == "")
+                {
+                    lblBookingSeats.Text += "A5";
+                }
+                else
+                {
+                    lblBookingSeats.Text += ", A5";
+                }
+            }
+            else
+            {
+                btnBookingA5.Background = (Brush)bc.ConvertFrom("#FF033A00");
+                int seats = Convert.ToInt32(lblBookingTotalSeats.Content);
+                seats -= 1;
+                lblBookingTotalSeats.Content = seats.ToString();
+                double total = Convert.ToDouble(lblBookingTotal.Content.ToString().Replace("$ ", ""));
+                double price = Convert.ToDouble(lblBookingTicketPrice.Content.ToString().Replace("$ ", ""));
+                total = seats * price;
+                lblBookingTotal.Content = "$ " + String.Format("{0:.00}", total);
+
+                if (lblBookingSeats.Text.ToString() == "A5")
+                {
+                    lblBookingSeats.Text = "";
+                }
+                else
+                {
+                    lblBookingSeats.Text = lblBookingSeats.Text.ToString().Replace(", A5", "");
+                }
+            }
+        }
+
+        private void btnBookingConfirm_Click(object sender, RoutedEventArgs e)
+        {
+            NetworkStream stream = new NetworkStream(socket);
+            StreamWriter writer = new StreamWriter(stream);
+            StreamReader read = new StreamReader(stream);
+            writer.AutoFlush = true;
+            writer.WriteLine("book_movie");
+            writer.WriteLine(Guid.NewGuid().ToString());
+            writer.WriteLine(movieList[currentSelectedMovie].Title);
+            writer.WriteLine(currentUser.getEmail());
+            writer.WriteLine(Convert.ToDouble(lblBookingTotal.Content.ToString().Replace("$ ", "")));
+            string dt = ddlBookingDate.SelectedValue.ToString().Replace(" on ", ";");
+            String[] datetime = dt.Split(';');
+            writer.WriteLine(datetime[1]);
+            writer.WriteLine(datetime[0]);
+            writer.WriteLine(lblBookingSeats.Text.ToString().Replace(". ", "|"));
+            string status = read.ReadLine();
+            if (status == "success")
+            {
+                txtConfirmSeats.Text = "Booked Seats: " + lblBookingSeats.Text;
+                lblConfirmTime.Text = ddlBookingDate.SelectedValue.ToString();
+                hideBookingGrid();
+                showConfirmGrid();
+            }
+            else
+            {
+                System.Windows.MessageBox.Show("Error! Please try again later!");
+            }
+            
+        }
+
+        private void btnConfirmRecept_Click(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog save = new SaveFileDialog();
+
+            save.FileName = "BookingReceipt.txt";
+
+            save.Filter = "Text File | *.txt";
+
+            if (save.ShowDialog() == true)
+
+            {
+
+                using (StreamWriter writer = new StreamWriter(save.FileName))
+                {
+                    writer.WriteLine("Ticketter");
+                    writer.WriteLine("================================================");
+                    writer.WriteLine("Booking for: " + currentUser.getFirstName() + " " + currentUser.getMiddleName() + " " + currentUser.getLastName());
+                    writer.WriteLine("================================================");
+                    writer.WriteLine("Seats booked: " + txtConfirmSeats.Text.ToString().Replace("Booked Seats: ", ""));
+                    writer.WriteLine("Date and Time of Movie: " + lblConfirmTime.Text);
+                    writer.WriteLine("");
+                    writer.WriteLine("");
+                    writer.WriteLine("");
+                    writer.WriteLine("");
+                    writer.WriteLine("");
+                    writer.WriteLine("");
+                    writer.WriteLine("");
+                    writer.WriteLine("Total paid: " + String.Format("{0:.00}", lblBookingTotal.Content.ToString()));
+
+                    writer.Flush();
+
+                    writer.Close();
+                }
             }
         }
     }
