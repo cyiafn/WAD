@@ -2306,31 +2306,43 @@ namespace WAD
             }
             else
             {
+                bool success = true;
                 HashSet<Booking> newSet = new HashSet<Booking>();
                 using (var reader = new StringReader(xml))
                 {
-                    newSet = (HashSet<Booking>)xs.Deserialize(reader);
-                }
-                List<Booking> bookList = newSet.ToList();
-                for (int i = 0; i < bookList.Count; i++)
-                {
-                    string seats = "";
-                    bool first = true;
-                    for (int x = 0; x < (bookList[i].Seats).Length; x++)
+                    try
                     {
-                        if (first)
-                        {
-                            seats += bookList[i].Seats[x];
-                            first = false;
-                        }
-                        else
-                        {
-                            seats += ", " + bookList[i].Seats[x];
-                        }
+                        newSet = (HashSet<Booking>)xs.Deserialize(reader);
                     }
+                    catch (Exception e)
+                    {
+                        success = false;
+                    }
+                    
+                }
+                if (success)
+                {
+                    List<Booking> bookList = newSet.ToList();
+                    for (int i = 0; i < bookList.Count; i++)
+                    {
+                        string seats = "";
+                        bool first = true;
+                        for (int x = 0; x < (bookList[i].Seats).Length; x++)
+                        {
+                            if (first)
+                            {
+                                seats += bookList[i].Seats[x];
+                                first = false;
+                            }
+                            else
+                            {
+                                seats += ", " + bookList[i].Seats[x];
+                            }
+                        }
 
-                    var data = new tempDGClass { ID = bookList[i].TransactionId, Title = bookList[i].Movie, Seats = seats, Time = bookList[i].Timeslot, Date = bookList[i].Date };
-                    dgCheckBookings.Items.Add(data);
+                        var data = new tempDGClass { ID = bookList[i].TransactionId, Title = bookList[i].Movie, Seats = seats, Time = bookList[i].Timeslot, Date = bookList[i].Date };
+                        dgCheckBookings.Items.Add(data);
+                    }
                 }
                 checkGrid.Opacity = 0;
                 checkGrid.IsEnabled = true;

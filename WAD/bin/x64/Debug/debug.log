@@ -318,3 +318,9 @@
 [0116/233336.295:WARNING:spdy_session.cc(2276)] Received HEADERS for invalid stream 1
 [0116/233602.582:ERROR:child_thread_impl.cc(762)] Request for unknown Channel-associated interface: ui::mojom::GpuMain
 [0116/233635.161:ERROR:child_thread_impl.cc(762)] Request for unknown Channel-associated interface: ui::mojom::GpuMain
+[0117/141703.277:ERROR:child_thread_impl.cc(762)] Request for unknown Channel-associated interface: ui::mojom::GpuMain
+[0117/141859.087:WARNING:htmlmediaelement.cpp(1949)] currentPlaybackPosition readyState = 4 but no webMeidaPlayer to provide currentPlaybackPosition
+[0117/142605.687:ERROR:child_thread_impl.cc(762)] Request for unknown Channel-associated interface: ui::mojom::GpuMain
+[0117/142641.812:ERROR:child_thread_impl.cc(762)] Request for unknown Channel-associated interface: ui::mojom::GpuMain
+[0117/142901.206:ERROR:child_thread_impl.cc(762)] Request for unknown Channel-associated interface: ui::mojom::GpuMain
+[0117/143100.283:ERROR:child_thread_impl.cc(762)] Request for unknown Channel-associated interface: ui::mojom::GpuMain
