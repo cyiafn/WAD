@@ -22,6 +22,7 @@ using System.Threading;
 using System.Windows.Media.Animation;
 using System.Security.Cryptography;
 using System.Xml.Serialization;
+using System.Text.RegularExpressions;
 namespace WAD
 {
     /// <summary>
@@ -48,23 +49,23 @@ namespace WAD
 
         private static BitmapImage LoadImage(byte[] imageData)
         {
-            if (imageData == null || imageData.Length == 0)
-            {
-                return null;
-            }
-            var image = new BitmapImage();
-            using (var mem = new MemoryStream(imageData))
-            {
-                mem.Position = 0;
-                image.BeginInit();
-                image.CreateOptions = BitmapCreateOptions.PreservePixelFormat;
-                image.CacheOption = BitmapCacheOption.OnLoad;
-                image.UriSource = null;
-                image.StreamSource = mem;
-                image.EndInit();
-                image.Freeze();
-                return image;
-            }
+                if (imageData == null || imageData.Length == 0)
+                {
+                    return null;
+                }
+                var image = new BitmapImage();
+                using (var mem = new MemoryStream(imageData))
+                {
+                    mem.Position = 0;
+                    image.BeginInit();
+                    image.CreateOptions = BitmapCreateOptions.PreservePixelFormat;
+                    image.CacheOption = BitmapCacheOption.OnLoad;
+                    image.UriSource = null;
+                    image.StreamSource = mem;
+                    image.EndInit();
+                    image.Freeze();
+                    return image;
+                }
         }
 
         public MainWindow()
@@ -99,6 +100,11 @@ namespace WAD
                 catch (SocketException e)
                 {
                     MessageBox.Show("Unable to connect to server.");
+                    this.Dispatcher.Invoke(() =>
+                    {
+                        homeGrid.IsEnabled = false;
+                    });
+                   
                     return;
                 }
 
@@ -269,14 +275,15 @@ namespace WAD
         }
         private void imgHome1_ClickEvent(object sender, MouseEventArgs e)
         {
-            if (currentUser.getEmail() == null)
+            if (currentUser.getEmail() ==  null)
             {
                 hideHomeGrid();
                 showLoginGrid();
             }
             else
             {
-                lblHomeMovie1.Content = "Not working";
+                hideHomeGrid();
+                showListGrid();
             }
         }
 
@@ -586,68 +593,77 @@ namespace WAD
 
         private void btnLogin_Click(object sender, RoutedEventArgs e)
         {
-            NetworkStream stream = new NetworkStream(socket);
-            StreamReader reader = new StreamReader(stream);
-            StreamWriter writer = new StreamWriter(stream);
-            try
+            string emailPattern = @"^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$";
+            Regex emailReg = new Regex(emailPattern);
+            if (!emailReg.IsMatch(txtRegisterEmail.Text) || txtLoginPassword.Password == "")
             {
-                writer.AutoFlush = true;
-                writer.WriteLine("login");
-                writer.WriteLine(txtLoginEmail.Text);
-                string password = sha256_hash(txtLoginPassword.Password);
-                writer.WriteLine(password);
-                if (reader.ReadLine() == "authorized")
+                lblLoginIncorrect.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                NetworkStream stream = new NetworkStream(socket);
+                StreamReader reader = new StreamReader(stream);
+                StreamWriter writer = new StreamWriter(stream);
+                try
                 {
-                    currentUser.setFirstName(reader.ReadLine());
-                    currentUser.setMiddleName(reader.ReadLine());
-                    currentUser.setLastName(reader.ReadLine());
-                    currentUser.setDOB(reader.ReadLine());
-                    currentUser.setEmail(txtLoginEmail.Text);
-                    currentUser.setPassword(password);
-                    txtLoginEmail.Text = "";
-                    txtLoginPassword.Password = "";
-                    lblLoginIncorrect.Visibility = Visibility.Hidden;
-                    hideLoginGrid();
-                    showHomeGrid();
-                    btnHomeSignIn.IsEnabled = false;
-                    btnHomeSignIn.Visibility = Visibility.Hidden;
-                    btnHomeRegister.IsEnabled = false;
-                    btnHomeRegister.Visibility = Visibility.Hidden;
-                    btnHomeSignIn.Visibility = Visibility.Hidden;
-                    lblHomeHello.Visibility = Visibility.Visible;
-                    lblHomeName.Visibility = Visibility.Visible;
-                    if ((currentUser.getFirstName() + " " + currentUser.getMiddleName() + " " + currentUser.getLastName()).Length > 20)
+                    writer.AutoFlush = true;
+                    writer.WriteLine("login");
+                    writer.WriteLine(txtLoginEmail.Text);
+                    string password = sha256_hash(txtLoginPassword.Password);
+                    writer.WriteLine(password);
+                    if (reader.ReadLine() == "authorized")
                     {
-                        if ((currentUser.getFirstName() + " " + (currentUser.getMiddleName())[0] + ". " + currentUser.getLastName()).Length > 20)
+                        currentUser.setFirstName(reader.ReadLine());
+                        currentUser.setMiddleName(reader.ReadLine());
+                        currentUser.setLastName(reader.ReadLine());
+                        currentUser.setDOB(reader.ReadLine());
+                        currentUser.setEmail(txtLoginEmail.Text);
+                        currentUser.setPassword(password);
+                        txtLoginEmail.Text = "";
+                        txtLoginPassword.Password = "";
+                        lblLoginIncorrect.Visibility = Visibility.Hidden;
+                        hideLoginGrid();
+                        showHomeGrid();
+                        btnHomeSignIn.IsEnabled = false;
+                        btnHomeSignIn.Visibility = Visibility.Hidden;
+                        btnHomeRegister.IsEnabled = false;
+                        btnHomeRegister.Visibility = Visibility.Hidden;
+                        btnHomeSignIn.Visibility = Visibility.Hidden;
+                        lblHomeHello.Visibility = Visibility.Visible;
+                        lblHomeName.Visibility = Visibility.Visible;
+                        if ((currentUser.getFirstName() + " " + currentUser.getMiddleName() + " " + currentUser.getLastName()).Length > 20)
                         {
-                            if ((currentUser.getFirstName() + " " + (currentUser.getMiddleName())[0] + ". " + currentUser.getLastName()[0] + ".").Length > 20)
+                            if ((currentUser.getFirstName() + " " + (currentUser.getMiddleName())[0] + ". " + currentUser.getLastName()).Length > 20)
                             {
-                                lblHomeName.Content = currentUser.getFirstName()[0] + ". " + (currentUser.getMiddleName())[0] + ". " + currentUser.getLastName()[0] + ".";
+                                if ((currentUser.getFirstName() + " " + (currentUser.getMiddleName())[0] + ". " + currentUser.getLastName()[0] + ".").Length > 20)
+                                {
+                                    lblHomeName.Content = currentUser.getFirstName()[0] + ". " + (currentUser.getMiddleName())[0] + ". " + currentUser.getLastName()[0] + ".";
+                                }
+                                else
+                                {
+                                    lblHomeName.Content = currentUser.getFirstName() + " " + (currentUser.getMiddleName())[0] + ". " + currentUser.getLastName()[0] + ".";
+                                }
                             }
                             else
                             {
-                                lblHomeName.Content = currentUser.getFirstName() + " " + (currentUser.getMiddleName())[0] + ". " + currentUser.getLastName()[0] + ".";
+                                lblHomeName.Content = currentUser.getFirstName() + " " + (currentUser.getMiddleName())[0] + ". " + currentUser.getLastName();
                             }
                         }
                         else
                         {
-                            lblHomeName.Content = currentUser.getFirstName() + " " + (currentUser.getMiddleName())[0] + ". " + currentUser.getLastName();
+                            lblHomeName.Content = currentUser.getFirstName() + " " + currentUser.getMiddleName() + " " + currentUser.getLastName();
                         }
                     }
                     else
                     {
-                        lblHomeName.Content = currentUser.getFirstName() + " " + currentUser.getMiddleName() + " " + currentUser.getLastName();
+                        lblLoginIncorrect.Visibility = Visibility.Visible;
+                        txtLoginPassword.Password = "";
                     }
                 }
-                else
+                catch (Exception error)
                 {
-                    lblLoginIncorrect.Visibility = Visibility.Visible;
-                    txtLoginPassword.Password = "";
+                    throw error;
                 }
-            }
-            catch (Exception error)
-            {
-                throw error;
             }
 
         }
@@ -675,76 +691,116 @@ namespace WAD
 
         private void btnRegisterRegister_Click(object sender, RoutedEventArgs e)
         {
-            if (txtRegisterPassword.Password == txtRegisterConfirmPassword.Password)
+            string emailPattern = @"^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$";
+            Regex emailReg = new Regex(emailPattern);
+            string datePattern = @"^(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)\d\d$";
+            Regex dateReg = new Regex(datePattern);
+            string error = "";
+            if (!emailReg.IsMatch(txtRegisterEmail.Text))
             {
-                NetworkStream stream = new NetworkStream(socket);
-                StreamReader reader = new StreamReader(stream);
-                StreamWriter writer = new StreamWriter(stream);
-                writer.AutoFlush = true;
-                writer.WriteLine("register");
-                writer.WriteLine(txtRegisterEmail.Text);
-                writer.WriteLine(sha256_hash(txtRegisterPassword.Password));
-                writer.WriteLine(txtRegisterFirstName.Text);
-                writer.WriteLine(txtRegisterMiddleName.Text);
-                writer.WriteLine(txtRegisterLastName.Text);
-                writer.WriteLine(txtRegisterDOB.Text);
-                writer.Flush();
-                if (reader.ReadLine() == "success")
+                error += "Enter a valid email address \n";
+            }
+            if (txtRegisterPassword.Password == "")
+            {
+                error += "The password is empty!";
+            }
+            if (txtRegisterPassword.Password != txtRegisterConfirmPassword.Password)
+            {
+                error += "The passwords do not match\n";
+            }
+            if (txtRegisterFirstName.Text == "")
+            {
+                error += "Please enter a first name.";
+            }
+            if (txtRegisterLastName.Text == "")
+            {
+                error += "Please enter a last name.";
+            }
+            if (!dateReg.IsMatch(txtRegisterDOB.Text))
+            {
+                error += "Enter a valid date in the format (DD/MM/YYYY)\n";
+            }
+            if (error != "")
+            {
+                error.Insert(0, "Error, the following fields have incorrect input:\n");
+                MessageBox.Show(error);
+            }
+            else
+            {
+                try
                 {
-                    currentUser.setEmail(txtRegisterEmail.Text);
-                    currentUser.setPassword(sha256_hash(txtRegisterPassword.Password));
-                    currentUser.setFirstName(txtRegisterFirstName.Text);
-                    currentUser.setMiddleName(txtRegisterMiddleName.Text);
-                    currentUser.setLastName(txtRegisterLastName.Text);
-                    currentUser.setDOB(txtRegisterDOB.Text);
-                    txtRegisterEmail.Text = "";
-                    txtRegisterPassword.Password = "";
-                    txtRegisterConfirmPassword.Password = "";
-                    txtRegisterFirstName.Text = "";
-                    txtRegisterMiddleName.Text = "";
-                    txtRegisterLastName.Text = "";
-                    txtRegisterDOB.Text = "";
-                    hideRegisterGrid();
-                    showHomeGrid();
-                    btnHomeSignIn.IsEnabled = false;
-                    btnHomeSignIn.Visibility = Visibility.Hidden;
-                    btnHomeRegister.IsEnabled = false;
-                    btnHomeRegister.Visibility = Visibility.Hidden;
-                    btnHomeSignIn.Visibility = Visibility.Hidden;
-                    lblHomeHello.Visibility = Visibility.Visible;
-                    lblHomeName.Visibility = Visibility.Visible;
-                    if ((currentUser.getFirstName() + " " + currentUser.getMiddleName() + " " + currentUser.getLastName()).Length > 20)
+                    NetworkStream stream = new NetworkStream(socket);
+                    StreamReader reader = new StreamReader(stream);
+                    StreamWriter writer = new StreamWriter(stream);
+                    writer.AutoFlush = true;
+                    writer.WriteLine("register");
+                    writer.WriteLine(txtRegisterEmail.Text);
+                    writer.WriteLine(sha256_hash(txtRegisterPassword.Password));
+                    writer.WriteLine(txtRegisterFirstName.Text);
+                    writer.WriteLine(txtRegisterMiddleName.Text);
+                    writer.WriteLine(txtRegisterLastName.Text);
+                    writer.WriteLine(txtRegisterDOB.Text);
+                    writer.Flush();
+                    if (reader.ReadLine() == "success")
                     {
-                        if ((currentUser.getFirstName() + " " + (currentUser.getMiddleName())[0] + ". " + currentUser.getLastName()).Length > 20)
+                        currentUser.setEmail(txtRegisterEmail.Text);
+                        currentUser.setPassword(sha256_hash(txtRegisterPassword.Password));
+                        currentUser.setFirstName(txtRegisterFirstName.Text);
+                        currentUser.setMiddleName(txtRegisterMiddleName.Text);
+                        currentUser.setLastName(txtRegisterLastName.Text);
+                        currentUser.setDOB(txtRegisterDOB.Text);
+                        txtRegisterEmail.Text = "";
+                        txtRegisterPassword.Password = "";
+                        txtRegisterConfirmPassword.Password = "";
+                        txtRegisterFirstName.Text = "";
+                        txtRegisterMiddleName.Text = "";
+                        txtRegisterLastName.Text = "";
+                        txtRegisterDOB.Text = "";
+                        hideRegisterGrid();
+                        showHomeGrid();
+                        btnHomeSignIn.IsEnabled = false;
+                        btnHomeSignIn.Visibility = Visibility.Hidden;
+                        btnHomeRegister.IsEnabled = false;
+                        btnHomeRegister.Visibility = Visibility.Hidden;
+                        btnHomeSignIn.Visibility = Visibility.Hidden;
+                        lblHomeHello.Visibility = Visibility.Visible;
+                        lblHomeName.Visibility = Visibility.Visible;
+                        if ((currentUser.getFirstName() + " " + currentUser.getMiddleName() + " " + currentUser.getLastName()).Length > 20)
                         {
-                            if ((currentUser.getFirstName() + " " + (currentUser.getMiddleName())[0] + ". " + currentUser.getLastName()[0] + ".").Length > 20)
+                            if ((currentUser.getFirstName() + " " + (currentUser.getMiddleName())[0] + ". " + currentUser.getLastName()).Length > 20)
                             {
-                                lblHomeName.Content = currentUser.getFirstName()[0] + ". " + (currentUser.getMiddleName())[0] + ". " + currentUser.getLastName()[0] + ".";
+                                if ((currentUser.getFirstName() + " " + (currentUser.getMiddleName())[0] + ". " + currentUser.getLastName()[0] + ".").Length > 20)
+                                {
+                                    lblHomeName.Content = currentUser.getFirstName()[0] + ". " + (currentUser.getMiddleName())[0] + ". " + currentUser.getLastName()[0] + ".";
+                                }
+                                else
+                                {
+                                    lblHomeName.Content = currentUser.getFirstName() + " " + (currentUser.getMiddleName())[0] + ". " + currentUser.getLastName()[0] + ".";
+                                }
                             }
                             else
                             {
-                                lblHomeName.Content = currentUser.getFirstName() + " " + (currentUser.getMiddleName())[0] + ". " + currentUser.getLastName()[0] + ".";
+                                lblHomeName.Content = currentUser.getFirstName() + " " + (currentUser.getMiddleName())[0] + ". " + currentUser.getLastName();
                             }
                         }
                         else
                         {
-                            lblHomeName.Content = currentUser.getFirstName() + " " + (currentUser.getMiddleName())[0] + ". " + currentUser.getLastName();
+                            lblHomeName.Content = currentUser.getFirstName() + " " + currentUser.getMiddleName() + " " + currentUser.getLastName();
                         }
                     }
                     else
                     {
-                        lblHomeName.Content = currentUser.getFirstName() + " " + currentUser.getMiddleName() + " " + currentUser.getLastName();
+                        MessageBox.Show("Error, another account with the same email exists.");
                     }
                 }
-                else
+                catch (Exception er)
                 {
-
+                    MessageBox.Show(er.ToString());
                 }
+                
             }
-            else
-            {
-
-            }
+            
+                
         }
 
         private void rctHomeOpacity2_MouseEnter(object sender, MouseEventArgs e)
@@ -760,8 +816,16 @@ namespace WAD
 
         private void rctHomeOpacity2_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            hideHomeGrid();
-            showListGrid();
+            if (currentUser.getEmail() != null)
+            {
+                hideHomeGrid();
+                showListGrid();
+            }
+            else
+            {
+                hideHomeGrid();
+                showLoginGrid();
+            }
         }
 
         private void btnListNext_Click(object sender, RoutedEventArgs e)
@@ -1203,71 +1267,102 @@ namespace WAD
         private void rctList1_MouseDown(object sender, MouseButtonEventArgs e)
         {
             currentSelectedMovie = listStart - 10;
-            hideListGrid();
-            showMovieGrid();
+            if (currentSelectedMovie < movieList.Count)
+            {
+                hideListGrid();
+                showMovieGrid();
+            }
         }
 
         private void rctList2_MouseDown(object sender, MouseButtonEventArgs e)
         {
             currentSelectedMovie = listStart - 9;
-            hideListGrid();
-            showMovieGrid();
+            if (currentSelectedMovie < movieList.Count)
+            {
+                hideListGrid();
+                showMovieGrid();
+            }
+                
         }
 
         private void rctList3_MouseDown(object sender, MouseButtonEventArgs e)
         {
             currentSelectedMovie = listStart - 8;
-            hideListGrid();
-            showMovieGrid();
+            if (currentSelectedMovie < movieList.Count)
+            {
+                hideListGrid();
+                showMovieGrid();
+            }
         }
 
         private void rctList4_MouseDown(object sender, MouseButtonEventArgs e)
         {
             currentSelectedMovie = listStart - 7;
-            hideListGrid();
-            showMovieGrid();
+            if (currentSelectedMovie < movieList.Count)
+            {
+                hideListGrid();
+                showMovieGrid();
+            }
         }
 
         private void rctList5_MouseDown(object sender, MouseButtonEventArgs e)
         {
             currentSelectedMovie = listStart - 6;
-            hideListGrid();
-            showMovieGrid();
+            if (currentSelectedMovie < movieList.Count)
+            {
+                hideListGrid();
+                showMovieGrid();
+            }
         }
 
         private void rctList6_MouseDown(object sender, MouseButtonEventArgs e)
         {
             currentSelectedMovie = listStart - 5;
-            hideListGrid();
-            showMovieGrid();
+            if (currentSelectedMovie < movieList.Count)
+            {
+                hideListGrid();
+                showMovieGrid();
+            }
         }
 
         private void rctList7_MouseDown(object sender, MouseButtonEventArgs e)
         {
             currentSelectedMovie = listStart - 4;
-            hideListGrid();
-            showMovieGrid();
+            if (currentSelectedMovie < movieList.Count)
+            {
+                hideListGrid();
+                showMovieGrid();
+            }
         }
 
         private void rctList8_MouseDown(object sender, MouseButtonEventArgs e)
         {
             currentSelectedMovie = listStart - 3;
-            hideListGrid();
-            showMovieGrid();
+            if (currentSelectedMovie < movieList.Count)
+            {
+                hideListGrid();
+                showMovieGrid();
+            }
         }
 
         private void rctList9_MouseDown(object sender, MouseButtonEventArgs e)
         {
             currentSelectedMovie = listStart - 2;
-            hideListGrid();
-            showMovieGrid();
+            if (currentSelectedMovie < movieList.Count)
+            {
+                hideListGrid();
+                showMovieGrid();
+            }
         }
 
         private void rctList10_MouseDown(object sender, MouseButtonEventArgs e)
         {
             currentSelectedMovie = listStart - 1;
-            hideListGrid();
-            showMovieGrid();
+            if (currentSelectedMovie < movieList.Count)
+            {
+                hideListGrid();
+                showMovieGrid();
+            }
         }
 
         private void btnMovieBack_Click(object sender, RoutedEventArgs e)
@@ -1295,68 +1390,75 @@ namespace WAD
         }
         private void showBookingGrid()
         {
-            bookingGrid.Opacity = 0;
-            bookingGrid.IsEnabled = true;
-            bookingGrid.Visibility = Visibility.Visible;
-            DoubleAnimation ani = new DoubleAnimation(1, TimeSpan.FromSeconds(0.2));
-            bookingGrid.BeginAnimation(Grid.OpacityProperty, ani);
-            BrushConverter bc = new BrushConverter();
-            btnBookingA1.Background = (Brush)bc.ConvertFrom("#FFFF0000");
-            btnBookingA2.Background = (Brush)bc.ConvertFrom("#FFFF0000");
-            btnBookingA3.Background = (Brush)bc.ConvertFrom("#FFFF0000");
-            btnBookingA4.Background = (Brush)bc.ConvertFrom("#FFFF0000");
-            btnBookingA5.Background = (Brush)bc.ConvertFrom("#FFFF0000");
-            btnBookingB1.Background = (Brush)bc.ConvertFrom("#FFFF0000");
-            btnBookingB2.Background = (Brush)bc.ConvertFrom("#FFFF0000");
-            btnBookingB3.Background = (Brush)bc.ConvertFrom("#FFFF0000");
-            btnBookingB4.Background = (Brush)bc.ConvertFrom("#FFFF0000");
-            btnBookingB5.Background = (Brush)bc.ConvertFrom("#FFFF0000");
-            btnBookingC1.Background = (Brush)bc.ConvertFrom("#FFFF0000");
-            btnBookingC2.Background = (Brush)bc.ConvertFrom("#FFFF0000");
-            btnBookingC3.Background = (Brush)bc.ConvertFrom("#FFFF0000");
-            btnBookingC4.Background = (Brush)bc.ConvertFrom("#FFFF0000");
-            btnBookingC5.Background = (Brush)bc.ConvertFrom("#FFFF0000");
-            btnBookingA1.IsEnabled = false;
-            btnBookingA2.IsEnabled = false;
-            btnBookingA3.IsEnabled = false;
-            btnBookingA4.IsEnabled = false;
-            btnBookingA5.IsEnabled = false;
-            btnBookingB1.IsEnabled = false;
-            btnBookingB2.IsEnabled = false;
-            btnBookingB3.IsEnabled = false;
-            btnBookingB4.IsEnabled = false;
-            btnBookingB5.IsEnabled = false;
-            btnBookingC1.IsEnabled = false;
-            btnBookingC2.IsEnabled = false;
-            btnBookingC3.IsEnabled = false;
-            btnBookingC4.IsEnabled = false;
-            btnBookingC5.IsEnabled = false;
-            btnBookingConfirm.IsEnabled = false;
-            NetworkStream stream = new NetworkStream(socket);
-            StreamWriter writer = new StreamWriter(stream);
-            StreamReader read = new StreamReader(stream);
-            writer.AutoFlush = true;
-            writer.WriteLine("request_showtime");
-            writer.WriteLine(movieList[currentSelectedMovie].Title);
-            lblBookingTicketPrice.Content = "$ " + String.Format("{0:.00}", movieList[currentSelectedMovie].Price);
-            lblBookingTotal.Content = "$ 0.00";
-            string xml = "";
-            string line;
-            //string randomVar = read.ReadLine();
-            var xs = new XmlSerializer(typeof(List<String>));
-            while ((line = read.ReadLine()) != "endofxml")
+            try
             {
-                xml += line;
+                bookingGrid.Opacity = 0;
+                bookingGrid.IsEnabled = true;
+                bookingGrid.Visibility = Visibility.Visible;
+                DoubleAnimation ani = new DoubleAnimation(1, TimeSpan.FromSeconds(0.2));
+                bookingGrid.BeginAnimation(Grid.OpacityProperty, ani);
+                BrushConverter bc = new BrushConverter();
+                btnBookingA1.Background = (Brush)bc.ConvertFrom("#FFFF0000");
+                btnBookingA2.Background = (Brush)bc.ConvertFrom("#FFFF0000");
+                btnBookingA3.Background = (Brush)bc.ConvertFrom("#FFFF0000");
+                btnBookingA4.Background = (Brush)bc.ConvertFrom("#FFFF0000");
+                btnBookingA5.Background = (Brush)bc.ConvertFrom("#FFFF0000");
+                btnBookingB1.Background = (Brush)bc.ConvertFrom("#FFFF0000");
+                btnBookingB2.Background = (Brush)bc.ConvertFrom("#FFFF0000");
+                btnBookingB3.Background = (Brush)bc.ConvertFrom("#FFFF0000");
+                btnBookingB4.Background = (Brush)bc.ConvertFrom("#FFFF0000");
+                btnBookingB5.Background = (Brush)bc.ConvertFrom("#FFFF0000");
+                btnBookingC1.Background = (Brush)bc.ConvertFrom("#FFFF0000");
+                btnBookingC2.Background = (Brush)bc.ConvertFrom("#FFFF0000");
+                btnBookingC3.Background = (Brush)bc.ConvertFrom("#FFFF0000");
+                btnBookingC4.Background = (Brush)bc.ConvertFrom("#FFFF0000");
+                btnBookingC5.Background = (Brush)bc.ConvertFrom("#FFFF0000");
+                btnBookingA1.IsEnabled = false;
+                btnBookingA2.IsEnabled = false;
+                btnBookingA3.IsEnabled = false;
+                btnBookingA4.IsEnabled = false;
+                btnBookingA5.IsEnabled = false;
+                btnBookingB1.IsEnabled = false;
+                btnBookingB2.IsEnabled = false;
+                btnBookingB3.IsEnabled = false;
+                btnBookingB4.IsEnabled = false;
+                btnBookingB5.IsEnabled = false;
+                btnBookingC1.IsEnabled = false;
+                btnBookingC2.IsEnabled = false;
+                btnBookingC3.IsEnabled = false;
+                btnBookingC4.IsEnabled = false;
+                btnBookingC5.IsEnabled = false;
+                btnBookingConfirm.IsEnabled = false;
+                NetworkStream stream = new NetworkStream(socket);
+                StreamWriter writer = new StreamWriter(stream);
+                StreamReader read = new StreamReader(stream);
+                writer.AutoFlush = true;
+                writer.WriteLine("request_showtime");
+                writer.WriteLine(movieList[currentSelectedMovie].Title);
+                lblBookingTicketPrice.Content = "$ " + String.Format("{0:.00}", movieList[currentSelectedMovie].Price);
+                lblBookingTotal.Content = "$ 0.00";
+                string xml = "";
+                string line;
+                //string randomVar = read.ReadLine();
+                var xs = new XmlSerializer(typeof(List<String>));
+                while ((line = read.ReadLine()) != "endofxml")
+                {
+                    xml += line;
+                }
+                using (var reader = new StringReader(xml))
+                {
+                    showtimeList = (List<String>)xs.Deserialize(reader);
+                }
+                lblBookingTitle.Content = movieList[currentSelectedMovie].Title;
+                for (int i = 0; i < showtimeList.Count; i++)
+                {
+                    string[] tempList = showtimeList[i].Split(';');
+                    ddlBookingDate.Items.Add(tempList[1] + " on " + tempList[0]);
+                }
             }
-            using (var reader = new StringReader(xml))
+            catch (Exception er)
             {
-                showtimeList = (List<String>)xs.Deserialize(reader);
-            }
-            lblBookingTitle.Content = movieList[currentSelectedMovie].Title;
-            for (int i = 0; i < showtimeList.Count; i++)
-            {
-                string[] tempList = showtimeList[i].Split(';');
-                ddlBookingDate.Items.Add(tempList[1] + " on " + tempList[0]);
+                MessageBox.Show(er.ToString());
             }
         }
         private void hideBookingGrid()
@@ -1393,8 +1495,23 @@ namespace WAD
             btnBookingC3.IsEnabled = true;
             btnBookingC4.IsEnabled = true;
             btnBookingC5.IsEnabled = true;
-            btnBookingConfirm.IsEnabled = true;
             BrushConverter bc = new BrushConverter();
+            btnBookingA1.Background = (Brush)bc.ConvertFrom("#FFFF0000");
+            btnBookingA2.Background = (Brush)bc.ConvertFrom("#FFFF0000");
+            btnBookingA3.Background = (Brush)bc.ConvertFrom("#FFFF0000");
+            btnBookingA4.Background = (Brush)bc.ConvertFrom("#FFFF0000");
+            btnBookingA5.Background = (Brush)bc.ConvertFrom("#FFFF0000");
+            btnBookingB1.Background = (Brush)bc.ConvertFrom("#FFFF0000");
+            btnBookingB2.Background = (Brush)bc.ConvertFrom("#FFFF0000");
+            btnBookingB3.Background = (Brush)bc.ConvertFrom("#FFFF0000");
+            btnBookingB4.Background = (Brush)bc.ConvertFrom("#FFFF0000");
+            btnBookingB5.Background = (Brush)bc.ConvertFrom("#FFFF0000");
+            btnBookingC1.Background = (Brush)bc.ConvertFrom("#FFFF0000");
+            btnBookingC2.Background = (Brush)bc.ConvertFrom("#FFFF0000");
+            btnBookingC3.Background = (Brush)bc.ConvertFrom("#FFFF0000");
+            btnBookingC4.Background = (Brush)bc.ConvertFrom("#FFFF0000");
+            btnBookingC5.Background = (Brush)bc.ConvertFrom("#FFFF0000");
+            btnBookingConfirm.IsEnabled = true;
             string tempVal = ddlBookingDate.SelectedValue.ToString().Replace(" on ", ";");
             String[] tempArray = tempVal.Split(';');
 
@@ -1504,9 +1621,10 @@ namespace WAD
                 total = seats * price;
                 lblBookingTotal.Content = "$ " + String.Format("{0:.00}", total);
 
-                if (lblBookingSeats.Text.ToString() == "C1")
+                if (lblBookingSeats.Text.StartsWith("C1"))
                 {
-                    lblBookingSeats.Text = "";
+                    lblBookingSeats.Text = lblBookingSeats.Text.Replace("C1, ", "");
+                    lblBookingSeats.Text = lblBookingSeats.Text.Replace("C1", "");
                 }
                 else
                 {
@@ -1553,9 +1671,10 @@ namespace WAD
                 total = seats * price;
                 lblBookingTotal.Content = "$ " + String.Format("{0:.00}", total);
 
-                if (lblBookingSeats.Text.ToString() == "C2")
+                if (lblBookingSeats.Text.StartsWith("C2"))
                 {
-                    lblBookingSeats.Text = "";
+                    lblBookingSeats.Text = lblBookingSeats.Text.Replace("C2, ", "");
+                    lblBookingSeats.Text = lblBookingSeats.Text.Replace("C2", "");
                 }
                 else
                 {
@@ -1602,9 +1721,10 @@ namespace WAD
                 total = seats * price;
                 lblBookingTotal.Content = "$ " + String.Format("{0:.00}", total);
 
-                if (lblBookingSeats.Text.ToString() == "C3")
+                if (lblBookingSeats.Text.StartsWith("C3"))
                 {
-                    lblBookingSeats.Text = "";
+                    lblBookingSeats.Text = lblBookingSeats.Text.Replace("C3, ", "");
+                    lblBookingSeats.Text = lblBookingSeats.Text.Replace("C3", "");
                 }
                 else
                 {
@@ -1651,9 +1771,10 @@ namespace WAD
                 total = seats * price;
                 lblBookingTotal.Content = "$ " + String.Format("{0:.00}", total);
 
-                if (lblBookingSeats.Text.ToString() == "C4")
+                if (lblBookingSeats.Text.StartsWith("C4"))
                 {
-                    lblBookingSeats.Text = "";
+                    lblBookingSeats.Text = lblBookingSeats.Text.Replace("C4, ", "");
+                    lblBookingSeats.Text = lblBookingSeats.Text.Replace("C4", "");
                 }
                 else
                 {
@@ -1700,9 +1821,10 @@ namespace WAD
                 total = seats * price;
                 lblBookingTotal.Content = "$ " + String.Format("{0:.00}", total);
 
-                if (lblBookingSeats.Text.ToString() == "C5")
+                if (lblBookingSeats.Text.StartsWith("C5"))
                 {
-                    lblBookingSeats.Text = "";
+                    lblBookingSeats.Text = lblBookingSeats.Text.Replace("C5, ", "");
+                    lblBookingSeats.Text = lblBookingSeats.Text.Replace("C5", "");
                 }
                 else
                 {
@@ -1749,9 +1871,10 @@ namespace WAD
                 total = seats * price;
                 lblBookingTotal.Content = "$ " + String.Format("{0:.00}", total);
 
-                if (lblBookingSeats.Text.ToString() == "B1")
+                if (lblBookingSeats.Text.StartsWith("B1"))
                 {
-                    lblBookingSeats.Text = "";
+                    lblBookingSeats.Text = lblBookingSeats.Text.Replace("B1, ", "");
+                    lblBookingSeats.Text = lblBookingSeats.Text.Replace("B1", "");
                 }
                 else
                 {
@@ -1798,9 +1921,10 @@ namespace WAD
                 total = seats * price;
                 lblBookingTotal.Content = "$ " + String.Format("{0:.00}", total);
 
-                if (lblBookingSeats.Text.ToString() == "B2")
+                if (lblBookingSeats.Text.StartsWith("B2"))
                 {
-                    lblBookingSeats.Text = "";
+                    lblBookingSeats.Text = lblBookingSeats.Text.Replace("B2, ", "");
+                    lblBookingSeats.Text = lblBookingSeats.Text.Replace("B2", "");
                 }
                 else
                 {
@@ -1847,9 +1971,10 @@ namespace WAD
                 total = seats * price;
                 lblBookingTotal.Content = "$ " + String.Format("{0:.00}", total);
 
-                if (lblBookingSeats.Text.ToString() == "B3")
+                if (lblBookingSeats.Text.StartsWith("B3"))
                 {
-                    lblBookingSeats.Text = "";
+                    lblBookingSeats.Text = lblBookingSeats.Text.Replace("B3, ", "");
+                    lblBookingSeats.Text = lblBookingSeats.Text.Replace("B3", "");
                 }
                 else
                 {
@@ -1896,9 +2021,10 @@ namespace WAD
                 total = seats * price;
                 lblBookingTotal.Content = "$ " + String.Format("{0:.00}", total);
 
-                if (lblBookingSeats.Text.ToString() == "B4")
+                if (lblBookingSeats.Text.StartsWith("B4"))
                 {
-                    lblBookingSeats.Text = "";
+                    lblBookingSeats.Text = lblBookingSeats.Text.Replace("B4, ", "");
+                    lblBookingSeats.Text = lblBookingSeats.Text.Replace("B4", "");
                 }
                 else
                 {
@@ -1945,9 +2071,10 @@ namespace WAD
                 total = seats * price;
                 lblBookingTotal.Content = "$ " + String.Format("{0:.00}", total);
 
-                if (lblBookingSeats.Text.ToString() == "B5")
+                if (lblBookingSeats.Text.StartsWith("B5"))
                 {
-                    lblBookingSeats.Text = "";
+                    lblBookingSeats.Text = lblBookingSeats.Text.Replace("B5, ", "");
+                    lblBookingSeats.Text = lblBookingSeats.Text.Replace("B5", "");
                 }
                 else
                 {
@@ -1994,9 +2121,10 @@ namespace WAD
                 total = seats * price;
                 lblBookingTotal.Content = "$ " + String.Format("{0:.00}", total);
 
-                if (lblBookingSeats.Text.ToString() == "A1")
+                if (lblBookingSeats.Text.StartsWith("A1"))
                 {
-                    lblBookingSeats.Text = "";
+                    lblBookingSeats.Text = lblBookingSeats.Text.Replace("A1, ", "");
+                    lblBookingSeats.Text = lblBookingSeats.Text.Replace("A1", "");
                 }
                 else
                 {
@@ -2043,9 +2171,10 @@ namespace WAD
                 total = seats * price;
                 lblBookingTotal.Content = "$ " + String.Format("{0:.00}", total);
 
-                if (lblBookingSeats.Text.ToString() == "A2")
+                if (lblBookingSeats.Text.StartsWith("A2"))
                 {
-                    lblBookingSeats.Text = "";
+                    lblBookingSeats.Text = lblBookingSeats.Text.Replace("A2, ", "");
+                    lblBookingSeats.Text = lblBookingSeats.Text.Replace("A2", "");
                 }
                 else
                 {
@@ -2092,9 +2221,10 @@ namespace WAD
                 total = seats * price;
                 lblBookingTotal.Content = "$ " + String.Format("{0:.00}", total);
 
-                if (lblBookingSeats.Text.ToString() == "A3")
+                if (lblBookingSeats.Text.StartsWith("A3"))
                 {
-                    lblBookingSeats.Text = "";
+                    lblBookingSeats.Text = lblBookingSeats.Text.Replace("A3, ", "");
+                    lblBookingSeats.Text = lblBookingSeats.Text.Replace("A3", "");
                 }
                 else
                 {
@@ -2141,9 +2271,10 @@ namespace WAD
                 total = seats * price;
                 lblBookingTotal.Content = "$ " + String.Format("{0:.00}", total);
 
-                if (lblBookingSeats.Text.ToString() == "A4")
+                if (lblBookingSeats.Text.StartsWith("A4"))
                 {
-                    lblBookingSeats.Text = "";
+                    lblBookingSeats.Text = lblBookingSeats.Text.Replace("A4, ", "");
+                    lblBookingSeats.Text = lblBookingSeats.Text.Replace("A4", "");
                 }
                 else
                 {
@@ -2190,9 +2321,10 @@ namespace WAD
                 total = seats * price;
                 lblBookingTotal.Content = "$ " + String.Format("{0:.00}", total);
 
-                if (lblBookingSeats.Text.ToString() == "A5")
+                if (lblBookingSeats.Text.StartsWith("A5"))
                 {
-                    lblBookingSeats.Text = "";
+                    lblBookingSeats.Text = lblBookingSeats.Text.Replace("A5, ", "");
+                    lblBookingSeats.Text = lblBookingSeats.Text.Replace("A5", "");
                 }
                 else
                 {
@@ -2203,31 +2335,38 @@ namespace WAD
 
         private void btnBookingConfirm_Click(object sender, RoutedEventArgs e)
         {
-            NetworkStream stream = new NetworkStream(socket);
-            StreamWriter writer = new StreamWriter(stream);
-            StreamReader read = new StreamReader(stream);
-            writer.AutoFlush = true;
-            writer.WriteLine("book_movie");
-            writer.WriteLine(Guid.NewGuid().ToString());
-            writer.WriteLine(movieList[currentSelectedMovie].Title);
-            writer.WriteLine(currentUser.getEmail());
-            writer.WriteLine(Convert.ToDouble(lblBookingTotal.Content.ToString().Replace("$ ", "")));
-            string dt = ddlBookingDate.SelectedValue.ToString().Replace(" on ", ";");
-            String[] datetime = dt.Split(';');
-            writer.WriteLine(datetime[1]);
-            writer.WriteLine(datetime[0]);
-            writer.WriteLine(lblBookingSeats.Text.ToString().Replace(", ", "|"));
-            string status = read.ReadLine();
-            if (status == "success")
+            try
             {
-                txtConfirmSeats.Text = "Booked Seats: " + lblBookingSeats.Text;
-                lblConfirmTime.Text = ddlBookingDate.SelectedValue.ToString();
-                hideBookingGrid();
-                showConfirmGrid();
+                NetworkStream stream = new NetworkStream(socket);
+                StreamWriter writer = new StreamWriter(stream);
+                StreamReader read = new StreamReader(stream);
+                writer.AutoFlush = true;
+                writer.WriteLine("book_movie");
+                writer.WriteLine(Guid.NewGuid().ToString());
+                writer.WriteLine(movieList[currentSelectedMovie].Title);
+                writer.WriteLine(currentUser.getEmail());
+                writer.WriteLine(Convert.ToDouble(lblBookingTotal.Content.ToString().Replace("$ ", "")));
+                string dt = ddlBookingDate.SelectedValue.ToString().Replace(" on ", ";");
+                String[] datetime = dt.Split(';');
+                writer.WriteLine(datetime[1]);
+                writer.WriteLine(datetime[0]);
+                writer.WriteLine(lblBookingSeats.Text.ToString().Replace(", ", "|"));
+                string status = read.ReadLine();
+                if (status == "success")
+                {
+                    txtConfirmSeats.Text = "Booked Seats: " + lblBookingSeats.Text;
+                    lblConfirmTime.Text = ddlBookingDate.SelectedValue.ToString();
+                    hideBookingGrid();
+                    showConfirmGrid();
+                }
+                else
+                {
+                    System.Windows.MessageBox.Show("Error! Please try again later!");
+                }
             }
-            else
+            catch (Exception er)
             {
-                System.Windows.MessageBox.Show("Error! Please try again later!");
+                MessageBox.Show(er.ToString());
             }
             
         }
@@ -2276,79 +2415,87 @@ namespace WAD
 
         private void showCheckGrid()
         {
-            dgCheckBookings.Items.Clear();
-            NetworkStream stream = new NetworkStream(socket);
-            StreamWriter writer = new StreamWriter(stream);
-            StreamReader read = new StreamReader(stream);
-            writer.AutoFlush = true;
-            writer.WriteLine("view_booking");
-            writer.WriteLine(currentUser.getEmail());
-            string xml = "";
-            string line;
-            //string randomVar = read.ReadLine();
-            var xs = new XmlSerializer(typeof(HashSet<Booking>));
-            while ((line = read.ReadLine()) != "endofxml")
+            try
             {
+                dgCheckBookings.Items.Clear();
+                NetworkStream stream = new NetworkStream(socket);
+                StreamWriter writer = new StreamWriter(stream);
+                StreamReader read = new StreamReader(stream);
+                writer.AutoFlush = true;
+                writer.WriteLine("view_booking");
+                writer.WriteLine(currentUser.getEmail());
+                string xml = "";
+                string line;
+                //string randomVar = read.ReadLine();
+                var xs = new XmlSerializer(typeof(HashSet<Booking>));
+                while ((line = read.ReadLine()) != "endofxml")
+                {
+                    if (line == "fail")
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        xml += line;
+                    }
+                }
+
                 if (line == "fail")
                 {
-                    break;
+                    System.Windows.MessageBox.Show("You have no bookings.");
+                    showListGrid();
                 }
                 else
                 {
-                    xml += line;
-                }
-            }
-
-            if (line == "fail")
-            {
-                System.Windows.MessageBox.Show("You have no bookings.");
-                showListGrid();
-            }
-            else
-            {
-                bool success = true;
-                HashSet<Booking> newSet = new HashSet<Booking>();
-                using (var reader = new StringReader(xml))
-                {
-                    try
+                    bool success = true;
+                    HashSet<Booking> newSet = new HashSet<Booking>();
+                    using (var reader = new StringReader(xml))
                     {
-                        newSet = (HashSet<Booking>)xs.Deserialize(reader);
-                    }
-                    catch (Exception e)
-                    {
-                        success = false;
-                    }
-                    
-                }
-                if (success)
-                {
-                    List<Booking> bookList = newSet.ToList();
-                    for (int i = 0; i < bookList.Count; i++)
-                    {
-                        string seats = "";
-                        bool first = true;
-                        for (int x = 0; x < (bookList[i].Seats).Length; x++)
+                        try
                         {
-                            if (first)
-                            {
-                                seats += bookList[i].Seats[x];
-                                first = false;
-                            }
-                            else
-                            {
-                                seats += ", " + bookList[i].Seats[x];
-                            }
+                            newSet = (HashSet<Booking>)xs.Deserialize(reader);
+                        }
+                        catch (Exception e)
+                        {
+                            success = false;
                         }
 
-                        var data = new tempDGClass { ID = bookList[i].TransactionId, Title = bookList[i].Movie, Seats = seats, Time = bookList[i].Timeslot, Date = bookList[i].Date };
-                        dgCheckBookings.Items.Add(data);
                     }
+                    if (success)
+                    {
+                        List<Booking> bookList = newSet.ToList();
+                        for (int i = 0; i < bookList.Count; i++)
+                        {
+                            string seats = "";
+                            bool first = true;
+                            for (int x = 0; x < (bookList[i].Seats).Length; x++)
+                            {
+                                if (first)
+                                {
+                                    seats += bookList[i].Seats[x];
+                                    first = false;
+                                }
+                                else
+                                {
+                                    seats += ", " + bookList[i].Seats[x];
+                                }
+                            }
+
+                            var data = new tempDGClass { ID = bookList[i].TransactionId, Title = bookList[i].Movie, Seats = seats, Time = bookList[i].Timeslot, Date = bookList[i].Date };
+                            dgCheckBookings.Items.Add(data);
+                        }
+                    }
+                    checkGrid.Opacity = 0;
+                    checkGrid.IsEnabled = true;
+                    checkGrid.Visibility = Visibility.Visible;
+                    DoubleAnimation ani = new DoubleAnimation(1, TimeSpan.FromSeconds(0.2));
+                    checkGrid.BeginAnimation(Grid.OpacityProperty, ani);
                 }
-                checkGrid.Opacity = 0;
-                checkGrid.IsEnabled = true;
-                checkGrid.Visibility = Visibility.Visible;
-                DoubleAnimation ani = new DoubleAnimation(1, TimeSpan.FromSeconds(0.2));
-                checkGrid.BeginAnimation(Grid.OpacityProperty, ani);
+                
+            }
+            catch (Exception er)
+            {
+                MessageBox.Show(er.ToString());
             }
         }
         private void hideCheckGrid()
@@ -2388,21 +2535,35 @@ namespace WAD
 
         private void btnCheckDelete_Click(object sender, RoutedEventArgs e)
         {
-            NetworkStream stream = new NetworkStream(socket);
-            StreamWriter writer = new StreamWriter(stream);
-            StreamReader read = new StreamReader(stream);
-            writer.AutoFlush = true;
-            writer.WriteLine("remove_booking");
-            writer.WriteLine(txtCheckDelete.Text);
-            if (read.ReadLine() == "success")
+            if (txtCheckDelete.Text == "")
             {
-                hideCheckGrid();
-                showCheckGrid();
-                
+                MessageBox.Show("Error, the ID field cannot be empty.");
             }
             else
             {
-                MessageBox.Show("No such ID!");
+                try
+                {
+                    NetworkStream stream = new NetworkStream(socket);
+                    StreamWriter writer = new StreamWriter(stream);
+                    StreamReader read = new StreamReader(stream);
+                    writer.AutoFlush = true;
+                    writer.WriteLine("remove_booking");
+                    writer.WriteLine(txtCheckDelete.Text);
+                    if (read.ReadLine() == "success")
+                    {
+                        hideCheckGrid();
+                        showCheckGrid();
+
+                    }
+                    else
+                    {
+                        MessageBox.Show("No such ID!");
+                    }
+                }
+                catch (Exception er)
+                {
+                    MessageBox.Show(er.ToString());
+                }
             }
         }
     }
