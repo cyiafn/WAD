@@ -23,3 +23,28 @@ D:\Visual Studio Projects\WAD\WAD\obj\x64\Release\WAD.csproj.GenerateResource.Ca
 D:\Visual Studio Projects\WAD\WAD\obj\x64\Release\WAD.csproj.CoreCompileInputs.cache
 D:\Visual Studio Projects\WAD\WAD\obj\x64\Release\WAD.exe
 D:\Visual Studio Projects\WAD\WAD\obj\x64\Release\WAD.pdb
+C:\Users\seanm\Desktop\3.2 WAD\WAD\WAD\bin\x64\Release\WAD.exe.config
+C:\Users\seanm\Desktop\3.2 WAD\WAD\WAD\bin\x64\Release\WAD.exe
+C:\Users\seanm\Desktop\3.2 WAD\WAD\WAD\bin\x64\Release\WAD.pdb
+C:\Users\seanm\Desktop\3.2 WAD\WAD\WAD\bin\x64\Release\CefSharp.Core.dll
+C:\Users\seanm\Desktop\3.2 WAD\WAD\WAD\bin\x64\Release\CefSharp.dll
+C:\Users\seanm\Desktop\3.2 WAD\WAD\WAD\bin\x64\Release\CefSharp.Wpf.dll
+C:\Users\seanm\Desktop\3.2 WAD\WAD\WAD\bin\x64\Release\XamlAnimatedGif.dll
+C:\Users\seanm\Desktop\3.2 WAD\WAD\WAD\bin\x64\Release\CefSharp.Wpf.pdb
+C:\Users\seanm\Desktop\3.2 WAD\WAD\WAD\bin\x64\Release\CefSharp.Wpf.xml
+C:\Users\seanm\Desktop\3.2 WAD\WAD\WAD\bin\x64\Release\CefSharp.pdb
+C:\Users\seanm\Desktop\3.2 WAD\WAD\WAD\bin\x64\Release\CefSharp.xml
+C:\Users\seanm\Desktop\3.2 WAD\WAD\WAD\bin\x64\Release\CefSharp.Core.pdb
+C:\Users\seanm\Desktop\3.2 WAD\WAD\WAD\bin\x64\Release\CefSharp.Core.xml
+C:\Users\seanm\Desktop\3.2 WAD\WAD\WAD\obj\x64\Release\WAD.csprojResolveAssemblyReference.cache
+C:\Users\seanm\Desktop\3.2 WAD\WAD\WAD\obj\x64\Release\MainWindow.g.cs
+C:\Users\seanm\Desktop\3.2 WAD\WAD\WAD\obj\x64\Release\App.g.cs
+C:\Users\seanm\Desktop\3.2 WAD\WAD\WAD\obj\x64\Release\WAD_MarkupCompile.cache
+C:\Users\seanm\Desktop\3.2 WAD\WAD\WAD\obj\x64\Release\WAD_MarkupCompile.lref
+C:\Users\seanm\Desktop\3.2 WAD\WAD\WAD\obj\x64\Release\MainWindow.baml
+C:\Users\seanm\Desktop\3.2 WAD\WAD\WAD\obj\x64\Release\WAD.g.resources
+C:\Users\seanm\Desktop\3.2 WAD\WAD\WAD\obj\x64\Release\WAD.Properties.Resources.resources
+C:\Users\seanm\Desktop\3.2 WAD\WAD\WAD\obj\x64\Release\WAD.csproj.GenerateResource.Cache
+C:\Users\seanm\Desktop\3.2 WAD\WAD\WAD\obj\x64\Release\WAD.csproj.CoreCompileInputs.cache
+C:\Users\seanm\Desktop\3.2 WAD\WAD\WAD\obj\x64\Release\WAD.exe
+C:\Users\seanm\Desktop\3.2 WAD\WAD\WAD\obj\x64\Release\WAD.pdb

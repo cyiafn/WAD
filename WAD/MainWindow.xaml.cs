@@ -369,6 +369,7 @@ namespace WAD
         private void showListGrid()
         {
             listGrid.Opacity = 0;
+            currentSelectedMovie = 0;
             lblListLabel1.Content = "";
             lblListLabel2.Content = "";
             lblListLabel3.Content = "";
@@ -566,7 +567,6 @@ namespace WAD
         private void hideMovieGrid()
         {
             wbMovie.Address = string.Format("http://blank.org/");
-            currentSelectedMovie = 0;
             DoubleAnimation ani = new DoubleAnimation(0, TimeSpan.FromSeconds(0.2));
             movieGrid.BeginAnimation(Grid.OpacityProperty, ani);
             movieGrid.IsEnabled = false;
@@ -595,7 +595,7 @@ namespace WAD
         {
             string emailPattern = @"^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$";
             Regex emailReg = new Regex(emailPattern);
-            if (!emailReg.IsMatch(txtRegisterEmail.Text) || txtLoginPassword.Password == "")
+            if (!emailReg.IsMatch(txtLoginEmail.Text) || txtLoginPassword.Password == "")
             {
                 lblLoginIncorrect.Visibility = Visibility.Visible;
             }
@@ -702,7 +702,7 @@ namespace WAD
             }
             if (txtRegisterPassword.Password == "")
             {
-                error += "The password is empty!";
+                error += "The password is empty!\n";
             }
             if (txtRegisterPassword.Password != txtRegisterConfirmPassword.Password)
             {
@@ -710,11 +710,11 @@ namespace WAD
             }
             if (txtRegisterFirstName.Text == "")
             {
-                error += "Please enter a first name.";
+                error += "Please enter a first name.\n";
             }
             if (txtRegisterLastName.Text == "")
             {
-                error += "Please enter a last name.";
+                error += "Please enter a last name.\n";
             }
             if (!dateReg.IsMatch(txtRegisterDOB.Text))
             {
@@ -1495,6 +1495,9 @@ namespace WAD
             btnBookingC3.IsEnabled = true;
             btnBookingC4.IsEnabled = true;
             btnBookingC5.IsEnabled = true;
+            lblBookingSeats.Text = "";
+            lblBookingTotalSeats.Content = "0";
+            lblBookingTotal.Content = "$ 0.00";
             BrushConverter bc = new BrushConverter();
             btnBookingA1.Background = (Brush)bc.ConvertFrom("#FFFF0000");
             btnBookingA2.Background = (Brush)bc.ConvertFrom("#FFFF0000");

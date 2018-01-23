@@ -48,3 +48,28 @@ D:\Visual Studio Projects\WAD\WAD\obj\x64\Debug\WAD.g.resources
 D:\Visual Studio Projects\WAD\WAD\obj\x64\Debug\WAD.Properties.Resources.resources
 D:\Visual Studio Projects\WAD\WAD\obj\x64\Debug\WAD.csproj.GenerateResource.Cache
 D:\Visual Studio Projects\WAD\WAD\obj\x64\Debug\WAD.csproj.CoreCompileInputs.cache
+C:\Users\seanm\Desktop\3.2 WAD\WAD\WAD\bin\x64\Debug\WAD.exe.config
+C:\Users\seanm\Desktop\3.2 WAD\WAD\WAD\bin\x64\Debug\WAD.exe
+C:\Users\seanm\Desktop\3.2 WAD\WAD\WAD\bin\x64\Debug\WAD.pdb
+C:\Users\seanm\Desktop\3.2 WAD\WAD\WAD\bin\x64\Debug\CefSharp.Core.dll
+C:\Users\seanm\Desktop\3.2 WAD\WAD\WAD\bin\x64\Debug\CefSharp.dll
+C:\Users\seanm\Desktop\3.2 WAD\WAD\WAD\bin\x64\Debug\CefSharp.Wpf.dll
+C:\Users\seanm\Desktop\3.2 WAD\WAD\WAD\bin\x64\Debug\XamlAnimatedGif.dll
+C:\Users\seanm\Desktop\3.2 WAD\WAD\WAD\bin\x64\Debug\CefSharp.Wpf.pdb
+C:\Users\seanm\Desktop\3.2 WAD\WAD\WAD\bin\x64\Debug\CefSharp.Wpf.xml
+C:\Users\seanm\Desktop\3.2 WAD\WAD\WAD\bin\x64\Debug\CefSharp.pdb
+C:\Users\seanm\Desktop\3.2 WAD\WAD\WAD\bin\x64\Debug\CefSharp.xml
+C:\Users\seanm\Desktop\3.2 WAD\WAD\WAD\bin\x64\Debug\CefSharp.Core.pdb
+C:\Users\seanm\Desktop\3.2 WAD\WAD\WAD\bin\x64\Debug\CefSharp.Core.xml
+C:\Users\seanm\Desktop\3.2 WAD\WAD\WAD\obj\x64\Debug\WAD.csprojResolveAssemblyReference.cache
+C:\Users\seanm\Desktop\3.2 WAD\WAD\WAD\obj\x64\Debug\MainWindow.g.cs
+C:\Users\seanm\Desktop\3.2 WAD\WAD\WAD\obj\x64\Debug\App.g.cs
+C:\Users\seanm\Desktop\3.2 WAD\WAD\WAD\obj\x64\Debug\WAD_MarkupCompile.cache
+C:\Users\seanm\Desktop\3.2 WAD\WAD\WAD\obj\x64\Debug\WAD_MarkupCompile.lref
+C:\Users\seanm\Desktop\3.2 WAD\WAD\WAD\obj\x64\Debug\MainWindow.baml
+C:\Users\seanm\Desktop\3.2 WAD\WAD\WAD\obj\x64\Debug\WAD.g.resources
+C:\Users\seanm\Desktop\3.2 WAD\WAD\WAD\obj\x64\Debug\WAD.Properties.Resources.resources
+C:\Users\seanm\Desktop\3.2 WAD\WAD\WAD\obj\x64\Debug\WAD.csproj.GenerateResource.Cache
+C:\Users\seanm\Desktop\3.2 WAD\WAD\WAD\obj\x64\Debug\WAD.csproj.CoreCompileInputs.cache
+C:\Users\seanm\Desktop\3.2 WAD\WAD\WAD\obj\x64\Debug\WAD.exe
+C:\Users\seanm\Desktop\3.2 WAD\WAD\WAD\obj\x64\Debug\WAD.pdb
